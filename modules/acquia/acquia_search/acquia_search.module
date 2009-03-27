@@ -68,6 +68,10 @@ function acquia_search_menu_alter(&$menu) {
   if (isset($menu['search'])) {
     $menu['search']['page arguments'] = array('apachesolr_search');
   }
+  
+  if (isset($menu['admin/settings/apachesolr'])) {
+    $menu['admin/settings/apachesolr']['title'] = 'Acquia Search';
+  }
 }
 
 /**

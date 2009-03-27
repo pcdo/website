@@ -1,4 +1,4 @@
-# $Id: tr.po,v 1.1.2.11 2009/02/05 00:37:44 jcnventura Exp $
+# $Id: tr.po,v 1.1.2.12 2009/02/19 23:39:14 jcnventura Exp $
 #
 # Turkish translation of Drupal (print)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: print 1.7\n"
-"POT-Creation-Date: 2009-02-05 00:27+0100\n"
-"PO-Revision-Date: 2009-02-05 00:35+0100\n"
-"Last-Translator: Joao Ventura <jcnventura@drupal.org>\n"
+"POT-Creation-Date: 2009-02-10 23:40+0100\n"
+"PO-Revision-Date: 2009-02-20 00:22+0100\n"
+"Last-Translator: Drupal Hizmetleri <dh@drupalhizmetleri.com>\n"
 "Language-Team: Turkish <arikusu@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: print.admin.inc:20
 msgid "Common Settings"
-msgstr ""
+msgstr "Genel Ayarlar"
 
 #: print.admin.inc:25
 msgid "Stylesheet URL"
@@ -57,7 +57,7 @@ msgstr "Bu seçenek etkinleştirildiğinde, yazıcı uyumlu sayfada kullanıcı 
 
 #: print.admin.inc:50
 msgid "New window method"
-msgstr ""
+msgstr "Yeni pencere yöntemi"
 
 #: print.admin.inc:51
 msgid "Use HTML target (does not validate as XHTML Strict)"
@@ -69,15 +69,15 @@ msgstr "Javascript kullan (tarayıcı desteği gerektirir)"
 
 #: print.admin.inc:53
 msgid "Choose the method used to open pages in a new window/tab."
-msgstr ""
+msgstr "Sayfaları yeni pencere/sekmede açmak için yöntem seçiniz."
 
 #: print.admin.inc:58
 msgid "Logo options"
-msgstr ""
+msgstr "Logo seçenekleri"
 
 #: print.admin.inc:65
 msgid "Logo type"
-msgstr ""
+msgstr "Logo türü"
 
 #: print.admin.inc:66;97
 msgid "None (Disabled)"
@@ -85,11 +85,11 @@ msgstr "Etkin değil"
 
 #: print.admin.inc:66
 msgid "Current theme's logo"
-msgstr ""
+msgstr "Mevcut temanın logosu"
 
 #: print.admin.inc:66;97;104
 msgid "User-specified"
-msgstr ""
+msgstr "Kullanıcı terici"
 
 #: print.admin.inc:68
 msgid "Select the type of logo to display on the printer-friendly version. In case of a user-specified location, insert the path or URL below."
@@ -101,7 +101,7 @@ msgstr "Logo URL adresi"
 
 #: print.admin.inc:81
 msgid "Upload logo"
-msgstr ""
+msgstr "Logoyu karışıya yükle"
 
 #: print.admin.inc:84
 msgid "If you don't have direct file access to the server, use this field to upload your logo."
@@ -186,7 +186,7 @@ msgstr ""
 #: print_mail/print_mail.admin.inc:40
 #: print_pdf/print_pdf.admin.inc:52
 msgid "Link style"
-msgstr ""
+msgstr "Bağlantı stili"
 
 #: print.admin.inc:193
 #: print_mail/print_mail.admin.inc:42
@@ -395,7 +395,7 @@ msgid "Link text"
 msgstr ""
 
 #: print.admin.inc:371
-#: print.module:336;515
+#: print.module:338;517
 msgid "Printer-friendly version"
 msgstr "Yazıcı uyumlu"
 
@@ -411,7 +411,7 @@ msgstr "Misafir"
 msgid "Post new comment"
 msgstr ""
 
-#: print.module:143;329;84
+#: print.module:143;331;84
 #: print.info:0
 #: print_mail/print_mail.info:0
 #: print_pdf/print_pdf.info:0
@@ -422,29 +422,29 @@ msgstr ""
 msgid "Most printed"
 msgstr ""
 
-#: print.module:341
-#: print_mail/print_mail.module:232
-#: print_pdf/print_pdf.module:278
+#: print.module:343
+#: print_mail/print_mail.module:234
+#: print_pdf/print_pdf.module:280
 msgid "Show link"
 msgstr ""
 
-#: print.module:345
-#: print_mail/print_mail.module:236
-#: print_pdf/print_pdf.module:282
+#: print.module:347
+#: print_mail/print_mail.module:238
+#: print_pdf/print_pdf.module:284
 msgid "Show link in individual comments"
 msgstr ""
 
-#: print.module:349
-#: print_mail/print_mail.module:240
-#: print_pdf/print_pdf.module:286
+#: print.module:351
+#: print_mail/print_mail.module:242
+#: print_pdf/print_pdf.module:288
 msgid "Show Printer-friendly URLs list"
 msgstr ""
 
-#: print.module:362
+#: print.module:364
 msgid "The settings below only apply in case the corresponding type-specific setting is also enabled (except for the \"Show link in individual comments\")."
 msgstr ""
 
-#: print.module:518
+#: print.module:520
 msgid "Display a printer-friendly version of this page."
 msgstr "Bu sayfanın yazıcı uyumlu halini göster"
 
@@ -505,11 +505,11 @@ msgstr "Yazıcı uyumlu sayfalar (core)"
 
 #: print_mail/print_mail.admin.inc:20
 msgid "Send by e-mail options"
-msgstr ""
+msgstr "E-posta ile gönder seçenekleri"
 
 #: print_mail/print_mail.admin.inc:25
 msgid "Send by e-mail link"
-msgstr ""
+msgstr "E-posta ile gönder bağlantısı"
 
 #: print_mail/print_mail.admin.inc:28
 msgid "Choose the location of the link(s) to the send by e-mail page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still send a node by e-mail by going to !path/nid where nid is the numeric id of the node."
@@ -530,12 +530,12 @@ msgstr ""
 
 #: print_mail/print_mail.admin.inc:123
 msgid "The maximum number of e-mails a user can send per hour."
-msgstr ""
+msgstr "Bir kullanıcının her saat için gönderebileceği azami e-posta miktarı."
 
 #: print_mail/print_mail.admin.inc:128
 #: print_mail/print_mail.inc:89
 msgid "Send only the teaser"
-msgstr ""
+msgstr "Sadece özet gönder"
 
 #: print_mail/print_mail.admin.inc:130
 msgid "If selected, the default choice will be to send only the node's teaser instead of the full content."
@@ -550,9 +550,9 @@ msgid "If checked, the user will be able to choose between sending the full cont
 msgstr ""
 
 #: print_mail/print_mail.admin.inc:159
-#: print_mail/print_mail.module:311
+#: print_mail/print_mail.module:313
 msgid "Send to friend"
-msgstr ""
+msgstr "Arkadaşa gönder"
 
 #: print_mail/print_mail.admin.inc:160
 msgid "Text used in the link to the send by-email form."
@@ -560,12 +560,12 @@ msgstr ""
 
 #: print_mail/print_mail.admin.inc:165
 msgid "Message Subject"
-msgstr ""
+msgstr "Mesaj konusu"
 
 #: print_mail/print_mail.admin.inc:166
 #: print_mail/print_mail.inc:123
 msgid "!user has sent you a message from !site"
-msgstr ""
+msgstr "!user kullanıcısı !site isimli siteden bir mesaj gönderdi."
 
 #: print_mail/print_mail.admin.inc:167
 msgid "e-mail subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site."
@@ -573,12 +573,12 @@ msgstr ""
 
 #: print_mail/print_mail.admin.inc:171
 msgid "Message Preamble"
-msgstr ""
+msgstr "Başlangıç mesajı"
 
 #: print_mail/print_mail.admin.inc:172
 #: print_mail/print_mail.inc:229
 msgid "Message from sender"
-msgstr ""
+msgstr "Gönderenin mesajı"
 
 #: print_mail/print_mail.admin.inc:173
 msgid "e-mail message preamble. The sender will be able to add their own message after this."
@@ -586,7 +586,7 @@ msgstr ""
 
 #: print_mail/print_mail.admin.inc:177
 msgid "Message Content"
-msgstr ""
+msgstr "Mesaj içeriği"
 
 #: print_mail/print_mail.admin.inc:179
 msgid "Set the default contents of the message."
@@ -594,7 +594,7 @@ msgstr ""
 
 #: print_mail/print_mail.admin.inc:183
 msgid "Thank You Message"
-msgstr ""
+msgstr "Teşekkür mesajı"
 
 #: print_mail/print_mail.admin.inc:184
 #: print_mail/print_mail.inc:253
@@ -603,105 +603,105 @@ msgstr ""
 
 #: print_mail/print_mail.admin.inc:185
 msgid "This message will be displayed after the user successfully submits the form."
-msgstr ""
+msgstr "Bu mesaj, kullanıcının fromu başarılı şekilde gönderdikten sonra görüntülecektir."
 
 #: print_mail/print_mail.inc:27
 msgid "You cannot send more than %number messages per hour. Please try again later."
-msgstr ""
+msgstr "Her saat için %number mesajdan fazla mesaj gönderemezsiniz. Lütfen daha sonra tekrar deneyin."
 
 #: print_mail/print_mail.inc:60
 msgid "Your e-mail"
-msgstr ""
+msgstr "E-postanız"
 
 #: print_mail/print_mail.inc:65
 msgid "Your name"
-msgstr ""
+msgstr "Adınız"
 
 #: print_mail/print_mail.inc:70
 msgid "Send to"
-msgstr ""
+msgstr "Alıcı"
 
 #: print_mail/print_mail.inc:73
 msgid "Enter multiple addresses separated by commas and/or different lines."
-msgstr ""
+msgstr "Birdan fazla adresi virgül ayıracı ve/veya farklı satırlar olarak giriniz"
 
 #: print_mail/print_mail.inc:77
 msgid "Subject"
-msgstr ""
+msgstr "Konu"
 
 #: print_mail/print_mail.inc:82
 msgid "Your message"
-msgstr ""
+msgstr "Mesajınız"
 
 #: print_mail/print_mail.inc:100
 msgid "Send e-mail"
-msgstr ""
+msgstr "E-postayı gönder"
 
 #: print_mail/print_mail.inc:104
 msgid "Clear form"
-msgstr ""
+msgstr "Formu temizle"
 
 #: print_mail/print_mail.inc:109
 msgid "Cancel"
-msgstr ""
+msgstr "İptal"
 
 #: print_mail/print_mail.inc:120
 msgid "Someone"
-msgstr ""
+msgstr "Herhangi biri"
 
 #: print_mail/print_mail.inc:122
 msgid "an interesting site"
-msgstr ""
+msgstr "ilginç bir site"
 
 #: print_mail/print_mail.inc:199
 msgid "You must enter a subject."
-msgstr ""
+msgstr "Bir konu girmelisiniz."
 
 #: print_mail/print_mail.inc:203
 msgid "You must enter a message."
-msgstr ""
+msgstr "Bir mesaj girmelisiniz."
 
 #: print_mail/print_mail.inc:252
 msgid "us"
-msgstr ""
+msgstr "Biz"
 
 #: print_mail/print_mail.inc:251
 #: print_mail/print_mail.module:0
 msgid "print_mail"
-msgstr ""
+msgstr "eposta_yazı"
 
 #: print_mail/print_mail.inc:251
 msgid "%name [%from] sent %page to [%to]"
-msgstr ""
+msgstr "%name [%from] %page, [%to] kişisine gönder"
 
 #: print_mail/print_mail.module:88;98
 msgid "Most emailed"
-msgstr ""
+msgstr "En çok e-posta gönderilen"
 
-#: print_mail/print_mail.module:227
+#: print_mail/print_mail.module:229
 #: print_mail/print_mail.info:0
 msgid "Send by e-mail"
-msgstr ""
+msgstr "E-posta ile gönder"
 
-#: print_mail/print_mail.module:314
+#: print_mail/print_mail.module:316
 msgid "Send this page by e-mail."
-msgstr ""
+msgstr "Bu sayfayı e-posta ile gönder"
 
 #: print_mail/print_mail.module:48
 msgid "Send page by e-mail"
-msgstr ""
+msgstr "Sayfayı e-posta ile gönder"
 
 #: print_mail/print_mail.module:56
 msgid "e-mail"
-msgstr ""
+msgstr "e-posta"
 
 #: print_mail/print_mail.info:0
 msgid "Provides the capability to send the web page by e-mail"
-msgstr ""
+msgstr "Web sayfasını e-posta olarak gönderme özelliğini sağlar."
 
 #: print_pdf/print_pdf.admin.inc:24
 msgid "PDF options"
-msgstr ""
+msgstr "PDF seçenekleri"
 
 #: print_pdf/print_pdf.admin.inc:29
 msgid "PDF generation tool"
@@ -729,15 +729,15 @@ msgstr ""
 
 #: print_pdf/print_pdf.admin.inc:133
 msgid "Same browser window"
-msgstr ""
+msgstr "Aynı tarayıcı ekranında"
 
 #: print_pdf/print_pdf.admin.inc:133
 msgid "New browser window"
-msgstr ""
+msgstr "Yeni tarayıcı ekranında"
 
 #: print_pdf/print_pdf.admin.inc:133
 msgid "Save dialog"
-msgstr ""
+msgstr "Kaydet kutucuğu"
 
 #: print_pdf/print_pdf.admin.inc:135
 msgid "Select the desired method for opening the PDF in the user's browser."
@@ -745,7 +745,7 @@ msgstr ""
 
 #: print_pdf/print_pdf.admin.inc:140
 msgid "Paper size"
-msgstr ""
+msgstr "Kağır boyutu"
 
 #: print_pdf/print_pdf.admin.inc:157
 msgid "Choose the paper size of the generated PDF."
@@ -813,7 +813,7 @@ msgid "Font size must be at least 1."
 msgstr ""
 
 #: (duplicate) print_pdf/print_pdf.admin.inc:276
-#: print_pdf/print_pdf.module:273;358;149
+#: print_pdf/print_pdf.module:275;360;149
 #: print_pdf/print_pdf.info:0
 msgid "PDF version"
 msgstr "PDF"
@@ -822,7 +822,7 @@ msgstr "PDF"
 msgid "Text used in the link to the PDF version."
 msgstr ""
 
-#: print_pdf/print_pdf.pages.inc:380
+#: print_pdf/print_pdf.pages.inc:383
 msgid "Page !n of !total"
 msgstr ""
 
@@ -830,7 +830,7 @@ msgstr ""
 msgid "Most PDFd"
 msgstr ""
 
-#: print_pdf/print_pdf.module:361
+#: print_pdf/print_pdf.module:363
 msgid "Display a PDF version of this page."
 msgstr "Bu sayfayı PDF olarak gösterir"
 

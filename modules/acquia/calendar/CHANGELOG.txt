@@ -6,6 +6,38 @@ See documentation at http://drupal.org/node/262064.
 Version 2.0 dev
 =================
 
+- #377760 Fix alias handling for node edit and delete links.
+- Fix the way the node type filter was configured in the default view.
+- Get rid of truncated field display options, Views now handles that.
+- #372625 Reset year granularity after processing months on year view now that Views has changed processing order, also omit deprecated themes, we now use date_nav_title. 
+- #345077 Make sure duplicate copies of the date field each get to theme the raw, unaltered, data.
+- #338253 Re-work date_t() to create a more robust method of handling translations of abbreviations and other short strings.
+- Add more description text to the ical description and location fields to clarify that you have to add fields to the view.
+- #368632 Make sure iCal exports handle multi-day dates correctly.
+- Clean up inconsistent use of calendar_display and calendar_type to use only calendar_type.
+- #365113 Remove agenda hour column when not grouping by hour.
+- #357019 Add method to hide all items and show only count or 'more' link.
+- #350229 Make sure Calendar doesn't get updated before Views.
+- #341841 Add 'has-events' and 'has-no-events' classes for easier themeing.
+- Make sure there is a sane defualt value for the iCal summary field to avoid theme errors.
+- #364770 Add new date link needs to convert underscore to hyphen.
+- #370092 Add all-day checkbox to date field and use it in calendar.
+- #369573 Fix jCalendar popup when used without clean urls.
+- #367627 Fit jCalendar popup into window better.
+- #368632 Fix repeating date iCal export: show date only one time and add RRULE to export.
+- #332273 Use field alias in iCal location and description fields to avoid problems with CCK table optimization.
+- #328097 Fix some small problems found while researching this issue. The main fix was in the Date filter.
+- Allow removal of displays, still no UI since they can't go on other views.
+- Don't try to set date argument when another argument precedes it.
+- #349409 Fix jcalendar popup.
+- Add option to link calendar to content type, and add link to calendar to node, and link to node/add to calendar.
+- #342119 Make sure calendar_type option is in expected format, maybe this was causing the translation problems?
+- #343090 'Today' highlighting got lost in last round of theme changes, restore it.
+- #340215 Make sure day and week time slots are checking >= instead of >.
+- #327221 Don't add 'today' class in empty blocks.
+- #341964 Get missing back/next links back in year view (needs fix in Date module, too).
+- Fix some logic in stripe labels that was showing empty content type stripes and missing taxonomy stripes.
+
 Version 2.0 rc6
 =================
 

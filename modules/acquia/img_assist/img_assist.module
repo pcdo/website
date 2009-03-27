@@ -1,5 +1,5 @@
 <?php
-// $Id: img_assist.module,v 1.75.2.22 2009/01/18 21:51:17 sun Exp $
+// $Id: img_assist.module,v 1.75.2.26 2009/02/13 16:58:27 sun Exp $
 
 /**
  * @file
@@ -119,6 +119,9 @@ function img_assist_menu() {
 function img_assist_init() {
   $path = drupal_get_path('module', 'img_assist');
   if (arg(0) == 'img_assist') {
+    // Suppress Administration menu.
+    module_invoke('admin_menu', 'suppress');
+
     drupal_add_css($path .'/img_assist_popup.css', 'module', 'all', FALSE);
   }
   else {
@@ -877,7 +880,8 @@ function img_assist_properties_form($form_state, $node, $update) {
   require_once drupal_get_path('module', 'img_assist') .'/includes/img_assist.token.inc';
 
   $image_info = image_get_info(file_create_path($node->images[IMAGE_ORIGINAL]));
-  
+  $image_info['aspect_ratio'] = $image_info['height'] / $image_info['width'];
+
   // Select (or generate) a preview image.
   $img_assist_create_derivatives = variable_get('img_assist_create_derivatives', array());
   if (!empty($img_assist_create_derivatives['properties'])) {
@@ -915,7 +919,11 @@ function img_assist_properties_form($form_state, $node, $update) {
   // choose.
   $max_size = explode('x', variable_get('img_assist_max_size', '640x640'));
   
-  foreach (image_get_sizes() as $key => $size) {
+  foreach (image_get_sizes(NULL, $image_info['aspect_ratio']) as $key => $size) {
+    // Sizes are strings, may contain '' for 0; convert to integers.
+    settype($size['width'], 'int');
+    settype($size['height'], 'int');
+
     $added_to_derivatives = FALSE;
     if ($key == IMAGE_ORIGINAL) {
       if (user_access('use original size') && $image_info['width'] <= $max_size[0] && $image_info['height'] <= $max_size[1]) {
@@ -1119,23 +1127,26 @@ function img_assist_properties_form($form_state, $node, $update) {
   );
   
   // Buttons.
-  $form[] = array('#value' => '<div id="buttons">');
-  $form['insert'] = array(
+  $form['buttons'] = array(
+    '#prefix' => '<div id="buttons">',
+    '#suffix' => '</div>',
+  );
+  $form['#attributes']['onsubmit'] = 'return parent.insertImage();';
+  $form['buttons']['insert'] = array(
     '#type' => 'submit',
     '#value' => ($update) ? t('Update') : t('Insert'),
-    '#attributes' => array('onclick' => 'parent.insertImage()', 'style' => 'float: left;'),
+    '#attributes' => array('style' => 'float: left;'),
   );
-  $form['cancel'] = array(
+  $form['buttons']['cancel'] = array(
     '#type' => 'button',
     '#value' => t('Cancel'),
     '#button_type' => 'button',
-    '#attributes' => array('onclick' => 'parent.cancelAction()', 'style' => 'float: right;'),
+    '#attributes' => array('onclick' => 'return parent.cancelAction();', 'style' => 'float: right;'),
   );
   
-  $form[] = array('#value' => '</div>');
   $form[] = array('#value' => '</td></tr></table></div>');
   
-  $form['#attributes'] = array('name' => 'img_assist');
+  $form['#attributes']['name'] = 'img_assist';
   return $form;
 }
 
@@ -1330,12 +1341,15 @@ function _img_assist_build_derivatives(&$node, $size = NULL) {
       if ($info['width'] > $size['width'] || $info['height'] > $size['height']) {
         $source = file_create_path($node->images[IMAGE_ORIGINAL]);
         $destination = _image_filename(basename($source), $key, FALSE);
-        if (!image_scale($source, file_create_path($destination), $size['width'], $size['height'])) {
+        $destination_path = file_create_path($destination);
+        if (!image_scale($source, $destination_path, $size['width'], $size['height'])) {
           drupal_set_message(t('Unable to create %label image', array('%label' => $size['label'])), 'error');
         }
         else {
+          // Set default file permissions for webserver-generated files.
+          @chmod($destination_path, 0664);
           $node->images[$key] = $destination;
-          _image_insert($node, $key, file_create_path($destination));
+          _image_insert($node, $key, $destination_path);
         }
       }
       else {
@@ -1371,7 +1385,7 @@ function img_assist_render_image($attributes = array()) {
     // Get size.
     $width  = $attributes['width'];
     $height = $attributes['height'];
-    if ($width && $height) {
+    if ($width || $height) {
       // Check to ensure that the dimensions don't exceed the max set in the
       // img_assist settings.
       $max_size = explode('x', variable_get('img_assist_max_size', '640x640'));
@@ -1396,11 +1410,13 @@ function img_assist_render_image($attributes = array()) {
           $aspect_ratio = round($preview_width / $preview_height, 6);
           
           // Get new width and height for this inline image.
-          // Width is controlling factor.
-          if (round($width / $aspect_ratio) <= $height) {
+          // If height is either left out or larger than width then
+          // width is the controlling factor.
+          if (!$height || round($width / $aspect_ratio) <= $height) {
             $height = round($width / $aspect_ratio);
           }
-          // Height is controlling factor.
+          // Else, width is either left out or larger than height so
+          // height is controlling factor.
           else {
             $width = round($height * $aspect_ratio);
           }
@@ -1704,6 +1720,7 @@ function _img_assist_textarea_match($formid) {
  */
 
 function theme_img_assist_inline($node, $size, $attributes) {
+  $caption = '';
   if ($attributes['title'] && $attributes['desc']) {
     $caption = '<strong>'. $attributes['title'] .': </strong>'. $attributes['desc'];
   }
@@ -1819,8 +1836,8 @@ function theme_img_assist_page($content, $attributes = NULL) {
   $output .= drupal_get_html_head();
   $output .= drupal_get_js();
   $output .= "\n<script type=\"text/javascript\"><!-- \n";
-  $output .= "  if (parent.tinyMCE) {\n";
-  $output .= "    document.write('<link href=\"' + parent.tinyMCEPopup.getParam(\"popups_css\") + '\" rel=\"stylesheet\" type=\"text/css\">');\n";
+  $output .= "  if (parent.tinyMCE && parent.tinyMCEPopup && parent.tinyMCEPopup.getParam('popups_css')) {\n";
+  $output .= "    document.write('<link href=\"' + parent.tinyMCEPopup.getParam('popups_css') + '\" rel=\"stylesheet\" type=\"text/css\">');\n";
   $output .= "  } else {\n";
   foreach (drupal_add_css() as $media => $type) {
     $paths = array_merge($type['module'], $type['theme']);

@@ -1,5 +1,5 @@
 <?php
-// $Id: print_pdf.pages.inc,v 1.3.2.26 2009/02/09 20:25:20 jcnventura Exp $
+// $Id: print_pdf.pages.inc,v 1.3.2.29 2009/03/12 20:22:54 jcnventura Exp $
 
 /**
  * @file
@@ -20,7 +20,7 @@ require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
  * @see _print_pdf_tcpdf()
  */
 function print_pdf_controller() {
-  global $base_url;
+  global $base_url, $language;
 
   // Disable caching for generated PDFs, as Drupal doesn't ouput the proper headers from the cache
   $GLOBALS['conf']['cache'] = FALSE;
@@ -45,7 +45,16 @@ function print_pdf_controller() {
   // And converted from private to public paths
   $file_downloads = variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC);
   if ($file_downloads == FILE_DOWNLOADS_PRIVATE) {
-    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?system/files(/[^>]*?>)!is";
+    switch (variable_get('language_negotiation', LANGUAGE_NEGOTIATION_NONE)) {
+      case LANGUAGE_NEGOTIATION_PATH_DEFAULT:
+      case LANGUAGE_NEGOTIATION_PATH:
+        $lang = $language->language;
+        break;
+      default:
+        $lang = '';
+        break;
+    }
+    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files(/[^>]*?>)!is";
     $replacement = '$1file://'. realpath(file_directory_path()) .'$2';
     $print['content'] = preg_replace($pattern, $replacement, $print['content']);
     $print['logo'] = preg_replace($pattern, $replacement, $print['logo']);
@@ -57,6 +66,10 @@ function print_pdf_controller() {
   include_once(_print_get_template(PRINT_PDF_FORMAT, $print['type']));
   $html = ob_get_contents();
   ob_end_clean();
+
+  // Convert the a href elements
+  $pattern = '!<(a\s[^>]*?)>!is';
+  $html = preg_replace_callback($pattern, '_print_rewrite_urls', $html);
 
   $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
   if (function_exists('token_replace') && !empty($pdf_filename)) {
@@ -127,7 +140,7 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $html = strtr(utf8_decode($html), $no_tags);
 
   //must get rid of tbody (dompdf goes into recursion)
-  $html = preg_replace('!<tbody>|</tbody>!', '', $html);
+  $html = preg_replace('!<tbody[^>]*?>|</tbody>!i', '', $html);
 
   $dompdf->load_html($html);
 

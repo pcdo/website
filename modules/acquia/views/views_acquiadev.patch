@@ -1,0 +1,32 @@
+Index: includes/cache.inc
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/views/includes/cache.inc,v
+retrieving revision 1.23
+diff -u -p -r1.23 cache.inc
+--- includes/cache.inc	31 Jan 2009 18:08:48 -0000	1.23
++++ includes/cache.inc	23 Mar 2009 16:29:47 -0000
+@@ -230,7 +230,7 @@ function views_object_cache_get($obj, $n
+  */
+ function views_object_cache_set($obj, $name, $cache) {
+   views_object_cache_clear($obj, $name);
+-  db_query("INSERT INTO {views_object_cache} (sid, obj, name, data, updated) VALUES ('%s', '%s', '%s', %b, %d)", session_id(), $obj, $name, serialize($cache), time());
++  db_query("INSERT INTO {views_object_cache} (sid, obj, name, data, updated) VALUES ('%s', '%s', '%s', '%s', %d)", session_id(), $obj, $name, serialize($cache), time());
+ }
+ 
+ /**
+Index: modules/comment/views_handler_field_comment.inc
+===================================================================
+RCS file: /cvs/drupal-contrib/contributions/modules/views/modules/comment/views_handler_field_comment.inc,v
+retrieving revision 1.4
+diff -u -p -r1.4 views_handler_field_comment.inc
+--- modules/comment/views_handler_field_comment.inc	30 Jan 2009 00:01:42 -0000	1.4
++++ modules/comment/views_handler_field_comment.inc	23 Mar 2009 16:29:47 -0000
+@@ -37,7 +37,7 @@ class views_handler_field_comment extend
+   function render_link($data, $values) {
+     if (!empty($this->options['link_to_comment']) && $data !== NULL && $data !== '') {
+       $this->options['alter']['make_link'] = TRUE;
+-      $this->options['alter']['path'] = $values->{$this->aliases['nid']};
++      $this->options['alter']['path'] = "node/". $values->{$this->aliases['nid']};
+       $this->options['alter']['fragment'] = "comment-" . $values->{$this->aliases['cid']};
+     }
+ 

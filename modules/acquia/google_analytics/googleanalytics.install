@@ -1,5 +1,5 @@
 <?php
-// $Id: googleanalytics.install,v 1.4.2.27 2008/11/22 22:57:10 hass Exp $
+// $Id: googleanalytics.install,v 1.6.2.8 2008/11/22 22:53:37 hass Exp $
 
 /**
  * @file
@@ -22,7 +22,6 @@ function googleanalytics_install() {
 
 function googleanalytics_uninstall() {
   variable_del('googleanalytics_account');
-  variable_del('googleanalytics_legacy_version');
   variable_del('googleanalytics_codesnippet_before');
   variable_del('googleanalytics_codesnippet_after');
   variable_del('googleanalytics_segmentation');
@@ -47,7 +46,6 @@ function googleanalytics_uninstall() {
 function googleanalytics_disable() {
   $path = file_directory_path() .'/googleanalytics';
   if (file_exists($path)) {
-    file_delete($path .'/urchin.js');
     file_delete($path .'/ga.js');
     rmdir($path);
   }
@@ -238,6 +236,23 @@ function googleanalytics_update_6007() {
   unset($profile_fields['name']);
   variable_set('googleanalytics_segmentation', $profile_fields);
   $ret[] = array('success' => TRUE, 'query' => 'Removed "User identifier" and "User name" from segmentation fields.');
+
+  return $ret;
+}
+
+/**
+ * Remove outdated legacy support variables and files.
+ */
+function googleanalytics_update_6200() {
+  $ret = array();
+
+  $path = file_directory_path() .'/googleanalytics';
+  if (file_exists($path)) {
+    file_delete($path .'/urchin.js');
+  }
+  variable_del('googleanalytics_legacy_version');
+
+  $ret[] = array('success' => TRUE, 'query' => 'Removed legacy support.');
 
   return $ret;
 }

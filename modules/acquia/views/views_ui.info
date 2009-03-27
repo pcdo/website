@@ -6,8 +6,10 @@ core = 6.x
 dependencies[] = views
 
 ; Information added by Acquia.com packaging script
-version = "6.x-2.2"
 core = "6.x"
 project = "views"
+version = "6.x-2.3-acquiadev-1"
+description = "Administrative interface to views. Without this module, you cannot create or edit your views. Acquia version 6.x-2.3-acquiadev-1 (Feb. 17, 2009) patched to enable correct functioning of comment links and prevent errors when running on certain database configurations. See the <a href="http://acquia.com/release-notes/1.2.5-Drupal-6.10-core">release notes</a>."
+datestamp = "1234828800"
 acquia = "1"
 

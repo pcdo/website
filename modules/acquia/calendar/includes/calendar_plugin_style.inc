@@ -1,5 +1,5 @@
 <?php
-// $Id: calendar_plugin_style.inc,v 1.1.2.11 2008/12/02 17:32:48 karens Exp $
+// $Id: calendar_plugin_style.inc,v 1.1.2.13 2009/02/15 00:47:33 karens Exp $
 /**
  * Style plugin to create the calendar navigation and links.
  * 
@@ -124,7 +124,7 @@ class calendar_plugin_style extends views_plugin_style {
           $argument->max_date = $range[1];
         }
         $this->view->date_info->granularity = !empty($argument->granularity) ? $argument->granularity : $argument->options['granularity'];
-        $this->view->date_info->date_arg = !empty($this->view->args) ? $this->view->args[$argument->position] : '';
+        $this->view->date_info->date_arg = !empty($this->view->args) && count($this->view->args) > $argument->position ? $this->view->args[$argument->position] : '';
         $this->view->date_info->date_arg_pos = $i;
         $this->view->date_info->year = isset($argument->year) ? $argument->year : NULL;
         $this->view->date_info->month = isset($argument->month) ? $argument->month: NULL;
@@ -142,7 +142,7 @@ class calendar_plugin_style extends views_plugin_style {
     }
     $this->view->date_info->display_types = $this->display_types();
     $keys = drupal_map_assoc(array_keys(calendar_display_types()));
-    $this->view->date_info->calendar_display = $keys[$this->view->date_info->granularity];
+    $this->view->date_info->calendar_type = $keys[$this->view->date_info->granularity];
     
     // bring the node type into the query so we can use it in the theme
     $this->view->query->add_field('node', 'type');

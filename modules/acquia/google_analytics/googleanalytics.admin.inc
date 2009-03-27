@@ -1,5 +1,5 @@
 <?php
-// $Id: googleanalytics.admin.inc,v 1.2.2.54 2008/11/26 19:37:48 hass Exp $
+// $Id: googleanalytics.admin.inc,v 1.4.2.10 2008/11/26 19:36:50 hass Exp $
 
 /**
  * @file
@@ -171,17 +171,6 @@ function googleanalytics_admin_settings_form(&$form_state) {
     '#collapsed' => TRUE,
   );
 
-  $form['advanced']['googleanalytics_legacy_version'] = array(
-    '#type' => 'radios',
-    '#title' => t('Google Analytics version used'),
-    '#default_value' => variable_get('googleanalytics_legacy_version', 0),
-    '#options' => array(
-      0 => t('Latest (ga.js) tracking code'),
-      1 => t('Legacy (urchin.js) tracking code')
-    ),
-    '#description' => t('<a href="@ga_js_url">On December 13, 2007, Google rolled out a new API</a> for its tracking code, and suggests all new sites to use this code. You should only use the older legacy code, if you have custom tracking code tied to that API. Otherwise it is suggested you use the latest API, as the legacy code will not receive feature updates and is not compatible with new features.', array('@ga_js_url' => 'http://analytics.blogspot.com/2007/12/announcing-new-graphing-tools-gajs.html')),
-  );
-
   $form['advanced']['googleanalytics_cache'] = array(
     '#type' => 'checkbox',
     '#title' => t('Cache tracking code file locally'),
@@ -230,7 +219,7 @@ function googleanalytics_admin_settings_form(&$form_state) {
     '#default_value' => variable_get('googleanalytics_codesnippet_before', ''),
     '#rows' => 5,
     '#wysiwyg' => FALSE,
-    '#description' => t('Code in this textarea will be added <strong>before</strong> urchinTracker() or pageTracker._trackPageview().')
+    '#description' => t('Code in this textarea will be added <strong>before</strong> pageTracker._trackPageview().')
   );
   $form['advanced']['codesnippet']['googleanalytics_codesnippet_after'] = array(
     '#type' => 'textarea',
@@ -238,7 +227,7 @@ function googleanalytics_admin_settings_form(&$form_state) {
     '#default_value' => variable_get('googleanalytics_codesnippet_after', ''),
     '#rows' => 5,
     '#wysiwyg' => FALSE,
-    '#description' => t("Code in this textarea will be added <strong>after</strong> urchinTracker() or pageTracker._trackPageview(). This is useful if you'd like to track a site in two accounts.")
+    '#description' => t("Code in this textarea will be added <strong>after</strong> pageTracker._trackPageview(). This is useful if you'd like to track a site in two accounts.")
   );
 
   $form['advanced']['googleanalytics_js_scope'] = array(
@@ -261,10 +250,10 @@ function googleanalytics_admin_settings_form_validate($form, &$form_state) {
   }
 
   // This is for the Newbie's who cannot read a text area description.
-  if (stristr($form_state['values']['googleanalytics_codesnippet_before'], 'http://www.google-analytics.com/urchin.js') || stristr($form_state['values']['googleanalytics_codesnippet_before'], 'google-analytics.com/ga.js')) {
+  if (stristr($form_state['values']['googleanalytics_codesnippet_before'], 'google-analytics.com/ga.js')) {
     form_set_error('googleanalytics_codesnippet_before', t('Do not add the tracker code provided by Google into the javascript code snippets! This module already builds the tracker code based on your Google Analytics account number and settings.'));
   }
-  if (stristr($form_state['values']['googleanalytics_codesnippet_after'], 'http://www.google-analytics.com/urchin.js') || stristr($form_state['values']['googleanalytics_codesnippet_after'], 'google-analytics.com/ga.js')) {
+  if (stristr($form_state['values']['googleanalytics_codesnippet_after'], 'google-analytics.com/ga.js')) {
     form_set_error('googleanalytics_codesnippet_after', t('Do not add the tracker code provided by Google into the javascript code snippets! This module already builds the tracker code based on your Google Analytics account number and settings.'));
   }
   if (preg_match('/(.*)<\/?script(.*)>(.*)/i', $form_state['values']['googleanalytics_codesnippet_before'])) {

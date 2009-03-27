@@ -1,5 +1,5 @@
 <?php
-// $Id: apachesolr.module,v 1.1.2.12.2.115 2009/02/27 14:38:05 pwolanin Exp $
+// $Id: apachesolr.module,v 1.1.2.12.2.119 2009/03/20 17:34:23 pwolanin Exp $
 
 /**
  * @file
@@ -89,7 +89,7 @@ function apachesolr_requirements($phase) {
     $ping = FALSE;
     try {
       $solr = apachesolr_get_solr();
-      $ping = @$solr->ping();
+      $ping = @$solr->ping(variable_get('apachesolr_ping_timeout', 4));
       // If there is no $solr object, there is no server available, so don't continue.
       if (!$ping) {
         throw new Exception(t('No Solr instance available when checking requirements.'));
@@ -246,7 +246,7 @@ function apachesolr_index_nodes($result, $namespace = '', $callback = 'apachesol
     // Get the $solr object
     $solr = apachesolr_get_solr();
     // If there is no server available, don't continue.
-    if (!$solr->ping()) {
+    if (!$solr->ping(variable_get('apachesolr_ping_timeout', 4))) {
       throw new Exception(t('No Solr instance available during indexing.'));
     }
   }
@@ -534,8 +534,17 @@ function apachesolr_cron() {
     $solr = apachesolr_get_solr();
     $solr->clearCache();
     // Re-populate the luke cache.
-    // Note: we use 2 since 1 fails on Ubuntu Hardy.
     $solr->getLuke();
+    // Check for unpublished content that wasn't deleted from the index.
+    $result = db_query("SELECT n.nid, n.status FROM {apachesolr_search_node} asn INNER JOIN {node} n ON n.nid = asn.nid WHERE asn.status != n.status");
+    while ($node = db_fetch_object($result)) {
+      apachesolr_nodeapi($node, 'update');
+    }
+    // Check for deleted content that wasn't deleted from the index.
+    $result = db_query("SELECT asn.nid FROM {apachesolr_search_node} asn LEFT JOIN {node} n ON n.nid = asn.nid WHERE n.nid IS NULL");
+    while ($node = db_fetch_object($result)) {
+      apachesolr_nodeapi($node, 'delete');
+    }
     $last = variable_get('apachesolr_last_optimize', 0);
     $time = time();
     // Make sure to omtimize once per day.
@@ -566,10 +575,14 @@ function apachesolr_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
     case 'update':
       // Check if the node has gone from published to unpublished.
       If (!$node->status && db_result(db_query("SELECT status FROM {apachesolr_search_node} WHERE nid = %d", $node->nid))) {
-        apachesolr_delete_node_from_index($node);
+        if (apachesolr_delete_node_from_index($node)) {
+          // There was no exception, so update the table.
+          db_query("UPDATE {apachesolr_search_node} SET changed = %d, status = %d WHERE nid  = %d", time(), $node->status, $node->nid);
+        }
       }
-      // TODO: check that there was no exception?
-      db_query("UPDATE {apachesolr_search_node} SET changed = %d, status = %d WHERE nid  = %d", time(), $node->status, $node->nid);
+      else {
+        db_query("UPDATE {apachesolr_search_node} SET changed = %d, status = %d WHERE nid  = %d", time(), $node->status, $node->nid);
+      }
       break;
   }
 }
@@ -608,7 +621,7 @@ function apachesolr_block($op = 'list', $delta = 0, $edit = array()) {
       if (apachesolr_has_searched()) {
         // Get the query and response. Without these no blocks make sense.
         $response = apachesolr_static_response_cache();
-        if (empty($response)) {
+        if (empty($response) || ($response->response->numFound < 2)) {
           return;
         }
 
@@ -641,10 +654,21 @@ function apachesolr_block($op = 'list', $delta = 0, $edit = array()) {
               $new_query->set_solrsort($type == "relevancy" ? '' : "{$type} {$new_sort}");
               $active = isset($solrsorts[$type]) || ($type == "relevancy" && !$solrsorts);
               $direction = isset($solrsorts[$type]) ? $solrsorts[$type] : '';
-              $sort_links[$type] = theme('apachesolr_sort_link', $sort['name'], $path, $new_query->get_url_querystring(), $active, $direction);
+              $sort_links[$type] = array(
+                'name' => $sort['name'],
+                'path' => $path,
+                'querystring' => $new_query->get_url_querystring(),
+                'active' => $active,
+                'direction' => $direction
+              );
+            }
+            // Allow other modules to add or remove sorts.
+            drupal_alter('apachesolr_sort_links', $sort_links);
+            foreach ($sort_links as $type => $link) {
+              $themed_links[$type] = theme('apachesolr_sort_link', $link['name'], $link['path'], $link['querystring'], $link['active'], $link['direction']);
             }
             return array('subject' => t('Sort by'),
-                         'content' => theme('apachesolr_sort_list', $sort_links));
+                         'content' => theme('apachesolr_sort_list', $themed_links));
           default:
             break;
         }
