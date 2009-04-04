@@ -111,7 +111,7 @@ function acquia_search_form_alter(&$form, &$form_state, $form_id) {
       }
       break;
     case 'apachesolr_delete_index_form':
-      $form['markup']['#value'] = t('Acquia Search index');
+      $form['markup']['#value'] = t('Acquia Search index controls');
       break;
     case 'acquia_agent_settings_form':
       $form['buttons']['submit']['#submit'][] = 'acquia_search_settings_submit';

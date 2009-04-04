@@ -104,6 +104,10 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
       $result->code = 0;
     }
 
+    if (isset($result->error)) {
+      $responses[0] .= ': ' . check_plain($result->error);
+    }
+
     if (!isset($result->data)) {
       $result->data = '';
     }

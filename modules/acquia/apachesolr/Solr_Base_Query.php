@@ -1,5 +1,5 @@
 <?php
-// $Id: Solr_Base_Query.php,v 1.1.4.21 2009/03/18 20:30:48 pwolanin Exp $
+// $Id: Solr_Base_Query.php,v 1.1.4.24 2009/04/03 14:37:32 pwolanin Exp $
 
 class Solr_Base_Query {
 
@@ -10,7 +10,7 @@ class Solr_Base_Query {
     $queries = array();
     $values = array();
     // Range queries.  The "TO" is case-sensitive.
-    $patterns[] = '/(^| )'. $name .':(\[\S+ TO \S+\])/';
+    $patterns[] = '/(^| )'. $name .':([\[\{]\S+ TO \S+[\]\}])/';
     // Match quoted values.
     $patterns[] = '/(^| )'. $name .':"([^"]*)"/';
     // Match unquoted values.
@@ -33,7 +33,7 @@ class Solr_Base_Query {
   static function make_field(array $field) {
     // If the field value has spaces, or : in it, wrap it in double quotes.
     // unless it is a range query.
-    if (preg_match('/[ :]/', $field['#value']) && !preg_match('/\[\S+ TO \S+\]/', $field['#value'])) {
+    if (preg_match('/[ :]/', $field['#value']) && !preg_match('/[\[\{]\S+ TO \S+[\]\}]/', $field['#value'])) {
       $field['#value'] = '"'. $field['#value']. '"';
     }
     return $field['#name'] . ':' . $field['#value'];
@@ -205,7 +205,10 @@ class Solr_Base_Query {
   public function get_url_querystring() {
     $querystring = '';
     if ($fq = $this->rebuild_fq(TRUE)) {
-      $querystring = 'filters='. implode(' ', $fq);
+      foreach ($fq as $key => $value) {
+        $fq[$key] = drupal_urlencode($value);
+      }
+      $querystring = 'filters='. implode('+', $fq);
     }
     if ($this->solrsort) {
       $querystring .= ($querystring ? '&' : '') .'solrsort='. $this->solrsort;
@@ -296,6 +299,7 @@ class Solr_Base_Query {
    * a URL query parameter or passed to Solr as fq paramters.
    */
   protected function rebuild_fq($aliases = FALSE) {
+    $fq = array();
     $fields = array();
     foreach ($this->fields as $pos => $field) {
       // Look for a field alias.

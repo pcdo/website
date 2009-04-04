@@ -1,5 +1,5 @@
 <?php
-// $Id: acquia_agent_streams.inc,v 1.2 2009/01/20 18:24:28 pwolanin Exp $
+// $Id: acquia_agent_streams.inc,v 1.3 2009/04/02 20:00:55 pwolanin Exp $
 
 /**
  * @file
@@ -65,7 +65,7 @@ function _acquia_agent_xmlrpc() {
 function acquia_agent_stream_context_create($url, $module = 'acquia_agent') {
   $opts = array();
   $uri = parse_url($url);
-  if ($uri['scheme'] == 'https') {
+  if (isset($uri['scheme']) && ($uri['scheme'] == 'https') && variable_get('acquia_agent_verify_peer', 0)) {
     // Look for a local certificate to validate the server identity.
     $pem_file = drupal_get_path('module', $module) .'/'. $uri['host'] . '.pem';
     if (file_exists($pem_file)) {

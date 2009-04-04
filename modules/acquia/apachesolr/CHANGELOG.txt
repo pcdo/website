@@ -1,4 +1,4 @@
-// $Id: CHANGELOG.txt,v 1.1.2.42 2009/03/20 17:34:23 pwolanin Exp $
+// $Id: CHANGELOG.txt,v 1.1.2.48 2009/04/03 14:46:49 pwolanin Exp $
 
 Apache Solr integration x.x-x.x, xxxx-xx-xx
 ------------------------------
@@ -8,6 +8,15 @@ Apache Solr integration 6.x-1.x, xxxx-xx-xx
 
 Apache Solr integration 6.x-1.0-xxxxx, xxxx-xx-xx
 ------------------------------
+
+Apache Solr integration 6.x-1.0-beta7, 2009-04-03
+------------------------------
+#410330 by pwolanin and bhuga, return more information for error 0.
+#293989 by bjaspan and vladimir.dolgopolov, add date facets for created and changed dates. 
+#420290 by mkalkbrenner and pwolanin, add spaces around tags to avoid running words together.
+#368688 by hurleyit and pwolanin, send MLT docs instead of processed links to theme function.
+#383478 by pwolanin and JacobSingh, provide more information about autocommit lag, pending deletes.
+#339490 by aufumy, pwolanin, and JacobSingh, Organic groups Apachesolr integration, new _alter hook.
 
 Apache Solr integration 6.x-1.0-beta6, 2009-03-20
 ------------------------------
