@@ -5,8 +5,9 @@ dependencies[] = date_api
 package = Date/Time
 core = 6.x
 ; Information added by Acquia.com packaging script
-version = "6.x-2.0"
 core = "6.x"
 project = "date"
+datestamp = "1238042820"
+version = "6.x-2.x-dev"
 acquia = "1"
 

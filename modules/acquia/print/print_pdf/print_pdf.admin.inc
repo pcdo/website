@@ -1,5 +1,5 @@
 <?php
-// $Id: print_pdf.admin.inc,v 1.1.2.13 2009/02/05 00:37:44 jcnventura Exp $
+// $Id: print_pdf.admin.inc,v 1.1.2.14 2009/03/27 01:12:35 jcnventura Exp $
 
 /**
  * @file
@@ -44,7 +44,7 @@ function print_pdf_settings() {
       '#type' => 'fieldset',
       '#title' => t('Advanced link options'),
       '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
+      '#collapsed' => FALSE,
     );
 
     $form['settings']['adv_link']['print_pdf_show_link'] = array(
@@ -120,7 +120,7 @@ function print_pdf_settings() {
       $form['settings']['adv_link']['print_pdf_sys_link_pages']['#description'] .= ' '. t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
     }
 
-    $form['settings']['print_pdf_book_link'] = array(
+    $form['settings']['adv_link']['print_pdf_book_link'] = array(
       '#type' => 'radios',
       '#title' => t('Link in book hierarchy nodes'),
       '#default_value' => variable_get('print_pdf_book_link', PRINT_PDF_BOOK_LINK_DEFAULT),

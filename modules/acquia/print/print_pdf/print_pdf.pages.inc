@@ -1,5 +1,5 @@
 <?php
-// $Id: print_pdf.pages.inc,v 1.3.2.29 2009/03/12 20:22:54 jcnventura Exp $
+// $Id: print_pdf.pages.inc,v 1.3.2.31 2009/04/15 19:44:44 jcnventura Exp $
 
 /**
  * @file
@@ -133,11 +133,21 @@ function _print_pdf_dompdf($print, $html, $filename) {
 // dompdf can't handle footers cleanly, so disable the following
 //  $html = theme('print_pdf_dompdf_footer', $html);
 
-  // Convert from UTF-8 to ISO-8859-1 and then to HTML entities
-  $all_entities = get_html_translation_table(HTML_ENTITIES, ENT_NOQUOTES);
-  $special_entities = get_html_translation_table(HTML_SPECIALCHARS, ENT_NOQUOTES);
-  $no_tags = array_diff($all_entities, $special_entities);
-  $html = strtr(utf8_decode($html), $no_tags);
+  // Convert from UTF-8 to ISO 8859-1 and then to HTML entities
+  if (function_exists('utf8_decode')) {
+    $html = utf8_decode($html);
+  }
+// iconv fails silently when it encounters something that it doesn't know, so don't use it
+//  else if (function_exists('iconv')) {
+//    $html = iconv('UTF-8', 'ISO-8859-1', $html);
+//  }
+  else if (function_exists('mb_convert_encoding')) {
+    $html = mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8');
+  }
+  else if (function_exists('recode_string')) {
+    $html = recode_string('UTF-8..ISO_8859-1', $html);
+  }
+  $html = htmlspecialchars_decode(htmlentities($html, ENT_NOQUOTES, 'ISO-8859-1'), ENT_NOQUOTES);
 
   //must get rid of tbody (dompdf goes into recursion)
   $html = preg_replace('!<tbody[^>]*?>|</tbody>!i', '', $html);
@@ -346,11 +356,20 @@ function theme_print_pdf_tcpdf_content(&$pdf, &$html, $font) {
   $pattern = '!(?:<div class="print-(?:logo|site_name|breadcrumb|footer)">.*?</div>|<hr class="print-hr" />)!si';
   $matches[1] = preg_replace($pattern, '', $matches[1]);
 
+  // Make CCK fields look better
+  $matches[1] = preg_replace('!(<div class="field.*?>)\s*!sm', '$1', $matches[1]);
+  $matches[1] = preg_replace('!(<div class="field.*?>.*?</div>)\s*!sm', '$1', $matches[1]);
+  $matches[1] = preg_replace('!<div( class="field-label.*?>.*?)</div>!sm', '<strong$1</strong>', $matches[1]);
+
   // Since TCPDF's writeHTML is so bad with <p>, do everything possible to make it look nice
   $matches[1] = preg_replace('!(<p>|<p\s*/>|</p>)!i', '<br />', $matches[1]);
   $matches[1] = str_replace(array('<div', 'div>'), array('<span', 'span><br />'), $matches[1]);
+  do {
+    $prev = $matches[1];
+    $matches[1] = preg_replace('!(</span>)<br />(\s*?</span><br />)!s', '$1$2', $matches[1]);
+  } while ($prev != $matches[1]);
 
-  $pdf->writeHTML($matches[1]);
+  @$pdf->writeHTML($matches[1]);
 
   return $pdf;
 }

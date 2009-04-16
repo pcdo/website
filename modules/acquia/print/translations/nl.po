@@ -1,4 +1,4 @@
-# $Id: nl.po,v 1.1.2.12 2009/02/05 00:37:44 jcnventura Exp $
+# $Id: nl.po,v 1.1.2.13 2009/03/24 00:04:47 jcnventura Exp $
 #
 # Nederlands translation of Drupal (print)
 # Copyright 2004 Hendrik Eeckhaut <Hendrik.Eeckhaut@UGent.be>
@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2009-02-05 00:27+0100\n"
-"PO-Revision-Date: 2009-02-05 00:39+0100\n"
+"POT-Creation-Date: 2009-03-18 22:29+0100\n"
+"PO-Revision-Date: 2009-03-24 00:13+0100\n"
 "Last-Translator: Joao Ventura <jcnventura@drupal.org>\n"
 "Language-Team: Nederlands <nl@li.org, joost@trisum.nl>\n"
 "MIME-Version: 1.0\n"
@@ -355,7 +355,7 @@ msgid "Saving these strings will disable their translation via Drupal's language
 msgstr ""
 
 #: print.admin.inc:324;365
-#: print.module:102;125
+#: print.module:103;126
 #: print_mail/print_mail.admin.inc:153
 #: print_mail/print_mail.module:70
 #: print_pdf/print_pdf.admin.inc:270
@@ -395,7 +395,7 @@ msgid "Link text"
 msgstr "Link tekst"
 
 #: print.admin.inc:371
-#: print.module:336;515
+#: print.module:340;531
 msgid "Printer-friendly version"
 msgstr "Printervriendelijke versie"
 
@@ -411,79 +411,83 @@ msgstr "Anoniem"
 msgid "Post new comment"
 msgstr "Nieuwe reactie inzenden"
 
-#: print.module:143;329;84
+#: print.module:144;332;376;85
 #: print.info:0
 #: print_mail/print_mail.info:0
 #: print_pdf/print_pdf.info:0
 msgid "Printer, e-mail and PDF versions"
 msgstr "Printer, e-mail en PDF versies"
 
-#: print.module:144;173
+#: print.module:145;174
 msgid "Most printed"
 msgstr "Meest geprint"
 
-#: print.module:341
-#: print_mail/print_mail.module:232
-#: print_pdf/print_pdf.module:278
+#: print.module:345
+#: print_mail/print_mail.module:234
+#: print_pdf/print_pdf.module:280
 msgid "Show link"
 msgstr "Toon link"
 
-#: print.module:345
-#: print_mail/print_mail.module:236
-#: print_pdf/print_pdf.module:282
+#: print.module:349
+#: print_mail/print_mail.module:238
+#: print_pdf/print_pdf.module:284
 msgid "Show link in individual comments"
 msgstr "Toont een link in individuele commentaren"
 
-#: print.module:349
-#: print_mail/print_mail.module:240
-#: print_pdf/print_pdf.module:286
+#: print.module:353
+#: print_mail/print_mail.module:242
+#: print_pdf/print_pdf.module:288
 msgid "Show Printer-friendly URLs list"
 msgstr "Toon printervriendelijk URL lijst"
 
-#: print.module:362
+#: print.module:366
 msgid "The settings below only apply in case the corresponding type-specific setting is also enabled (except for the \"Show link in individual comments\")."
 msgstr ""
 
-#: print.module:518
+#: print.module:377
+msgid "Print module form."
+msgstr ""
+
+#: print.module:534
 msgid "Display a printer-friendly version of this page."
 msgstr "Maak een printervriendelijke versie van deze pagina."
 
-#: print.module:56
+#: print.module:57
 msgid "access print"
 msgstr "toegang tot print"
 
-#: print.module:56
+#: print.module:57
 msgid "administer print"
 msgstr "beheer print"
 
-#: print.module:56
+#: print.module:57
 msgid "node-specific print configuration"
 msgstr ""
 
-#: print.module:56
+#: print.module:57
 msgid "use PHP for link visibility"
 msgstr ""
 
-#: print.module:77
+#: print.module:78
 msgid "Printer-friendly"
 msgstr "Printvriendelijk"
 
-#: print.module:85
+#: print.module:86
 #: print.info:0
 msgid "Adds a printer-friendly version link to content and administrative pages."
 msgstr "Voeg een link voor een printervriendelijke versie aan de inhoud en administratieve pagina's toe."
 
-#: print.module:92
+#: print.module:93
 msgid "Web page"
 msgstr "Webpagina"
 
-#: print.module:97;120
+#: print.module:98;121
 #: print_mail/print_mail.module:65
 #: print_pdf/print_pdf.module:88
 msgid "Options"
 msgstr ""
 
-#: print.module:111
+#: print.module:112
 msgid "Settings"
 msgstr "Instellingen"
 
@@ -533,7 +537,7 @@ msgid "The maximum number of e-mails a user can send per hour."
 msgstr "Het maximum aantal e-mails dat een gebruiker per uur kan versturen."
 
 #: print_mail/print_mail.admin.inc:128
-#: print_mail/print_mail.inc:89
+#: print_mail/print_mail.inc:95
 msgid "Send only the teaser"
 msgstr "Verstuur alleen het voorproefje"
 
@@ -550,7 +554,7 @@ msgid "If checked, the user will be able to choose between sending the full cont
 msgstr "Indien geselecteerd, kan de gebruker de keuze maken bij het versturen tussen het versturen van de gehele inhoude of alleen het voorproefje."
 
 #: print_mail/print_mail.admin.inc:159
-#: print_mail/print_mail.module:311
+#: print_mail/print_mail.module:313
 msgid "Send to friend"
 msgstr "Verstuur naar een vriend"
 
@@ -563,20 +567,21 @@ msgid "Message Subject"
 msgstr "Onderwerp bericht"
 
 #: print_mail/print_mail.admin.inc:166
-#: print_mail/print_mail.inc:123
+#: print_mail/print_mail.inc:129
 msgid "!user has sent you a message from !site"
 msgstr "!user heeft u een bericht gestuurd van !site"
 
 #: print_mail/print_mail.admin.inc:167
-msgid "e-mail subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site."
-msgstr "e-mail onderwerp regele. De naam van de verzender komt in de plaats van !user in het onderwerp. "
+#, fuzzy
+msgid "e-mail subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site. The page title replaces !title."
+msgstr "e-mail onderwerp regele. De naam van de verzender komt in de plaats van !user in het onderwerp. The page title replaces !title."
 
 #: print_mail/print_mail.admin.inc:171
 msgid "Message Preamble"
 msgstr "Inleiding bericht"
 
 #: print_mail/print_mail.admin.inc:172
-#: print_mail/print_mail.inc:229
+#: print_mail/print_mail.inc:245
 msgid "Message from sender"
 msgstr "Bericht van verzender"
 
@@ -597,7 +602,7 @@ msgid "Thank You Message"
 msgstr "Bedankt bericht"
 
 #: print_mail/print_mail.admin.inc:184
-#: print_mail/print_mail.inc:253
+#: print_mail/print_mail.inc:276
 msgid "Thank you for spreading the word about !site."
 msgstr "Dank u voor het informeren over !site."
 
@@ -609,68 +614,81 @@ msgstr "Dit bericht wordt getoons nadat de gebruiker het formulier succesvol hee
 msgid "You cannot send more than %number messages per hour. Please try again later."
 msgstr "U kunt niet meer dan %number berichten per uur versturen. Probeer het later opnieuw."
 
-#: print_mail/print_mail.inc:60
+#: print_mail/print_mail.inc:61
 msgid "Your e-mail"
 msgstr "Uw e-mail"
 
-#: print_mail/print_mail.inc:65
+#: print_mail/print_mail.inc:66
 msgid "Your name"
 msgstr "Uw naam"
 
-#: print_mail/print_mail.inc:70
+#: print_mail/print_mail.inc:71
 msgid "Send to"
 msgstr "Verstuurd aan"
 
-#: print_mail/print_mail.inc:73
+#: print_mail/print_mail.inc:74
 msgid "Enter multiple addresses separated by commas and/or different lines."
 msgstr "Voer meerdere adressen in, gescheiden door kommas en/of verschillende regels."
 
-#: print_mail/print_mail.inc:77
+#: print_mail/print_mail.inc:78
 msgid "Subject"
 msgstr "Onderwerp"
 
-#: print_mail/print_mail.inc:82
+#: print_mail/print_mail.inc:83
+msgid "Page to be sent"
+msgstr ""
+
+#: print_mail/print_mail.inc:84
+msgid "View page"
+msgstr ""
+
+#: print_mail/print_mail.inc:88
 msgid "Your message"
 msgstr "Uw bericht"
 
-#: print_mail/print_mail.inc:100
+#: print_mail/print_mail.inc:106
 msgid "Send e-mail"
 msgstr "Verstuur e-mail"
 
-#: print_mail/print_mail.inc:104
+#: print_mail/print_mail.inc:110
 msgid "Clear form"
 msgstr "Maak formulier leeg"
 
-#: print_mail/print_mail.inc:109
+#: print_mail/print_mail.inc:115
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: print_mail/print_mail.inc:120
+#: print_mail/print_mail.inc:126
 msgid "Someone"
 msgstr "Iemand"
 
-#: print_mail/print_mail.inc:122
+#: print_mail/print_mail.inc:128
 msgid "an interesting site"
 msgstr "een interessante site"
 
-#: print_mail/print_mail.inc:199
+#: print_mail/print_mail.inc:203
+#, fuzzy
+msgid "You cannot send more than %number messages per hour. Please reduce the number of recipients."
+msgstr "U kunt niet meer dan %number berichten per uur versturen. Please reduce the number of recipients."
+
+#: print_mail/print_mail.inc:215
 msgid "You must enter a subject."
 msgstr "U moet een onderwerp invoeren"
 
-#: print_mail/print_mail.inc:203
+#: print_mail/print_mail.inc:219
 msgid "You must enter a message."
 msgstr "U moet een bericht invoeren."
 
-#: print_mail/print_mail.inc:252
+#: print_mail/print_mail.inc:275
 msgid "us"
 msgstr "ons"
 
-#: print_mail/print_mail.inc:251
+#: print_mail/print_mail.inc:274
 #: print_mail/print_mail.module:0
 msgid "print_mail"
 msgstr "print_mail"
 
-#: print_mail/print_mail.inc:251
+#: print_mail/print_mail.inc:274
 msgid "%name [%from] sent %page to [%to]"
 msgstr "%name [%from] verstuurd %page aan [%to]"
 
@@ -678,12 +696,12 @@ msgstr "%name [%from] verstuurd %page aan [%to]"
 msgid "Most emailed"
 msgstr "Het meest verstuurd via e-mail"
 
-#: print_mail/print_mail.module:227
+#: print_mail/print_mail.module:229
 #: print_mail/print_mail.info:0
 msgid "Send by e-mail"
 msgstr "Verstuur via e-mail"
 
-#: print_mail/print_mail.module:314
+#: print_mail/print_mail.module:316
 msgid "Send this page by e-mail."
 msgstr "Verstuur deze pagina via e-mail."
 
@@ -813,7 +831,7 @@ msgid "Font size must be at least 1."
 msgstr "Font grootte moet minimaal 1 zijn."
 
 #: (duplicate) print_pdf/print_pdf.admin.inc:276
-#: print_pdf/print_pdf.module:273;358;149
+#: print_pdf/print_pdf.module:275;360;149
 #: print_pdf/print_pdf.info:0
 msgid "PDF version"
 msgstr "PDF versie"
@@ -822,7 +840,7 @@ msgstr "PDF versie"
 msgid "Text used in the link to the PDF version."
 msgstr "Tekste gebruikt voor de link naar de PDF versie"
 
-#: print_pdf/print_pdf.pages.inc:380
+#: print_pdf/print_pdf.pages.inc:396
 msgid "Page !n of !total"
 msgstr "Pagina !n van !total"
 
@@ -830,7 +848,7 @@ msgstr "Pagina !n van !total"
 msgid "Most PDFd"
 msgstr "Het meest PDFd"
 
-#: print_pdf/print_pdf.module:361
+#: print_pdf/print_pdf.module:363
 msgid "Display a PDF version of this page."
 msgstr "Toon een PDF versie van deze pagina"
 

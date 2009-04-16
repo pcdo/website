@@ -1,5 +1,5 @@
 <?php
-// $Id: print_mail.module,v 1.1.2.27 2009/02/09 20:59:32 jcnventura Exp $
+// $Id: print_mail.module,v 1.1.2.29 2009/04/15 19:44:42 jcnventura Exp $
 
 /**
  * @file
@@ -168,8 +168,7 @@ function print_mail_link($type, $node = NULL, $teaser = FALSE) {
  */
 function print_mail_help($path, $arg) {
   $print_mail_link_pos = variable_get('print_mail_link_pos', array(PRINT_MAIL_LINK_POS_DEFAULT => PRINT_MAIL_LINK_POS_DEFAULT));
-  if ((preg_match('!^node/!i', $path) == 0) &&
-      !(empty($print_mail_link_pos['link']) && empty($print_mail_link_pos['corner']))) {
+  if (($path !== 'node/%') && !(empty($print_mail_link_pos['link']) && empty($print_mail_link_pos['corner']))) {
     static $output = FALSE;
 
     if ($output === FALSE) {
@@ -192,13 +191,10 @@ function print_mail_nodeapi(&$node, $op = 'view', $teaser, $page) {
       // Insert content corner links
       $print_mail_link_pos = variable_get('print_mail_link_pos', array(PRINT_MAIL_LINK_POS_DEFAULT => PRINT_MAIL_LINK_POS_DEFAULT));
       if (($teaser === FALSE) && !empty($print_mail_link_pos['corner']) &&
-          (preg_match('!^print!i', $_GET['q']) == 0)) {
+          isset($node->build_mode) && ($node->build_mode == NODE_BUILD_NORMAL)) {
         $link = print_mail_insert_link(NULL, $node);
         if ($link) {
-          $node->content['print_mail_link'] = array(
-            '#value' => "<span class='print-link'>$link</span>",
-            '#weight' => -102,
-          );
+          $node->content['print_links']['#value'] = preg_replace('!</span>$!', $link .'</span>', $node->content['print_links']['#value']);
         }
       }
       break;
@@ -425,7 +421,7 @@ function print_mail_link_allowed($args) {
     $print_mail_node_link_visibility = variable_get('print_mail_node_link_visibility', PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT);
     $print_mail_node_link_pages = variable_get('print_mail_node_link_pages', PRINT_MAIL_NODE_LINK_PAGES_DEFAULT);
 
-    if (!empty($node->printing) ||
+    if ((isset($node->build_mode) && ($node->build_mode == NODE_BUILD_PRINT)) ||
         !_print_page_match($print_mail_node_link_visibility, $print_mail_node_link_pages)) {
       // Page not in visibility list or we are working!
       return FALSE;
