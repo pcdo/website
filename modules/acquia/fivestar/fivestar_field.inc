@@ -1,5 +1,5 @@
 <?php
-// $Id: fivestar_field.inc,v 1.3.2.10 2008/07/23 15:54:22 quicksketch Exp $
+// $Id: fivestar_field.inc,v 1.3.2.17 2009/04/29 21:50:38 quicksketch Exp $
 
 /**
  * @file
@@ -53,7 +53,7 @@ function fivestar_field_settings($op, $field) {
         drupal_set_message(t('No potential target fields are available for the %type type. Create a node reference field in this node type to make it easier to assign a vote to a node.', array('%type' => node_get_types('name', $field['type_name']))), 'warning');
       }
 
-      $dynamic_options = array('' => t('<none>')) + $dynamic_options;
+      $dynamic_options = array('' => '<'. t('none') .'>') + $dynamic_options;
       $form['dynamic_target'] = array(
         '#title' => t('Voting target'),
         '#type' => 'select',
@@ -101,7 +101,7 @@ function fivestar_field_settings($op, $field) {
       );
   }
 }
-  
+
 /**
  * Implementation of hook_field().
  */
@@ -111,38 +111,18 @@ function fivestar_field($op, &$node, $field, &$items, $teaser, $page) {
   switch ($op) {
     case 'insert':
     case 'update':
-      foreach ($items as $delta => $item) {
-        if (!empty($field['php_target'])) {
-          // Use eval rather than drupal_eval to allow access to local variables.
-          $items[$delta]['target'] = eval($field['php_target']);
-        }
-        elseif ($field['dynamic_target'] && !empty($node->$field['dynamic_target'])) {
-          if (is_array($node->$field['dynamic_target']) && is_numeric($node->{$field['dynamic_target']}[0]['nid'])) {
-            $items[$delta]['target'] = $node->{$field['dynamic_target']}[0]['nid'];
-          }
-          elseif (is_numeric($node->$field['dynamic_target'])) {
-            $items[$delta]['target'] = $node->$field['dynamic_target'];
-          }
-        }
-
-        if (is_numeric($items[$delta]['target'])) {
-          _fivestar_cast_vote('node', $items[$delta]['target'], $items[$delta]['rating'], $items[$delta]['axis'], $node->uid);
-          votingapi_recalculate_results('node', $items[$delta]['target']);
-        }
-      }
-      break;
     case 'delete':
       foreach ($items as $delta => $item) {
-        if ($field['dynamic_target'] && !empty($node->$field['dynamic_target'])) {
-          $items[$delta]['target'] = $node->$field['dynamic_target'];
+        if ($node->status == 0 || $op == 'delete') {
+          $rating = 0;
+        } else {
+          $rating = $items[$delta]['rating'];
         }
-        elseif (!empty($item['php_target'])) {
-          // Use eval rather than drupal_eval to allow access to local variables.
-          $items[$delta]['target'] = eval($item['target']);
-        }
-        if (is_numeric($items[$delta]['target'])) {
-          _fivestar_cast_vote('node', $items[$delta]['target'], 0, $items[$delta]['axis'], $node->uid);
-          votingapi_recalculate_results('node', $items[$delta]['target']);
+        $target = fivestar_field_target($node, $field, $item);
+
+        if (is_numeric($target)) {
+          _fivestar_cast_vote('node', $target, $rating, $field['axis'], $node->uid, FALSE, TRUE);
+          votingapi_recalculate_results('node', $target);
         }
       }
       break;
@@ -150,6 +130,31 @@ function fivestar_field($op, &$node, $field, &$items, $teaser, $page) {
       $items[0]['stars'] = $field['stars'];
       break;
   }
+}
+
+/**
+ * Helper function to find the nid that should be rated when a field is changed.
+ */
+function fivestar_field_target($node, $field, $item) {
+  $target = FALSE;
+
+  if (!empty($field['php_target'])) {
+    // Use eval rather than drupal_eval to allow access to local variables.
+    $target = eval($field['php_target']);
+  }
+  elseif ($field['dynamic_target'] && !empty($node->$field['dynamic_target'])) {
+    if (is_array($node->$field['dynamic_target']) && is_numeric($node->{$field['dynamic_target']}[0]['nid'])) {
+      $target = $node->{$field['dynamic_target']}[0]['nid'];
+    }
+    elseif (is_numeric($node->$field['dynamic_target'])) {
+      $target = $node->$field['dynamic_target'];
+    }
+  }
+  elseif (isset($item['target'][0]['nid'])) {
+    $target = $item['target'][0]['nid'];
+  }
+
+  return $target;
 }
 
 /**
@@ -190,7 +195,7 @@ function fivestar_widget_settings($op, $widget) {
       $form['allow_clear'] = array(
         '#type' => 'checkbox',
         '#title' => t('Allow user to clear value'),
-        '#default_value' => $widget['allow_clear'] ? $widget['allow_clear'] : 1,
+        '#default_value' => isset($widget['allow_clear']) ? $widget['allow_clear'] : 1,
       );
       return $form;
     case 'save':
@@ -231,7 +236,7 @@ function fivestar_widget(&$form, &$form_state, $field, $items) {
 
   return $element;
 }
-      
+
 /**
  * Implementation of hook_field_formatter_info().
  */
@@ -281,7 +286,7 @@ function theme_fivestar_formatter_rating($element) {
  * Theme function for 'percentage' fivestar field formatter.
  */
 function theme_fivestar_formatter_percentage($element) {
-  if (!isset($element['#item']['rating'])) {
+  if (empty($element['#item']['rating'])) {
     $element['#item']['rating'] = 0;
   }
   if (empty($element['#item']['stars'])) {

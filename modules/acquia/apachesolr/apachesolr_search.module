@@ -1,5 +1,5 @@
 <?php
-// $Id: apachesolr_search.module,v 1.1.2.6.2.85 2009/04/16 15:26:44 pwolanin Exp $
+// $Id: apachesolr_search.module,v 1.1.2.6.2.88 2009/04/30 17:38:41 pwolanin Exp $
 
 /**
  * @file
@@ -62,12 +62,13 @@ function apachesolr_search_update_index() {
 }
 
 /**
- * Implementation of hook_apachesolr_node_exclude().
+ * Implementation of hook_apachesolr_types_exclude().
  */
-function apachesolr_search_apachesolr_node_exclude($node) {
-  $excluded_types = variable_get('apachesolr_search_excluded_types', array());
-  // Exclude from processing node types we don't want.
-  return !empty($excluded_types[$node->type]);
+function apachesolr_search_apachesolr_types_exclude($namespace) {
+  if ($namespace == 'apachesolr_search') {
+    $excluded_types = variable_get('apachesolr_search_excluded_types', array());
+    return array_filter($excluded_types);
+  }
 }
 
 /**
@@ -89,14 +90,14 @@ function apachesolr_search_search($op = 'search', $keys = NULL) {
     case 'search':
 
       try {
-        // This is the object that knows about the query coming from the user.
         if (empty($filters) && !empty($_GET['filters'])) {
           $filters = $_GET['filters'];
         }
         if (empty($solrsort) && !empty($_GET['solrsort'])) {
           $solrsort = $_GET['solrsort'];
         }
-        $query = apachesolr_drupal_query($keys, $filters, $solrsort);
+        // This is the object that knows about the query coming from the user.
+        $query = apachesolr_drupal_query($keys, $filters, $solrsort, 'search/' . arg(1));
         if (empty($query)) {
           throw new Exception(t('Could not construct a Solr query in function apachesolr_search_search()'));
         }
@@ -747,7 +748,7 @@ function theme_apachesolr_breadcrumb_is_book_bid($bid) {
  * Return current search block contents
  */
 function theme_apachesolr_currentsearch($total_found, $links) {
-  return theme_item_list($links, t('Search found @count items', array('@count' => $total_found)));
+  return theme_item_list($links, format_plural($total_found, 'Search found 1 item', 'Search found @count items'));
 }
 
 /**

@@ -1,11 +1,16 @@
 /**
- * $Id: ie7-fixes.css,v 1.1.2.2 2008/12/03 09:08:30 jwolf Exp $
+ * $Id: ie7-fixes.css,v 1.1.2.4 2009/02/13 11:01:26 jwolf Exp $
  * Acquia Marina
  */
 
 /*************/
 /* IE7 FIXES */
 /*************/
+
+/* fix floating tabs */
+#header-bottom {
+  height: 1%;
+}
 
 /* prevent dropdown menus from disappearing behind preface blocks */
 #preface div.block {
@@ -64,34 +69,4 @@ html.js #user-login li.openid-processed {
 /* prevent comment form background from disappearing */
 #comments .content {
   zoom: 1;
-}
-
-/*--- USER BLOCK ---*/
-.block-user .block-icon {
-  left: -1px;
-  top: -14px;
-}
-
-/*--- SEARCH BLOCK ---*/
-.block-search .block-icon {
-  left: -2px;
-  top: -14px;
-}
-
-/*--- MENU BLOCK ---*/
-.block-menu .block-icon {
-  left: -1px;
-  top: -14px;
-}
-
-/*--- COMMENT BLOCK ---*/
-.block-comment .block-icon,
-.block-forum .block-icon {
-  left: -1px;
-  top: -14px;
-}
-
-.block-blog .block-icon {
-  left: -1px;
-  top: -14px;
 }

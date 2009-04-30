@@ -1,5 +1,5 @@
 /**
- * $Id: style.css,v 1.1.2.12 2008/12/21 23:17:44 jwolf Exp $
+ * $Id: style.css,v 1.1.2.17 2009/04/19 04:52:38 jwolf Exp $
  * Acquia Marina 
  */
 
@@ -343,7 +343,7 @@ div.content th img {
   margin: 0 auto;
   position: relative;
   width: 960px;
-  z-index: 600;    /* fixes IE z-index bug */
+  z-index: 5;    /* fixes IE z-index bug */
 }
 
 
@@ -722,7 +722,6 @@ div.node h2.title {
 
 div.node {
   margin: 0 0 30px;
-  overflow: hidden;
 }
 
 #content-content .node ul.links li,
@@ -831,7 +830,6 @@ div.block-wrapper {                    /* spacing between blocks */
 }
 
 div.block div.content {
-  overflow: hidden;
 }
 
 #user-login-form .item-list ul li,
@@ -1055,7 +1053,7 @@ div.rounded-inside {
   font-family: Myriad Pro, Myriad Web Pro Regular, Lucida Grande, Geneva, Trebuchet MS, sans-serif;
   font-size: 1em;
   font-weight: bold;
-  margin-top: 12px;
+  margin: 0;
   padding: 0;
   position: relative;
   text-transform: uppercase;
@@ -1393,6 +1391,11 @@ html.js input.form-autocomplete {
   background-position: 100% 5px;
 }
 
+/* prevents fields from overflowing into sidebar-last */
+body.layout-main-last input.form-text {
+  width: 450px;
+}
+
 /**********/
 /* PAGERS */
 /**********/
@@ -1556,6 +1559,7 @@ div.error {
 .status {
 }
 
+
 .help {
 }
 
@@ -1568,6 +1572,14 @@ div.error {
 .tips {
 
 }
+
+#help {
+  clear: left;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
 
 
 /*--------------------------------*/

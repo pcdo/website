@@ -1,5 +1,5 @@
 /**
- * $Id: ie6-fixes.css,v 1.1.2.3 2008/12/03 09:08:30 jwolf Exp $
+ * $Id: ie6-fixes.css,v 1.1.2.4 2008/12/15 16:56:23 jwolf Exp $
  * Acquia Marina
  */
 
@@ -82,23 +82,6 @@ html.js #user-login-form li.openid-processed,
 html.js #user-login li.openid-processed {
   margin-left: 0;
   padding-left: 8px;
-}
-
-/* group the block-icon layout styles together */
-.block-blog .block-icon,
-.block-comment .block-icon,
-.block-forum .block-icon,
-.block-search .block-icon,
-.block-menu .block-icon,
-.comments-block-icon,
-.block-user .block-icon,
-#block-blog-0 .block-icon,
-#block-book-0 .block-icon,
-#block-menu-devel .block-icon,
-#block-user-0 .block-icon,
-#block-views-archive-block .block-icon,
-#block-views-comments_recent-block .block-icon {
-  top: -5px;
 }
 
 /* fix extra rounded graphic at bottom */

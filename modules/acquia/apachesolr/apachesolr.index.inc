@@ -1,5 +1,5 @@
 <?php
-// $Id: apachesolr.index.inc,v 1.1.2.1 2009/04/16 13:33:16 pwolanin Exp $
+// $Id: apachesolr.index.inc,v 1.1.2.4 2009/04/30 17:38:40 pwolanin Exp $
 
 /**
  * @file
@@ -9,8 +9,8 @@
 /**
  * Add a document to the $documents array based on a node ID.
  */
-function apachesolr_add_node_document(&$documents, $nid) {
-  if ($document = apachesolr_node_to_document($nid)) {
+function apachesolr_add_node_document(&$documents, $nid, $namespace) {
+  if ($document = apachesolr_node_to_document($nid, $namespace)) {
     $documents[] = $document;
   }
 }
@@ -28,15 +28,20 @@ function apachesolr_strip_ctl_chars($text) {
  * Strip html tags and also control characters that cause Jetty/Solr to fail.
  */
 function apachesolr_clean_text($text) {
-  $text = preg_replace('@[\x00-\x08\x0B\x0C\x0E-\x1F]@', ' ', $text);
+  return _apachesolr_strip_decode(preg_replace('@[\x00-\x08\x0B\x0C\x0E-\x1F]@', ' ', $text));
+}
+
+function _apachesolr_strip_decode($text) {
   // Add spaces before stripping tags to avoid running words together.
-  return strip_tags(str_replace(array('<', '>'), array(' <', '> '), $text));
+  $text = filter_xss(str_replace(array('<', '>'), array(' <', '> '), $text), array());
+  // Decode entities and then make safe any < or > characters.
+  return htmlspecialchars(html_entity_decode($text, ENT_NOQUOTES, 'UTF-8'), ENT_NOQUOTES, 'UTF-8', FALSE);
 }
 
 /**
  * Given a node ID, return a document representing that node.
  */
-function apachesolr_node_to_document($nid) {
+function apachesolr_node_to_document($nid, $namespace) {
   // Set reset = TRUE to avoid static caching of all nodes that get indexed.
   $node = node_load($nid, NULL, TRUE);
   if (empty($node)) {
@@ -47,7 +52,7 @@ function apachesolr_node_to_document($nid) {
   // Let any module exclude this node from the index.
   $build_document = TRUE;
   foreach (module_implements('apachesolr_node_exclude') as $module) {
-    $exclude = module_invoke($module, 'apachesolr_node_exclude', $node);
+    $exclude = module_invoke($module, 'apachesolr_node_exclude', $node, $namespace);
     if (!empty($exclude)) {
       $build_document = FALSE;
     }
@@ -83,7 +88,7 @@ function apachesolr_node_to_document($nid) {
     if (!empty($node->language)) {
       $document->language = $node->language;
     }
-    $document->body = strip_tags(str_replace(array('<', '>'), array(' <', '> '), $text));
+    $document->body = _apachesolr_strip_decode($text);
     $document->type  = $node->type;
     $document->type_name = apachesolr_strip_ctl_chars(node_get_types('name', $node));
     $document->created = apachesolr_date_iso($node->created);
@@ -115,7 +120,7 @@ function apachesolr_node_to_document($nid) {
         // Got a CCK field. See if it is to be indexed.
         $function = $cck_info['callback'];
         if ($cck_info['callback'] && function_exists($function)) {
-          $field = call_user_func_array($function, array($node, $key));
+          $field = $function($node, $key);
         }
         else {
           $field = $node->$key;
@@ -123,12 +128,13 @@ function apachesolr_node_to_document($nid) {
         $index_key = apachesolr_index_key($cck_info);
         foreach ($field as $value) {
           // Don't index NULLs or empty strings
-          if (isset($value['safe']) && strlen($value['safe'])) {
+          // We can use 'value' rather than 'safe' since we strip tags and later check_plain().
+          if (isset($value['value']) && strlen($value['value'])) {
             if ($cck_info['multiple']) {
-              $document->setMultiValue($index_key, apachesolr_clean_text($value['safe']));
+              $document->setMultiValue($index_key, apachesolr_clean_text($value['value']));
             }
             else {
-              $document->$index_key = apachesolr_clean_text($value['safe']);
+              $document->$index_key = apachesolr_clean_text($value['value']);
             }
           }
         }

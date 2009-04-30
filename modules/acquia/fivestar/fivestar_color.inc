@@ -1,5 +1,10 @@
 <?php
-// $Id: fivestar_color.inc,v 1.1.4.5 2008/03/29 00:45:36 quicksketch Exp $
+// $Id: fivestar_color.inc,v 1.1.4.8 2009/04/10 18:21:03 quicksketch Exp $
+
+/**
+ * @file
+ * File containing functions relating to the color widget.
+ */
 
 /**
  * Form callback. Returns the configuration form.
@@ -65,7 +70,7 @@ function fivestar_color_form() {
     'matte' => t('Matte color'),
   );
 
-  $form['fivestar_colors']['#tree'] = true;
+  $form['fivestar_colors']['#tree'] = TRUE;
   $form['fivestar_colors']['#theme'] = 'fivestar_color_palette';
   foreach ($names as $key => $name) {
     $form['fivestar_colors'][$key] = array(
@@ -133,7 +138,7 @@ function theme_fivestar_color_form($form) {
 /**
  * Validate handler for color form.
  */
-function fivstar_color_form_validate($form, &$form_state) {
+function fivestar_color_form_validate($form, &$form_state) {
   if ($form_state['values']['fivestar_color_type'] == 'default' || $_POST['fivestar_color_type'] == '') {
     $form_state['values']['fivestar_color_type'] = 'default';
     return;
@@ -150,7 +155,7 @@ function fivstar_color_form_validate($form, &$form_state) {
 /**
  * Submit handler for color change form.
  */
-function fivstar_color_form_submit($form, &$form_state) {
+function fivestar_color_form_submit($form, &$form_state) {
   if ($form_state['values']['matte'] == t('none')) {
     $form_state['values']['matte'] = '';
   }
@@ -197,11 +202,13 @@ function fivstar_color_form_submit($form, &$form_state) {
   variable_set('fivestar_colors', $form_state['values']['fivestar_colors']);
   variable_set('fivestar_color_type', $form_state['values']['fivestar_color_type']);
 
+  drupal_clear_css_cache();
   drupal_set_message(t('Custom %name stars generated. You may need to clear your browser cache before the new stars are visible.', array('%name' => t($widget))));
 }
 
 /**
  * Render images that match a given palette.
+ *
  * @param $source
  *   The original image source (star-template.png or cancel-template.png).
  * @param $palette
@@ -213,7 +220,7 @@ function _fivestar_color_render($source, $palette, $type) {
 
   // Pull in the template image.
   $template = imagecreatefrompng($source);
-  imagealphablending($template, true);
+  imagealphablending($template, TRUE);
   $width = imagesx($template) / 2;
   $height = imagesy($template);
 
@@ -246,14 +253,14 @@ function _fivestar_color_render($source, $palette, $type) {
   }
 
   // Apply the overlay on top of the mask.
-  imagealphablending($mask, true);
+  imagealphablending($mask, TRUE);
   imagecopy($mask, $overlay, 0, 0, 0, 0, $width, $height);
   imagedestroy($overlay);
 
   // Set the background color.
   if ($palette['matte'] == 'transparent') {
     // A simple case, just make this save as a 24-bit PNG.
-    imagesavealpha($mask, true);
+    imagesavealpha($mask, TRUE);
     $return = $mask;
   }
   else {
@@ -263,7 +270,7 @@ function _fivestar_color_render($source, $palette, $type) {
     $matte_rgb = _fivestar_color_unpack($palette['matte']);
     $transparent = imagecolorallocate($return, $matte_rgb[0], $matte_rgb[1], $matte_rgb[2]);
     imagefill($return, 0, 0, $transparent);
-    imagealphablending($return, true);
+    imagealphablending($return, TRUE);
     imagecopy($return, $mask, 0, 0, 0, 0, $width, $height);
     imagecolortransparent($return, $transparent);
     imagetruecolortopalette($return, TRUE, 255);
@@ -274,7 +281,7 @@ function _fivestar_color_render($source, $palette, $type) {
 
 /**
  * Apply a color to a portion of a black and white mask image.
- * 
+ *
  * @param $mask
  *   A GD image reference containing the mask image.
  * @param $color
@@ -290,16 +297,16 @@ function _fivestar_color_mask(&$mask, $color, $matte_color, $x_offset, $y_offset
       if ($matte_color != 'transparent' && $current_pixel['alpha'] != 127) {
         $matte_rgb = _fivestar_color_unpack($matte_color);
         $matte = imagecolorallocate($mask, $matte_rgb[0], $matte_rgb[1], $matte_rgb[2]);
-        imagealphablending($mask, false);
+        imagealphablending($mask, FALSE);
         imagesetpixel($mask, $x, $y, $matte);
-        imagealphablending($mask, true);
+        imagealphablending($mask, TRUE);
         imagesetpixel($mask, $x, $y, $new_color);
       }
       // Transparent matte:
       else {
-        imagealphablending($mask, false);
+        imagealphablending($mask, FALSE);
         imagesetpixel($mask, $x, $y, $new_color);
-        imagealphablending($mask, true);
+        imagealphablending($mask, TRUE);
       }
     }
   }
@@ -307,9 +314,9 @@ function _fivestar_color_mask(&$mask, $color, $matte_color, $x_offset, $y_offset
 
 /**
  * Apply a gradient to a portion of a black and white mask image.
- * 
+ *
  * The two colors passed in will form a linear gradient from top to bottom.
- * 
+ *
  * @param $mask
  *   A GD image reference containing the mask image.
  * @param $color1
@@ -339,7 +346,7 @@ function _fivestar_color_blend($hex1, $hex2, $alpha) {
 /**
  * Convert a hex color into an RGB triplet.
  */
-function _fivestar_color_unpack($hex, $normalize = false) {
+function _fivestar_color_unpack($hex, $normalize = FALSE) {
   if (strlen($hex) == 4) {
     $hex = $hex[1] . $hex[1] . $hex[2] . $hex[2] . $hex[3] . $hex[3];
   }
@@ -353,7 +360,7 @@ function _fivestar_color_unpack($hex, $normalize = false) {
 /**
  * Convert an RGB triplet to a hex color.
  */
-function _fivestar_color_pack($rgb, $normalize = false) {
+function _fivestar_color_pack($rgb, $normalize = FALSE) {
   foreach ($rgb as $k => $v) {
     $out |= (($v * ($normalize ? 255 : 1)) << (16 - $k * 8));
   }

@@ -1,5 +1,5 @@
 <?php
-// $Id: print_mail.inc,v 1.2.2.18 2009/03/18 20:49:44 jcnventura Exp $
+// $Id: print_mail.inc,v 1.2.2.20 2009/04/22 22:11:37 jcnventura Exp $
 
 /**
  * @file
@@ -177,7 +177,7 @@ function print_mail_form_validate($form, &$form_state) {
   }
 
   // All new-lines are replaced by commas
-  $to_addrs = str_replace(array("\r\n", "\n", "\r"), ',', $form_state['values']['txt_to_addrs']);
+  $to_addrs = preg_replace('![\r|\n|,]+!', ',', $form_state['values']['txt_to_addrs']);
   // Create an array from the string
   $to_array = explode(',', $to_addrs);
   // Verify each element of the array
@@ -264,10 +264,19 @@ function print_mail_form_submit($form, &$form_state) {
       $ok = FALSE;
       $addresses = explode(', ', $form_state['values']['txt_to_addrs']);
       foreach ($addresses as $to) {
-        $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
-        if ($ret['result']) {
-          flood_register_event('print_mail');
-          $ok = TRUE;
+        // Call to hook_print_mail_before_send in order to know if the mail can be sent
+        // Handlers must return TRUE or FALSE
+        $can_send = module_invoke_all('print_mail_before_send', $node, $to, $from, $params);
+
+        if (!in_array(FALSE, $can_send)) {
+          $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
+          if ($ret['result']) {
+            // Call to hook_print_mail_after_send in order to provide information to other modules.
+            module_invoke_all('print_mail_after_send', $node, $to, $from, $params);
+
+            flood_register_event('print_mail');
+            $ok = TRUE;
+          }
         }
       }
       if ($ok) {

@@ -12,6 +12,8 @@
 function acquia_search_enable() {
   if (acquia_agent_subscription_is_active()) {
     _acquia_search_set_variables();
+    // Send a heartbeat so the Acquia Network knows the module is enabled.
+    acquia_agent_check_subscription();
   }
 }
 
@@ -34,7 +36,7 @@ function _acquia_search_set_variables() {
 function acquia_search_disable() {
   acquia_search_delete_variables();
   // Disable all the associated search modules.
-  module_disable(array('apachesolr', 'apachesolr_search', 'apachesolr_mlt', 'apachesolr_nodeaccess', 'apachesolr_image'));
+  module_disable(array('apachesolr', 'apachesolr_search', 'apachesolr_mlt', 'apachesolr_nodeaccess', 'apachesolr_image', 'apachesolr_og'));
 }
 
 /**

@@ -1,5 +1,5 @@
 <?php
-// $Id: print_pdf.admin.inc,v 1.1.2.14 2009/03/27 01:12:35 jcnventura Exp $
+// $Id: print_pdf.admin.inc,v 1.1.2.16 2009/04/27 22:53:50 jcnventura Exp $
 
 /**
  * @file
@@ -181,6 +181,19 @@ function print_pdf_settings() {
       '#maxlength' => 3,
       '#description' => t('(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles.'),
     );
+    $form['settings']['print_pdf_wkhtmltopdf_options'] = array(
+      '#type' => 'textfield',
+      '#title' => t('wkhtmltopdf options'),
+      '#default_value' => variable_get('print_pdf_wkhtmltopdf_options', PRINT_PDF_WKHTMLTOPDF_OPTIONS),
+      '#description' => t('(wkhtmltopdf only) Set any additional options to be passed to the wkhtmltopdf executable.'),
+    );
+    $form['settings']['print_pdf_xvfb_options'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Xvfb options'),
+      '#default_value' => variable_get('print_pdf_xvfb_options', PRINT_PDF_XVFB_OPTIONS),
+      '#description' => t('(wkhtmltopdf only) Set any additional options to be passed to the Xvfb executable.'),
+    );
+
     if (module_exists('token')) {
       $form['settings']['print_pdf_filename'] = array(
         '#type' => 'textfield',
@@ -239,6 +252,7 @@ function _print_pdf_settings_validate($form, &$form_state) {
 function _print_pdf_tools() {
   $tools = array_keys(file_scan_directory(drupal_get_path('module', 'print'), '^dompdf_config.inc.php$'));
   $tools = array_merge($tools, array_keys(file_scan_directory(drupal_get_path('module', 'print'), '^tcpdf.php$')));
+  $tools = array_merge($tools, array_keys(file_scan_directory(drupal_get_path('module', 'print'), '^wkhtmltopdf$')));
 
   $num_tools = count($tools);
 

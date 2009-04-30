@@ -15,7 +15,7 @@
  * Create a degradeable star rating interface out of a simple form structure.
  * Returns a modified jQuery object containing the new interface.
  *   
- * @example jQuery('form.rating').rating();
+ * @example jQuery('form.rating').fivestar();
  * @cat plugin
  * @type jQuery 
  *
@@ -44,7 +44,7 @@
         }
         else if ($obj.is('.fivestar-average-stars')) {
           var starDisplay = 'average';
-          currentValue = $("input[@name=vote_average]", $obj).val();
+          currentValue = $("input[name=vote_average]", $obj).val();
         }
         else if ($obj.is('.fivestar-combo-stars')) {
           var starDisplay = 'combo';
@@ -128,7 +128,16 @@
               $obj.removeClass('fivestar-user-stars').addClass('fivestar-average-stars');
             }
             // Submit the form if needed.
-            $("input.fivestar-path", $obj).each(function () { $.ajax({ type: 'GET', dataType: 'xml', url: this.value + '/' + 0, success: voteHook }); });
+            $("input.fivestar-path", $obj).each(function() {
+              var token = $("input.fivestar-token", $obj).val();
+              $.ajax({
+                type: 'GET',
+                data: { token: token },
+                dataType: 'xml',
+                url: this.value + '/' + 0,
+                success: voteHook
+              });
+            });
             return false;
         });
         $stars.click(function(){
@@ -152,7 +161,16 @@
               $obj.removeClass('fivestar-average-stars').addClass('fivestar-user-stars');
             }
             // Submit the form if needed.
-            $("input.fivestar-path", $obj).each(function () { $.ajax({ type: 'GET', dataType: 'xml', url: this.value + '/' + currentValue, success: voteHook }); });
+            $("input.fivestar-path", $obj).each(function () {
+              var token = $("input.fivestar-token", $obj).val();
+              $.ajax({
+                type: 'GET',
+                data: { token: token },
+                dataType: 'xml',
+                url: this.value + '/' + currentValue,
+                success: voteHook
+              });
+            });
             return false;
         });
 
@@ -233,6 +251,7 @@
             },
             vote: {
               id: $("vote id", data).text(),
+              tag: $("vote tag", data).text(),
               type: $("vote type", data).text(),
               value: $("vote value", data).text()
             },
@@ -318,13 +337,14 @@
      * voteResult.result.summary.user The textual description of the user's current vote.
      * voteResult.vote.id The id of the item the vote was placed on (such as the nid)
      * voteResult.vote.type The type of the item the vote was placed on (such as 'node')
+     * voteResult.vote.tag The multi-axis tag the vote was placed on (such as 'vote')
      * voteResult.vote.average The average of the new vote saved
      * voteResult.display.stars The type of star display we're using. Either 'average', 'user', or 'combo'.
      * voteResult.display.text The type of text display we're using. Either 'average', 'user', or 'combo'.
      */
     function fivestarDefaultResult(voteResult) {
       // Update the summary text.
-      $('div.fivestar-summary-'+voteResult.vote.id).html(voteResult.result.summary[voteResult.display.text]);
+      $('div.fivestar-summary-'+voteResult.vote.tag+'-'+voteResult.vote.id).html(voteResult.result.summary[voteResult.display.text]);
       // If this is a combo display, update the average star display.
       if (voteResult.display.stars == 'combo') {
         $('div.fivestar-form-'+voteResult.vote.id).each(function() {
@@ -348,7 +368,7 @@
     /**
      * Set up the plugin
      */
-    $.fn.rating = function() {
+    $.fn.fivestar = function() {
       var stack = [];
       this.each(function() {
           var ret = buildRating($(this));
@@ -363,11 +383,10 @@
       document.execCommand('BackgroundImageCache', false, true);
     } catch(err) {}
   }
-})(jQuery);
 
-if (Drupal.jsEnabled) {
-  $(document).ready(function() {
-    $('div.fivestar-form-item').rating();
-    $('input.fivestar-submit').css('display', 'none');
-  });
-}
+  Drupal.behaviors.fivestar = function(context) {
+    $('div.fivestar-form-item:not(.fivestar-processed)', context).addClass('fivestar-processed').fivestar();
+    $('input.fivestar-submit', context).css('display', 'none');
+  }
+
+})(jQuery);

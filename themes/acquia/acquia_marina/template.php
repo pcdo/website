@@ -1,17 +1,16 @@
 <?php
-// $Id: template.php,v 1.1.2.7 2008/12/09 03:47:12 jwolf Exp $
-
-/**
- * Force refresh of theme registry.
- * DEVELOPMENT USE ONLY - COMMENT OUT FOR PRODUCTION
- */
-// drupal_rebuild_theme_registry();
-
+// $Id: template.php,v 1.1.2.10 2009/02/13 08:22:38 jwolf Exp $
 
 /**
  * Initialize theme settings
  */
-if (is_null(theme_get_setting('user_notverified_display'))) {
+if (is_null(theme_get_setting('user_notverified_display')) || theme_get_setting('rebuild_registry')) {
+	
+  // Auto-rebuild the theme registry during theme development.
+  if(theme_get_setting('rebuild_registry')) {
+    drupal_set_message(t('The theme registry has been rebuilt. <a href="!link">Turn off</a> this feature on production websites.', array('!link' => url('admin/build/themes/settings/' . $GLOBALS['theme']))), 'warning');
+  }
+
   global $theme_key;
   // Get node types
   $node_types = node_get_types('names');
@@ -67,6 +66,7 @@ if (is_null(theme_get_setting('user_notverified_display'))) {
     'comment_node_prefix_default'           => '',
     'comment_node_suffix_default'           => '',
     'comment_enable_content_type'           => 0,
+    'rebuild_registry'                      => 0,
   );
   
   // Make the default content-type settings the same as the default theme settings,
@@ -230,53 +230,56 @@ function phptemplate_preprocess_page(&$vars) {
     $vars['breadcrumb'] = '';  
   }
   
-  // Set site title, slogan, mission, page title & separator
-  $title = t(variable_get('site_name', ''));
-  $slogan = t(variable_get('site_slogan', ''));
-  $mission = t(variable_get('site_mission', ''));
-  $page_title = t(drupal_get_title());
-  $title_separator = theme_get_setting('configurable_separator');
-  if (drupal_is_front_page()) {                                                // Front page title settings
-    switch (theme_get_setting('front_page_title_display')) {
-      case 'title_slogan':
-        $vars['head_title'] = drupal_set_title($title . $title_separator . $slogan);
-        break;
-      case 'slogan_title':
-        $vars['head_title'] = drupal_set_title($slogan . $title_separator . $title);
-        break;
-      case 'title_mission':
-        $vars['head_title'] = drupal_set_title($title . $title_separator . $mission);
-        break;
-      case 'custom':
-        if (theme_get_setting('page_title_display_custom') !== '') {
-          $vars['head_title'] = drupal_set_title(t(theme_get_setting('page_title_display_custom')));
-        }
+  // Set site title, slogan, mission, page title & separator (unless using Page Title module)
+  if (!module_exists('page_title')) {
+    $title = t(variable_get('site_name', ''));
+    $slogan = t(variable_get('site_slogan', ''));
+    $mission = t(variable_get('site_mission', ''));
+    $page_title = t(drupal_get_title());
+    $title_separator = theme_get_setting('configurable_separator');
+    if (drupal_is_front_page()) {                                                // Front page title settings
+      switch (theme_get_setting('front_page_title_display')) {
+        case 'title_slogan':
+          $vars['head_title'] = drupal_set_title($title . $title_separator . $slogan);
+          break;
+        case 'slogan_title':
+          $vars['head_title'] = drupal_set_title($slogan . $title_separator . $title);
+          break;
+        case 'title_mission':
+          $vars['head_title'] = drupal_set_title($title . $title_separator . $mission);
+          break;
+        case 'custom':
+          if (theme_get_setting('page_title_display_custom') !== '') {
+            $vars['head_title'] = drupal_set_title(t(theme_get_setting('page_title_display_custom')));
+          }
+      }
     }
-  }
-  else {                                                                       // Non-front page title settings
-    switch (theme_get_setting('other_page_title_display')) {
-      case 'ptitle_slogan':
-        $vars['head_title'] = drupal_set_title($page_title . $title_separator . $slogan);
-        break;
-      case 'ptitle_stitle':
-        $vars['head_title'] = drupal_set_title($page_title . $title_separator . $title);
-        break;
-      case 'ptitle_smission':
-        $vars['head_title'] = drupal_set_title($page_title . $title_separator . $mission);
-        break;
-      case 'ptitle_custom':
-        if (theme_get_setting('other_page_title_display_custom') !== '') {
-          $vars['head_title'] = drupal_set_title($page_title . $title_separator . t(theme_get_setting('other_page_title_display_custom')));
-        }
-        break;
-      case 'custom':
-        if (theme_get_setting('other_page_title_display_custom') !== '') {
-          $vars['head_title'] = drupal_set_title(t(theme_get_setting('other_page_title_display_custom')));
-        }
+    else {                                                                       // Non-front page title settings
+      switch (theme_get_setting('other_page_title_display')) {
+        case 'ptitle_slogan':
+          $vars['head_title'] = drupal_set_title($page_title . $title_separator . $slogan);
+          break;
+        case 'ptitle_stitle':
+          $vars['head_title'] = drupal_set_title($page_title . $title_separator . $title);
+          break;
+        case 'ptitle_smission':
+          $vars['head_title'] = drupal_set_title($page_title . $title_separator . $mission);
+          break;
+        case 'ptitle_custom':
+          if (theme_get_setting('other_page_title_display_custom') !== '') {
+            $vars['head_title'] = drupal_set_title($page_title . $title_separator . t(theme_get_setting('other_page_title_display_custom')));
+          }
+          break;
+        case 'custom':
+          if (theme_get_setting('other_page_title_display_custom') !== '') {
+            $vars['head_title'] = drupal_set_title(t(theme_get_setting('other_page_title_display_custom')));
+          }
+      }
     }
+    $vars['head_title'] = strip_tags($vars['head_title']);                       // Remove any potential html tags
   }
-  $vars['head_title'] = strip_tags($vars['head_title']);                       // Remove any potential html tags
   
+  // Set meta keywords and description (unless using Meta tags module)
   if (!module_exists('nodewords')) {
     if (theme_get_setting('meta_keywords') !== '') {
       $keywords = '<meta name="keywords" content="'. theme_get_setting('meta_keywords') .'" />';
@@ -287,7 +290,10 @@ function phptemplate_preprocess_page(&$vars) {
       $vars['head'] .= $keywords ."\n";
     } 
   }
-  $vars['closure'] .= '<div id="legal-notice">Theme provided by <a href="http://www.acquia.com">Acquia, Inc.</a> under GPL license from TopNotchThemes <a href="http://www.topnotchthemes.com">Drupal themes</a></div>';
+
+  if (drupal_is_front_page()) {
+    $vars['closure'] .= '<div id="legal-notice">Theme provided by <a href="http://www.acquia.com">Acquia, Inc.</a> under GPL license from TopNotchThemes <a href="http://www.topnotchthemes.com">Drupal themes</a></div>';
+  }
 }
 
 

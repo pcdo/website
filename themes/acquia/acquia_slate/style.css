@@ -1,4 +1,4 @@
-/* $Id: style.css,v 1.1 2009/02/28 23:33:58 jwolf Exp $ */
+/* $Id: style.css,v 1.1.2.2 2009/04/19 07:35:18 jwolf Exp $ */
 
 /******************************************/
 /*  TopNotchThemes CSS Stylesheet         */
@@ -192,6 +192,18 @@ dl dt {
 dd {
   margin: 0 0 10px 22px;
 }
+
+/* adds indentation for child list items within nodes */
+#content-wrapper .node .content ol li,
+#content-wrapper .node .content ul li {
+  margin: 0 0 0 6px;
+}
+
+#content-wrapper .node .content ol li,
+#content-wrapper .node .content ul li {
+  padding: 0 0 0 12px;
+}
+
 
 /* Helper classes
 -------------------------------------------------------------- */
@@ -2176,26 +2188,3 @@ div.view div.views-admin-links li {
     margin: 0 3%;
   }
 }
-
-/*********************/
-/* Web Accessibility */ 
-/*********************/
-
-/*skip-link*/
-#skip a,
-#skip a:hover,
-#skip a:visited {
-  height: 1px;
-  left: 0px;
-  overflow: hidden;
-  position: absolute;
-  top: -500px;
-  width: 1px;
-}
-
-#skip a:active, 
-#skip a:focus {
-  height: auto;
-  position: static;
-  width: auto;
-} 

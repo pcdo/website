@@ -1,5 +1,5 @@
 <?php
-// $Id: template.php,v 1.1 2009/02/28 23:33:58 jwolf Exp $
+// $Id: template.php,v 1.1.2.2 2009/04/19 05:47:55 jwolf Exp $
 
 /**
  * Initialize theme settings
@@ -28,7 +28,6 @@ if (is_null(theme_get_setting('user_notverified_display')) || theme_get_setting(
     'search_info_date'                      => 1,
     'search_info_comment'                   => 1,
     'search_info_upload'                    => 1,
-    'mission_statement_pages'               => 'home',
     'front_page_title_display'              => 'title_slogan',
     'page_title_display_custom'             => '',
     'other_page_title_display'              => 'ptitle_slogan',
@@ -165,7 +164,7 @@ function phptemplate_preprocess(&$vars) {
 
 
 function phptemplate_preprocess_page(&$vars) {
-  // Remove sidebars if disabled e.g., for Panels
+  // Remove sidebars if disabled
   if (!$vars['show_blocks']) {
     $vars['sidebar_first'] = '';
     $vars['sidebar_last'] = '';
@@ -183,7 +182,7 @@ function phptemplate_preprocess_page(&$vars) {
     $body_classes[] = (arg(0) == 'forum') ? 'forum' : '';                                                   // Page is Forum page
   }
   $body_classes[] = (module_exists('panels_page') && (panels_page_get_current())) ? 'panels' : '';        // Page is Panels page
-  $body_classes[] = 'layout-'. (($vars['sidebar_first'] || $vars['secondary_links']) ? 'first-main' : 'main') . (($vars['sidebar_last']) ? '-last' : '');  // Page sidebars are active
+  $body_classes[] = 'layout-'. (($vars['sidebar_first']) ? 'first-main' : 'main') . (($vars['sidebar_last']) ? '-last' : '');  // Page sidebars are active
   if ($vars['preface_first'] || $vars['preface_middle'] || $vars['preface_last']) {                       // Preface regions are active
     $preface_regions = 'preface';
     $preface_regions .= ($vars['preface_first']) ? '-first' : '';
@@ -220,63 +219,62 @@ function phptemplate_preprocess_page(&$vars) {
   $vars['primary_links_tree'] = menu_tree(variable_get('menu_primary_links_source', 'primary-links'));
 
   // TNT THEME SETTINGS SECTION
-  // Display mission statement on all pages
-  if (theme_get_setting('mission_statement_pages') == 'all') {
-    $vars['mission'] = theme_get_setting('mission', false);  
-  }
   
   // Hide breadcrumb on all pages
   if (theme_get_setting('breadcrumb_display') == 0) {
     $vars['breadcrumb'] = '';  
   }
   
-  // Set site title, slogan, mission, page title & separator
-  $title = t(variable_get('site_name', ''));
-  $slogan = t(variable_get('site_slogan', ''));
-  $mission = t(variable_get('site_mission', ''));
-  $page_title = t(drupal_get_title());
-  $title_separator = theme_get_setting('configurable_separator');
-  if (drupal_is_front_page()) {                                                // Front page title settings
-    switch (theme_get_setting('front_page_title_display')) {
-      case 'title_slogan':
-        $vars['head_title'] = drupal_set_title($title . $title_separator . $slogan);
-        break;
-      case 'slogan_title':
-        $vars['head_title'] = drupal_set_title($slogan . $title_separator . $title);
-        break;
-      case 'title_mission':
-        $vars['head_title'] = drupal_set_title($title . $title_separator . $mission);
-        break;
-      case 'custom':
-        if (theme_get_setting('page_title_display_custom') !== '') {
-          $vars['head_title'] = drupal_set_title(t(theme_get_setting('page_title_display_custom')));
-        }
+  // Set site title, slogan, mission, page title & separator (unless using Page Title module)
+  if (!module_exists('page_title')) {
+    $title = t(variable_get('site_name', ''));
+    $slogan = t(variable_get('site_slogan', ''));
+    $mission = t(variable_get('site_mission', ''));
+    $page_title = t(drupal_get_title());
+    $title_separator = theme_get_setting('configurable_separator');
+    if (drupal_is_front_page()) {                                                // Front page title settings
+      switch (theme_get_setting('front_page_title_display')) {
+        case 'title_slogan':
+          $vars['head_title'] = drupal_set_title($title . $title_separator . $slogan);
+          break;
+        case 'slogan_title':
+          $vars['head_title'] = drupal_set_title($slogan . $title_separator . $title);
+          break;
+        case 'title_mission':
+          $vars['head_title'] = drupal_set_title($title . $title_separator . $mission);
+          break;
+        case 'custom':
+          if (theme_get_setting('page_title_display_custom') !== '') {
+            $vars['head_title'] = drupal_set_title(t(theme_get_setting('page_title_display_custom')));
+          }
+      }
     }
-  }
-  else {                                                                       // Non-front page title settings
-    switch (theme_get_setting('other_page_title_display')) {
-      case 'ptitle_slogan':
-        $vars['head_title'] = drupal_set_title($page_title . $title_separator . $slogan);
-        break;
-      case 'ptitle_stitle':
-        $vars['head_title'] = drupal_set_title($page_title . $title_separator . $title);
-        break;
-      case 'ptitle_smission':
-        $vars['head_title'] = drupal_set_title($page_title . $title_separator . $mission);
-        break;
-      case 'ptitle_custom':
-        if (theme_get_setting('other_page_title_display_custom') !== '') {
-          $vars['head_title'] = drupal_set_title($page_title . $title_separator . t(theme_get_setting('other_page_title_display_custom')));
-        }
-        break;
-      case 'custom':
-        if (theme_get_setting('other_page_title_display_custom') !== '') {
-          $vars['head_title'] = drupal_set_title(t(theme_get_setting('other_page_title_display_custom')));
-        }
+    else {                                                                       // Non-front page title settings
+      switch (theme_get_setting('other_page_title_display')) {
+        case 'ptitle_slogan':
+          $vars['head_title'] = drupal_set_title($page_title . $title_separator . $slogan);
+          break;
+        case 'ptitle_stitle':
+          $vars['head_title'] = drupal_set_title($page_title . $title_separator . $title);
+          break;
+        case 'ptitle_smission':
+          $vars['head_title'] = drupal_set_title($page_title . $title_separator . $mission);
+          break;
+        case 'ptitle_custom':
+          if (theme_get_setting('other_page_title_display_custom') !== '') {
+            $vars['head_title'] = drupal_set_title($page_title . $title_separator . t(theme_get_setting('other_page_title_display_custom')));
+          }
+          break;
+        case 'custom':
+          if (theme_get_setting('other_page_title_display_custom') !== '') {
+            $vars['head_title'] = drupal_set_title(t(theme_get_setting('other_page_title_display_custom')));
+          }
+      }
     }
+    $vars['head_title'] = strip_tags($vars['head_title']);                       // Remove any potential html tags
   }
-  $vars['head_title'] = strip_tags($vars['head_title']);                                        // Remove any potential html tags
-
+  
+  // Set meta keywords and description (unless using Meta tags module)
   if (!module_exists('nodewords')) {
     if (theme_get_setting('meta_keywords') !== '') {
       $keywords = '<meta name="keywords" content="'. theme_get_setting('meta_keywords') .'" />';
@@ -287,7 +285,10 @@ function phptemplate_preprocess_page(&$vars) {
       $vars['head'] .= $keywords ."\n";
     } 
   }
-  $vars['closure'] .= '<div id="legal-notice">Theme provided by <a href="http://www.acquia.com">Acquia, Inc.</a> under GPL license from TopNotchThemes <a href="http://www.topnotchthemes.com">Drupal themes</a></div>';
+
+  if (drupal_is_front_page()) {
+    $vars['closure'] .= '<div id="legal-notice">Theme provided by <a href="http://www.acquia.com">Acquia, Inc.</a> under GPL license from TopNotchThemes <a href="http://www.topnotchthemes.com">Drupal themes</a></div>';
+  }
 }
 
 
@@ -367,13 +368,13 @@ function phptemplate_preprocess_node(&$vars) {
     $node_content_type = (theme_get_setting('readmore_enable_content_type') == 1) ? $vars['node']->type : 'default';
     $vars['node']->links['node_read_more'] = array(
       'title' => _themesettings_link(
-        theme_get_setting('readmore_prefix_'. $node_content_type),
-        theme_get_setting('readmore_suffix_'. $node_content_type),
-        theme_get_setting('readmore_'. $node_content_type),
-        'node/'. $vars['node']->nid,
-        array(
-          'attributes' => array('title' => theme_get_setting('readmore_title_'. $node_content_type)), 
-          'query' => NULL, 'fragment' => NULL, 'absolute' => FALSE, 'html' => TRUE
+      theme_get_setting('readmore_prefix_'. $node_content_type),
+      theme_get_setting('readmore_suffix_'. $node_content_type),
+      theme_get_setting('readmore_'. $node_content_type),
+      'node/'. $vars['node']->nid,
+      array(
+        'attributes' => array('title' => theme_get_setting('readmore_title_'. $node_content_type)), 
+        'query' => NULL, 'fragment' => NULL, 'absolute' => FALSE, 'html' => TRUE
         )
       ),
       'attributes' => array('class' => 'readmore-item'),
@@ -385,13 +386,13 @@ function phptemplate_preprocess_node(&$vars) {
     if ($vars['teaser']) {
       $vars['node']->links['comment_add'] = array(
         'title' => _themesettings_link(
-          theme_get_setting('comment_add_prefix_'. $node_content_type),
-          theme_get_setting('comment_add_suffix_'. $node_content_type),
-          theme_get_setting('comment_add_'. $node_content_type),
-          "comment/reply/".$vars['node']->nid,
-          array(
-            'attributes' => array('title' => theme_get_setting('comment_add_title_'. $node_content_type)), 
-            'query' => NULL, 'fragment' => 'comment-form', 'absolute' => FALSE, 'html' => TRUE
+        theme_get_setting('comment_add_prefix_'. $node_content_type),
+        theme_get_setting('comment_add_suffix_'. $node_content_type),
+        theme_get_setting('comment_add_'. $node_content_type),
+        "comment/reply/".$vars['node']->nid,
+        array(
+          'attributes' => array('title' => theme_get_setting('comment_add_title_'. $node_content_type)), 
+          'query' => NULL, 'fragment' => 'comment-form', 'absolute' => FALSE, 'html' => TRUE
           )
         ),
         'attributes' => array('class' => 'comment-add-item'),
@@ -401,13 +402,13 @@ function phptemplate_preprocess_node(&$vars) {
     else {
       $vars['node']->links['comment_add'] = array(
         'title' => _themesettings_link(
-          theme_get_setting('comment_node_prefix_'. $node_content_type),
-          theme_get_setting('comment_node_suffix_'. $node_content_type),
-          theme_get_setting('comment_node_'. $node_content_type),
-          "comment/reply/".$vars['node']->nid,
-          array(
-            'attributes' => array('title' => theme_get_setting('comment_node_title_'. $node_content_type)), 
-            'query' => NULL, 'fragment' => 'comment-form', 'absolute' => FALSE, 'html' => TRUE
+        theme_get_setting('comment_node_prefix_'. $node_content_type),
+        theme_get_setting('comment_node_suffix_'. $node_content_type),
+        theme_get_setting('comment_node_'. $node_content_type),
+        "comment/reply/".$vars['node']->nid,
+        array(
+          'attributes' => array('title' => theme_get_setting('comment_node_title_'. $node_content_type)), 
+          'query' => NULL, 'fragment' => 'comment-form', 'absolute' => FALSE, 'html' => TRUE
           )
         ),
         'attributes' => array('class' => 'comment-node-item'),
@@ -641,6 +642,7 @@ function _themesettings_link($prefix, $suffix, $text, $path, $options) {
   return $prefix . (($text) ? l($text, $path, $options) : '') . $suffix;
 }
 
+
 /**
  * Function spanify firstword 
  */
@@ -662,7 +664,7 @@ function phptemplate_button($element) {
   }
 
   // Wrap visible inputs with span tags for button graphics
-  if (stristr($element['#attributes']['style'], 'display: none;') || stristr($element['#attributes']['class'], 'fivestar-submit')) {
+  if (stristr($element['#attributes']['style'], 'display: none;') || stristr($element['#attributes']['class'], 'fivestar-submit') || ($element['#value'] == 'Upload')) {
     return '<input type="submit" '. (empty($element['#name']) ? '' : 'name="'. $element['#name'] .'" ')  .'id="'. $element['#id'].'" value="'. check_plain($element['#value']) .'" '. drupal_attributes($element['#attributes']) ." />\n";
   }
   else {

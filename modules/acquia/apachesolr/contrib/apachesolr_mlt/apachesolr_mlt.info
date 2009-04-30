@@ -5,7 +5,7 @@ dependencies[] = apachesolr
 package = Apache Solr
 core = 6.x
 ; Information added by Acquia.com packaging script
-version = "6.x-1.0-beta8"
+version = "6.x-1.0-beta9"
 core = "6.x"
 project = "apachesolr"
 acquia = "1"

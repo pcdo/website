@@ -1,4 +1,4 @@
-/* $Id: README.txt,v 1.1.2.1.2.15 2009/04/03 15:01:11 pwolanin Exp $ */
+/* $Id: README.txt,v 1.1.2.1.2.17 2009/04/30 17:38:40 pwolanin Exp $ */
 
 This module integrates Drupal with the Apache Solr search platform. Solr search
 can be used as a replacement for core content search and boasts both extra
@@ -121,13 +121,41 @@ hook_apachesolr_modify_query(&$query, &$params, $caller);
           $query->add_field("uid", 1);         
         }        
     
-hook_apachesolr_cck_field_mappings
+hook_apachesolr_cck_fields_alter(&$mappings)
 
-hook_apachesolr_node_exclude($node)
+  Add or alter index mappings for CCK types.  The default mappings array handles just 
+  text fields with option widgets:
+
+    $mappings['text'] = array(
+      'optionwidgets_select' => array('callback' => '', 'index_type' => 'string'),
+      'optionwidgets_buttons' => array('callback' => '', 'index_type' => 'string')
+    );
+
+  In your _alter hook implementation you can add additional field types such as:
+
+    $mappings['number_integer']['number'] = array('callback' => '', 'index_type' => 'integer');
+
+  You can allso add a mapping for a specific field.  This will take precedence over any
+  mapping for a general field type. A field-specific mapping would look like:
+
+    $mappings['per-field']['field_model_name'] = array('callback' => '', 'index_type' => 'string');
+
+  or
+
+    $mappings['per-field']['field_model_price'] = array('callback' => '', 'index_type' => 'float');
+
+hook_apachesolr_types_exclude($namespace)
+
+  
+  Invoked by apachesolr.module when generating a list of nodes to index for a given
+  namespace.  Return an array of node types to be excldued from indexing for that namespace 
+  (e.g. 'apachesolr_search'). This is used by apachesolr_search module to exclude 
+  certain node types from the index.
+
+hook_apachesolr_node_exclude($node, $namespace)
 
   This is invoked by apachesolr.module for each node to be added to the index - if any module
-  returns TRUE, the node is skipped for indexing. For example, this is used by apachesolr_search
-  module to exclude certain node types from the index.
+  returns TRUE, the node is skipped for indexing. 
 
 hook_apachesolr_update_index(&$document, $node)
 

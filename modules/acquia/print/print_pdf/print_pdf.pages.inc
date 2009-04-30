@@ -1,5 +1,5 @@
 <?php
-// $Id: print_pdf.pages.inc,v 1.3.2.31 2009/04/15 19:44:44 jcnventura Exp $
+// $Id: print_pdf.pages.inc,v 1.3.2.41 2009/04/29 13:49:07 jcnventura Exp $
 
 /**
  * @file
@@ -84,6 +84,9 @@ function print_pdf_controller() {
   elseif (basename($print_pdf_pdf_tool) == 'tcpdf.php') {
     _print_pdf_tcpdf($print, $html, $pdf_filename);
   }
+  elseif (basename($print_pdf_pdf_tool) == 'wkhtmltopdf') {
+    _print_pdf_wkhtmltopdf($print, $html, $pdf_filename);
+  }
   else {
     return drupal_not_found();
   }
@@ -141,10 +144,10 @@ function _print_pdf_dompdf($print, $html, $filename) {
 //  else if (function_exists('iconv')) {
 //    $html = iconv('UTF-8', 'ISO-8859-1', $html);
 //  }
-  else if (function_exists('mb_convert_encoding')) {
+  elseif (function_exists('mb_convert_encoding')) {
     $html = mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8');
   }
-  else if (function_exists('recode_string')) {
+  elseif (function_exists('recode_string')) {
     $html = recode_string('UTF-8..ISO_8859-1', $html);
   }
   $html = htmlspecialchars_decode(htmlentities($html, ENT_NOQUOTES, 'ISO-8859-1'), ENT_NOQUOTES);
@@ -188,6 +191,9 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   define('K_BLANK_IMAGE', $pdf_tool_path .'/images/_blank.png');
   define('K_CELL_HEIGHT_RATIO', 1.25);
   define('K_SMALL_RATIO', 2/3);
+
+  $pattern = "!<img[^>]*?>!is";
+  $html = preg_replace_callback($pattern, create_function('$matches', 'return html_entity_decode($matches[0], ENT_QUOTES);'), $html);
 
   require_once($print_pdf_pdf_tool);
   if (strpos(PDF_PRODUCER, 'PHP4') === FALSE) {
@@ -234,9 +240,100 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   // reset pointer to the last page
   $pdf->lastPage();
 
+  // try to recover from any warning/error
+  ob_clean();
+
   //Close and output PDF document
   $output_dest = ($print_pdf_content_disposition == 2) ? 'D' : 'I';
   $pdf->Output($filename, $output_dest);
+}
+
+/**
+ * Generate the PDF file using wkhtmltopdf
+ *
+ * @param $print
+ *   array containing the configured data
+ * @param $html
+ *   contents of the post-processed template already with the node data
+ * @param $filename
+ *   name of the PDF file to be generated
+ * @see print_pdf_controller()
+ */
+function _print_pdf_wkhtmltopdf($print, $html, $filename) {
+  $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+  $print_pdf_paper_size = drupal_strtolower(variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT));
+  $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
+  $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
+  $print_pdf_wkhtmltopdf_options = variable_get('print_pdf_wkhtmltopdf_options', PRINT_PDF_WKHTMLTOPDF_OPTIONS);
+  $print_pdf_xvfb_options = variable_get('print_pdf_xvfb_options', PRINT_PDF_XVFB_OPTIONS);
+
+  $xvfb_binary = key(file_scan_directory(drupal_get_path('module', 'print'), '^Xvfb$'));
+  $dpi = 96;
+
+  // If available, launch a temporary X server
+  if (isset($xvfb_binary)) {
+    $xdisplay = variable_get('print_pdf_wkhtmltopdf_xdisplay', 10);
+    variable_set('print_pdf_wkhtmltopdf_xdisplay', ($xdisplay == 4990) ? 10 : $xdisplay + 10);
+    $xdisplay += mt_rand(0, 9);
+
+    $xcmd = realpath($xvfb_binary) ." :$xdisplay -screen 0 320x200x24 -dpi $dpi -terminate -nolisten tcp -tst $print_pdf_xvfb_options";
+
+    $xdescriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
+    $xprocess = proc_open($xcmd, $xdescriptor, $xpipes, NULL, NULL);
+  }
+
+  $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
+  $cmd = realpath($print_pdf_pdf_tool) ." --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation --dpi $dpi $print_pdf_wkhtmltopdf_options - -";
+
+  $process = proc_open($cmd, $descriptor, $pipes, NULL, isset($xvfb_binary) ? array('DISPLAY' => ':'. $xdisplay) : NULL);
+
+  if (is_resource($process)) {
+    fwrite($pipes[0], $html);
+    fclose($pipes[0]);
+
+    $pdf = stream_get_contents($pipes[1]);
+    fclose($pipes[1]);
+
+    stream_set_blocking($xpipes[2], 0);
+    $error = stream_get_contents($pipes[2]);
+    if (!empty($error)) {
+      watchdog('print_pdf', 'wkhtmltopdf: '. $error);
+    }
+    fclose($pipes[2]);
+
+    $retval = proc_terminate($process);
+  }
+  if (isset($xvfb_binary)) {
+    fclose($xpipes[0]);
+    fclose($xpipes[1]);
+    stream_set_blocking($xpipes[2], 0);
+    $xerror = stream_get_contents($xpipes[2]);
+    if (!empty($xerror)) {
+      watchdog('print_pdf', 'wkhtmltopdf Xvfb: '. $xerror);
+    }
+    fclose($xpipes[2]);
+
+    proc_terminate($xprocess);
+  }
+
+  if (!empty($pdf)) {
+    if (headers_sent()) {
+      die("Unable to stream pdf: headers already sent");
+    }
+    header("Cache-Control: private");
+    header("Content-Type: application/pdf");
+
+    $attachment =  ($print_pdf_content_disposition == 2) ?  "attachment" :  "inline";
+
+    header("Content-Disposition: $attachment; filename=\"$filename\"");
+
+    echo $pdf;
+    flush();
+  }
+  else {
+    drupal_goto($print['url']);
+    exit;
+  }
 }
 
 /**
@@ -362,7 +459,7 @@ function theme_print_pdf_tcpdf_content(&$pdf, &$html, $font) {
   $matches[1] = preg_replace('!<div( class="field-label.*?>.*?)</div>!sm', '<strong$1</strong>', $matches[1]);
 
   // Since TCPDF's writeHTML is so bad with <p>, do everything possible to make it look nice
-  $matches[1] = preg_replace('!(<p>|<p\s*/>|</p>)!i', '<br />', $matches[1]);
+  $matches[1] = preg_replace('!<(?:p(|\s+.*?)/?|/p)>!i', '<br$1 />', $matches[1]);
   $matches[1] = str_replace(array('<div', 'div>'), array('<span', 'span><br />'), $matches[1]);
   do {
     $prev = $matches[1];
@@ -409,7 +506,7 @@ function theme_print_pdf_tcpdf_footer(&$pdf, &$html, $font) {
  */
 function theme_print_pdf_tcpdf_footer2(&$pdf) {
   //Position at 1.5 cm from bottom
-  $pdf->writeHTMLCell(0, 15, 15, 0, $pdf->footer, 0, 0, 0, TRUE, '');
+  $pdf->writeHTMLCell(0, 15, 15, -10, $pdf->footer, 0, 0, 0, TRUE, '');
 
   $ormargins = $pdf->getOriginalMargins();
   $pagenumtxt = t('Page !n of !total', array('!n' => $pdf->PageNo(), '!total' => $pdf->getAliasNbPages()));

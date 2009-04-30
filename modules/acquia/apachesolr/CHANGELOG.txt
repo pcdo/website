@@ -1,4 +1,4 @@
-// $Id: CHANGELOG.txt,v 1.1.2.54 2009/04/16 14:34:15 pwolanin Exp $
+// $Id: CHANGELOG.txt,v 1.1.2.64 2009/04/30 18:00:00 pwolanin Exp $
 
 Apache Solr integration x.x-x.x, xxxx-xx-xx
 ------------------------------
@@ -6,8 +6,19 @@ Apache Solr integration x.x-x.x, xxxx-xx-xx
 Apache Solr integration 6.x-1.x, xxxx-xx-xx
 ------------------------------
 
-Apache Solr integration 6.x-1.0-xxxxx, xxxx-xx-xx
+Apache Solr integration 6.x-1.0-beta9, 2009-04-30
 ------------------------------
+#435924 by pwolanin, only clear cache on cron after updates and if the server is available.
+#405780 by blackdog and pwolanin, skip excluded node types during counting and indexing.
+#441628 by aufumy and pwolanin, update _og for negative facets, minor fixes, install/enable/update hooks.
+#447622 by pwolanin and mkalkbrenner, better encoding of html entities and CCK facets.
+#447890 by pwolanin, properly respect 'access content' permission in _nodeaccess.
+#271753 by pwolanin, more granular CCK field mappings via _alter hook.
+#436074 by pwolanin, better query class handling of negative queries.
+#442198 by Scott Reynolds and pwolanin, update the Drupal_Solr_Query_Interface interface.
+#443252 by Scott Reynolds, (bugfix for regression) make protected id public again.
+#337737 by David Lesieur, mikejoconnor and Scott Reynolds, localize arg(1) dependence.
+        Changes query get_path() to facilitate generating facets outside the search page.
 
 Apache Solr integration 6.x-1.0-beta8, 2009-04-16
 ------------------------------

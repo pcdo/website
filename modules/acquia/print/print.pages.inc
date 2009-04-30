@@ -1,5 +1,5 @@
 <?php
-// $Id: print.pages.inc,v 1.1.2.43 2009/04/15 19:52:20 jcnventura Exp $
+// $Id: print.pages.inc,v 1.1.2.47 2009/04/27 22:34:12 jcnventura Exp $
 
 /**
  * @file
@@ -516,7 +516,7 @@ function _print_url_list_enabled($node, $format = PRINT_HTML_FORMAT) {
 
   // Get value of Printer-friendly URLs setting
   return (variable_get('print_urls', PRINT_URLS_DEFAULT) && ($node_urllist) &&
-          variable_get('print_'. $fmt .'display_urllist_'. $node->type, PRINT_TYPE_URLLIST_DEFAULT));
+          (isset($node->type) ? variable_get('print_'. $fmt .'display_urllist_'. $node->type, PRINT_TYPE_URLLIST_DEFAULT) : PRINT_TYPE_URLLIST_DEFAULT));
 }
 
 /**
@@ -556,11 +556,16 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
   $node->printing = TRUE;
 
   //use the proper build_mode
-  $node->build_mode = NODE_BUILD_PRINT;
+//  $node->build_mode = NODE_BUILD_PRINT;
 
   // Turn off Pagination by the Paging module
   unset($node->pages);
   unset($node->page_count);
+
+  // Make this page a member of the original page's organic group
+  if (function_exists('og_set_group_context') && isset($node->og_groups)) {
+    og_set_group_context($node->og_groups);
+  }
 
   if ($cid === NULL) {
     // Adapted (simplified) version of node_view
@@ -584,11 +589,6 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
       $node->body = $content;
       unset($node->teaser);
     }
-
-    //TODO the following was part of the fix for http://drupal.org/node/254863
-    //check if it is reproducible and find the exact condition which
-    //triggered it
-    //$node->body = html_entity_decode($node->body);
   }
 
   $print_comments = variable_get('print_comments', PRINT_COMMENTS_DEFAULT);

@@ -1,5 +1,5 @@
 <?php
-// $Id: page.tpl.php,v 1.1.2.3 2008/11/25 22:42:34 jwolf Exp $
+// $Id: page.tpl.php,v 1.1.2.4 2008/12/21 23:38:55 jwolf Exp $
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -113,9 +113,7 @@
           <?php endif; ?>
 
           <div id="content-wrapper">
-            <?php if ($help): ?>
-              <?php print $help; ?>
-            <?php endif; ?>
+
             <?php if ($messages): ?>
               <?php print $messages; ?>
             <?php endif; ?>
@@ -132,6 +130,8 @@
                 <?php print $tabs; ?>
               </div>
               <?php endif; ?>
+              
+
             
               <?php if (($sidebar_first) && ($sidebar_last)) : ?>
                 <?php if ($sidebar_last): ?>
@@ -142,6 +142,13 @@
               <?php endif; ?>
 
               <div id="content-inner">
+                
+              <?php if ($help): ?>
+                <div id="help">
+                  <?php print $help; ?>
+                </div>
+              <?php endif; ?>
+                
                 <?php if ($title): ?>
                 <h1 class="title"><?php print $title; ?></h1>
                 <?php endif; ?>
