@@ -1,5 +1,5 @@
 <?php
-// $Id: print_pdf.module,v 1.1.2.35 2009/04/27 22:53:50 jcnventura Exp $
+// $Id: print_pdf.module,v 1.1.2.36 2009/05/06 00:23:05 jcnventura Exp $
 
 /**
  * @file
@@ -258,7 +258,7 @@ function print_pdf_nodeapi(&$node, $op = 'view', $teaser, $page) {
       break;
     case 'delete':
       db_query("DELETE FROM {print_pdf_node_conf} WHERE nid = %d", $node->nid);
-      db_query("DELETE FROM {print_pdf_page_counter} WHERE path = '%s'", $node->path);
+      db_query("DELETE FROM {print_pdf_page_counter} WHERE path = 'node/%d'", $node->nid);
       break;
   }
 }
@@ -473,9 +473,8 @@ function print_pdf_link_allowed($args) {
     $print_pdf_node_link_visibility = variable_get('print_pdf_node_link_visibility', PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT);
     $print_pdf_node_link_pages = variable_get('print_pdf_node_link_pages', PRINT_PDF_NODE_LINK_PAGES_DEFAULT);
 
-    if ((isset($node->build_mode) && ($node->build_mode == NODE_BUILD_PRINT)) ||
-        !_print_page_match($print_pdf_node_link_visibility, $print_pdf_node_link_pages)) {
-      // Page not in visibility list or we are working!
+    if (!_print_page_match($print_pdf_node_link_visibility, $print_pdf_node_link_pages)) {
+      // Page not in visibility list
       return FALSE;
     }
     elseif (isset($args['type']) && ($args['type'] == 'comment') && isset($node_type)) {

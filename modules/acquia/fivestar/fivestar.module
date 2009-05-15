@@ -1,5 +1,5 @@
 <?php
-// $Id: fivestar.module,v 1.13.2.55 2009/04/29 20:33:48 quicksketch Exp $
+// $Id: fivestar.module,v 1.13.2.56 2009/04/30 20:58:31 quicksketch Exp $
 
 /**
  * @file
@@ -1553,7 +1553,7 @@ function fivestar_expand($element) {
       '#type' => 'hidden',
       '#value' => fivestar_get_token($element['#auto_submit_path']),
       '#attributes' => array('class' => 'fivestar-token'),
-      '#id' => 'edit-auto-submit-path-'. $fivestar_id,
+      '#id' => 'edit-auto-submit-token-'. $fivestar_id,
     );
   }
 

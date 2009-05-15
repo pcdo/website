@@ -1,5 +1,5 @@
 <?php
-// $Id: acquia_agent.module,v 1.15 2009/03/23 16:12:57 pwolanin Exp $
+// $Id: acquia_agent.module,v 1.16 2009/05/06 06:52:02 goba Exp $
 
 /**
  * @file
@@ -49,21 +49,14 @@ function acquia_agent_menu() {
  */
 function acquia_agent_init() {
   if (empty($_POST) && user_access('administer site configuration') && (!acquia_agent_has_credentials())) {
-    if (arg(2) != 'acquia-agent') {
-      drupal_set_message(t('If you have an <a href="@network_url">Acquia Network subscription</a>, please enter your subscription key and identifier on the <a href="@settings_url">settings page</a>.', array('@network_url' => 'http://acquia.com/network', '@settings_url' => url('admin/settings/acquia-agent'))), 'warning', FALSE);
-    }
     if (arg(0) == 'admin') {
-      drupal_set_message(t('Complete your Drupal experience. Subscribe to the Acquia Network to:
-<ul>
-<li>Know instantly if your site is in trouble with Drupal web site health monitoring</li>
-<li>Automatically block content and comment spam with Mollom</li>
-<li>Provide quick faceted search with results sorting and automatic content recommendations with <a href="@search_url">Acquia Search</a></li>
-<li>View site usage, up-time and spam blocking statistics</li>
-<li>Automate the scheduling of site maintenance with remote cron activation</li>
-<li>Access commercial-grade Drupal support through <a href="@forums_url">Acquia\'s forums</a> and <a href="@tac_url">Technical Assistance Center</a></li>
-<li>Access your Drupal web site\'s operations dashboard to manage contacts and notifications</li>
-</ul>
-To learn more, visit the <a href="@overview_url">Acquia Network overview</a> page.', array('@search_url' => 'http://acquia.com/products-services/acquia-search', '@forums_url' => 'http://acquia.com/forum', '@tac_url' => 'http://acquia.com/products-services/drupal-technical-support', '@overview_url' => 'http://acquia.com/products-services/acquia-network')), 'warning', FALSE);
+      drupal_set_message(t('Subscribe to the <a href="@acquia-network">Acquia Network</a> to access Network Services and Technical Support for your Drupal site.<br /> 
+To learn how Acquia can help you manage your Drupal site, visit the <a href="@acquia-ps">Acquia Products &amp; Services page</a>.<br />
+Once subscribed, please enter your subscription key and identifier on the <a href="@settings">settings page</a>.<br />
+To turn this message off, disable the Acquia Network Connector modules.', array('@acquia-network' => 'http://acquia.com/network', '@acquia-ps' => 'http://acquia.com/products-services', '@settings' => url('admin/settings/acquia-agent'))), 'warning', FALSE);
+    }
+    else {
+      drupal_set_message(t('If you have an <a href="@acquia-network">Acquia Network subscription</a>, please enter your subscription key and identifier on the <a href="@settings">settings page</a>.', array('@acquia-network' => 'http://acquia.com/network', '@settings' => url('admin/settings/acquia-agent'))), 'warning', FALSE);
     }
   }
 }

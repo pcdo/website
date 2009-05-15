@@ -1,5 +1,5 @@
 <?php
-// $Id: print_mail.admin.inc,v 1.1.2.12 2009/03/27 01:12:35 jcnventura Exp $
+// $Id: print_mail.admin.inc,v 1.1.2.13 2009/05/04 13:48:22 jcnventura Exp $
 
 /**
  * @file
@@ -136,6 +136,15 @@ function print_mail_settings() {
     '#default_value' => variable_get('print_mail_teaser_choice', PRINT_MAIL_TEASER_CHOICE_DEFAULT),
     '#description' => t('If checked, the user will be able to choose between sending the full content or only the teaser at send time.'),
   );
+
+  if (module_exists('job_queue')) {
+    $form['settings']['print_mail_job_queue'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Send e-mails using Job Queue'),
+      '#default_value' => variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT),
+      '#description' => t("Selecting this option, e-mail delivery will be performed by the Job Queue module during each cron run. Leaving this unselected, the e-mail will be sent immediately, but the site will take slightly longer to reply to the user."),
+    );
+  }
 
   return system_settings_form($form);
 }

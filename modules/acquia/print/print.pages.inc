@@ -1,5 +1,5 @@
 <?php
-// $Id: print.pages.inc,v 1.1.2.47 2009/04/27 22:34:12 jcnventura Exp $
+// $Id: print.pages.inc,v 1.1.2.49 2009/05/13 16:18:06 jcnventura Exp $
 
 /**
  * @file
@@ -20,16 +20,21 @@ $_print_urls = PRINT_URLS_DEFAULT;
  */
 function print_controller_html() {
   $args = func_get_args();
-  // Remove the print/ prefix
   $path = implode('/', $args);
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
   $print = print_controller($path, $cid, PRINT_HTML_FORMAT);
   if ($print !== FALSE) {
     $node = $print['node'];
-    include_once(_print_get_template(PRINT_HTML_FORMAT, $print['type']));
 
-    $nodepath = drupal_get_normal_path($node->path);
+    ob_start();
+    include_once(_print_get_template(PRINT_HTML_FORMAT, $print['type']));
+    $html = ob_get_contents();
+    ob_end_clean();
+    $html = drupal_final_markup($html);
+    print $html;
+
+    $nodepath = (isset($node->path)) ? drupal_get_normal_path($node->path) : 'node/'. $path;
     db_query("UPDATE {print_page_counter} SET totalcount = totalcount + 1, timestamp = %d WHERE path = '%s'", time(), $nodepath);
     // If we affected 0 rows, this is the first time viewing the node.
     if (!db_affected_rows()) {
@@ -661,8 +666,6 @@ function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALS
   // Adapted from index.php.
   $node = new stdClass();
   $node->body = menu_execute_active_handler($path);
-  $node->title = drupal_get_title();
-  $node->path = $path;
 
   // It may happen that a drupal_not_found is called in the above call
   if (preg_match('/404 Not Found/', drupal_get_headers()) == 1) {
@@ -681,6 +684,9 @@ function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALS
         break;
     }
   }
+
+  $node->title = drupal_get_title();
+  $node->path = $path;
 
   // Delete any links area
   $node->body = preg_replace('!\s*<div class="links">.*?</div>!sim', '', $node->body);

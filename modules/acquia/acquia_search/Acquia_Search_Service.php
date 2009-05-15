@@ -27,6 +27,7 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
     list($cookie, $nonce) = acquia_search_auth_cookie($url);
     $request_headers = array(
       'Cookie' => $cookie,
+      'User-Agent' => 'acquia_search/'. ACQUIA_SEARCH_VERSION,
     );
     list ($data, $headers) = $this->_makeHttpRequest($url, 'GET', $request_headers, '', $timeout);
     $response = new Apache_Solr_Response($data, $headers, $this->_createDocuments, $this->_collapseSingleValueArrays);
@@ -50,7 +51,8 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
     list($cookie, $nonce) = acquia_search_auth_cookie($url, $rawPost);
     $request_headers = array(
       'Content-Type' => $contentType,
-      'Cookie' => $cookie
+      'Cookie' => $cookie,
+      'User-Agent' => 'acquia_search/'. ACQUIA_SEARCH_VERSION,
     );
     list ($data, $headers) = $this->_makeHttpRequest($url, 'POST', $request_headers, $rawPost, $timeout);
     $response = new Apache_Solr_Response($data, $headers, $this->_createDocuments, $this->_collapseSingleValueArrays);

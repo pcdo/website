@@ -1,5 +1,5 @@
 <?php
-// $Id: print_pdf.pages.inc,v 1.3.2.41 2009/04/29 13:49:07 jcnventura Exp $
+// $Id: print_pdf.pages.inc,v 1.3.2.48 2009/05/13 16:18:06 jcnventura Exp $
 
 /**
  * @file
@@ -26,7 +26,6 @@ function print_pdf_controller() {
   $GLOBALS['conf']['cache'] = FALSE;
 
   $args = func_get_args();
-  // Remove the printpdf/ prefix
   $path = implode('/', $args);
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
@@ -66,6 +65,7 @@ function print_pdf_controller() {
   include_once(_print_get_template(PRINT_PDF_FORMAT, $print['type']));
   $html = ob_get_contents();
   ob_end_clean();
+  $html = drupal_final_markup($html);
 
   // Convert the a href elements
   $pattern = '!<(a\s[^>]*?)>!is';
@@ -91,7 +91,7 @@ function print_pdf_controller() {
     return drupal_not_found();
   }
 
-  $nodepath = drupal_get_normal_path($node->path);
+  $nodepath = (isset($node->path)) ? drupal_get_normal_path($node->path) : 'node/'. $path;
   db_query("UPDATE {print_pdf_page_counter} SET totalcount = totalcount + 1, timestamp = %d WHERE path = '%s'", time(), $nodepath);
   // If we affected 0 rows, this is the first time viewing the node.
   if (!db_affected_rows()) {
@@ -192,8 +192,12 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   define('K_CELL_HEIGHT_RATIO', 1.25);
   define('K_SMALL_RATIO', 2/3);
 
+  // Decode HTML entities in image filenames
   $pattern = "!<img[^>]*?>!is";
   $html = preg_replace_callback($pattern, create_function('$matches', 'return html_entity_decode($matches[0], ENT_QUOTES);'), $html);
+  // Remove queries from the image URL
+  $pattern = "!(<img\s[^>]*?src\s*?=.*?)(?:%3F|\?)[\w=&]+([^>]*?>)!is";
+  $html = preg_replace($pattern, '$1$2', $html);
 
   require_once($print_pdf_pdf_tool);
   if (strpos(PDF_PRODUCER, 'PHP4') === FALSE) {
@@ -216,7 +220,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   // set document information
   $pdf->SetAuthor(strip_tags($print['submitted']));
   $pdf->SetCreator(variable_get('site_name', 'Drupal'));
-  $pdf->SetTitle($print['title']);
+  $pdf->SetTitle(html_entity_decode($print['title'], ENT_QUOTES, 'UTF-8'));
   $keys = implode(' ', explode("\n", trim(strip_tags($print['taxonomy']))));
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
@@ -409,7 +413,7 @@ function theme_print_pdf_tcpdf_header(&$pdf, &$html, $font) {
   // set header margin
   $pdf->SetHeaderMargin(5);
   // set header data
-  $pdf->SetHeaderData($logo, 10 * $ratio, $tpl_title[1], strip_tags($tpl_site_name[1]));
+  $pdf->SetHeaderData($logo, 10 * $ratio, html_entity_decode($tpl_title[1], ENT_QUOTES, 'UTF-8'), strip_tags($tpl_site_name[1]));
 
   return $pdf;
 }

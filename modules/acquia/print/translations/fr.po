@@ -1,4 +1,4 @@
-# $Id: fr.po,v 1.1.2.14 2009/03/24 00:04:47 jcnventura Exp $
+# $Id: fr.po,v 1.1.2.15 2009/05/13 12:58:18 jcnventura Exp $
 #
 # French Translation of Drupal (print)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: print.module\n"
-"POT-Creation-Date: 2009-03-18 22:29+0100\n"
-"PO-Revision-Date: 2009-03-23 23:51+0100\n"
+"POT-Creation-Date: 2009-05-13 03:12+0200\n"
+"PO-Revision-Date: 2009-05-13 12:54+0100\n"
 "Last-Translator: Joao Ventura <jcnventura@drupal.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -123,7 +123,7 @@ msgid "Select the type of footer to display on the printer-friendly version. In 
 msgstr "Choisissez le type de bas de page à afficher sur la version imprimable. En cas de bas de page personnalisé par l’utilisateur, insérez-le ci-dessous."
 
 #: print.admin.inc:112;341
-#: print.pages.inc:271
+#: print.pages.inc:270
 msgid "Source URL"
 msgstr "URL source"
 
@@ -348,53 +348,53 @@ msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link
 msgstr "Balise non standard pour ordonner aux moteurs de recherche de ne pas montrer un lien en mémoire cache pour les versions imprimables. Reconnu par Googlebot."
 
 #: print.admin.inc:320;361
-#: print_mail/print_mail.admin.inc:149
-#: print_pdf/print_pdf.admin.inc:266
+#: print_mail/print_mail.admin.inc:158
+#: print_pdf/print_pdf.admin.inc:280
 msgid "Saving these strings will disable their translation via Drupal's language system. Use the reset button to return them to the original state."
 msgstr "Sauvegarder ces chaînes de caractères désactivera leur traduction par l’intermédiaire du système de langage de Drupal. Utilisez le bouton rétablir par défaut pour les remettre à l’état initial."
 
 #: print.admin.inc:324;365
 #: print.module:103;126
-#: print_mail/print_mail.admin.inc:153
-#: print_mail/print_mail.module:70
-#: print_pdf/print_pdf.admin.inc:270
-#: print_pdf/print_pdf.module:93
+#: print_mail/print_mail.admin.inc:162
+#: print_mail/print_mail.module:71
+#: print_pdf/print_pdf.admin.inc:284
+#: print_pdf/print_pdf.module:96
 msgid "Text strings"
 msgstr "Chaînes de texte"
 
 #: print.admin.inc:329
-#: print.pages.inc:247
+#: print.pages.inc:246
 msgid "Published on %site_name"
 msgstr "Publié sur %site_name"
 
 #: print.admin.inc:333
-#: print.pages.inc:282
+#: print.pages.inc:281
 msgid "By %author"
 msgstr "Par %author"
 
 #: print.admin.inc:337
-#: print.pages.inc:286
+#: print.pages.inc:285
 msgid "Created %date"
 msgstr "Créé le %date"
 
 #: print.admin.inc:345
-#: print.pages.inc:267
+#: print.pages.inc:266
 msgid "retrieved on %date"
 msgstr "Obtenu le %date"
 
 #: print.admin.inc:349
-#: print.pages.inc:323
+#: print.pages.inc:322
 msgid "Links"
 msgstr "Liens"
 
 #: print.admin.inc:370
-#: print_mail/print_mail.admin.inc:158
-#: print_pdf/print_pdf.admin.inc:275
+#: print_mail/print_mail.admin.inc:167
+#: print_pdf/print_pdf.admin.inc:289
 msgid "Link text"
 msgstr "Texte du lien"
 
 #: print.admin.inc:371
-#: print.module:340;531
+#: print.module:343;551
 msgid "Printer-friendly version"
 msgstr "Version imprimable"
 
@@ -402,15 +402,15 @@ msgstr "Version imprimable"
 msgid "Text used in the link to the printer-friendly version."
 msgstr "Texte utilisé dans le lien de la version imprimable"
 
-#: print.pages.inc:283
+#: print.pages.inc:282
 msgid "Anonymous"
 msgstr "Anonyme"
 
-#: print.pages.inc:600
+#: print.pages.inc:602
 msgid "Post new comment"
 msgstr "Publier un nouveau commentaire"
 
-#: print.module:144;332;376;85
+#: print.module:144;335;379;85
 #: print.info:0
 #: print_mail/print_mail.info:0
 #: print_pdf/print_pdf.info:0
@@ -421,33 +421,33 @@ msgstr "Versions imprimante, courrier électronique et PDF"
 msgid "Most printed"
 msgstr "Les plus imprimés"
 
-#: print.module:345
-#: print_mail/print_mail.module:234
+#: print.module:348
+#: print_mail/print_mail.module:232
 #: print_pdf/print_pdf.module:280
 msgid "Show link"
 msgstr "Afficher lien"
 
-#: print.module:349
-#: print_mail/print_mail.module:238
+#: print.module:352
+#: print_mail/print_mail.module:236
 #: print_pdf/print_pdf.module:284
 msgid "Show link in individual comments"
 msgstr "Afficher le lien dans les commentaires individuels"
 
-#: print.module:353
-#: print_mail/print_mail.module:242
+#: print.module:356
+#: print_mail/print_mail.module:240
 #: print_pdf/print_pdf.module:288
 msgid "Show Printer-friendly URLs list"
 msgstr "Afficher la liste des URLs des versions imprimables"
 
-#: print.module:366
+#: print.module:369
 msgid "The settings below only apply in case the corresponding type-specific setting is also enabled (except for the \"Show link in individual comments\")."
 msgstr "Les configurations ci-dessous s’appliquent seulement au cas où la configuration spécifique au type correspondant serait également activée (excepté pour “Afficher le lien dans les commentaires individuels”)."
 
-#: print.module:377
+#: print.module:380
 msgid "Print module form."
 msgstr ""
 
-#: print.module:534
+#: print.module:554
 msgid "Display a printer-friendly version of this page."
 msgstr "Affiche une version imprimable de cette page."
 
@@ -482,18 +482,14 @@ msgid "Web page"
 msgstr "Page"
 
 #: print.module:98;121
-#: print_mail/print_mail.module:65
-#: print_pdf/print_pdf.module:88
+#: print_mail/print_mail.module:66
+#: print_pdf/print_pdf.module:91
 msgid "Options"
 msgstr "Options"
 
 #: print.module:112
 msgid "Settings"
 msgstr "Configurations"
-
-#: print.module:0
-msgid "print"
-msgstr "imprimer"
 
 #: (duplicate) print.install:16
 msgid "Printer-friendly Page settings are available under !link"
@@ -554,60 +550,68 @@ msgstr "Active le choix du mode sommaire/complet"
 msgid "If checked, the user will be able to choose between sending the full content or only the teaser at send time."
 msgstr "Si coché, l'utilisateur pourra choisir entre envoyer le contenu complet ou seulement le résumé au moment de l’envois."
 
-#: print_mail/print_mail.admin.inc:159
-#: print_mail/print_mail.module:313
+#: print_mail/print_mail.admin.inc:143
+msgid "Send e-mails using Job Queue"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:145
+msgid "Selecting this option, e-mail delivery will be performed by the Job Queue module during each cron run. Leaving this unselected, the e-mail will be sent immediately, but the site will take slightly longer to reply to the user."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:168
+#: print_mail/print_mail.module:262;321
 msgid "Send to friend"
 msgstr "Envoyer à un ami"
 
-#: print_mail/print_mail.admin.inc:160
+#: print_mail/print_mail.admin.inc:169
 msgid "Text used in the link to the send by-email form."
 msgstr "Texte utilisé dans le lien du formulaire d’envoi par courrier électronique."
 
-#: print_mail/print_mail.admin.inc:165
+#: print_mail/print_mail.admin.inc:174
 msgid "Message Subject"
 msgstr "Objet"
 
-#: print_mail/print_mail.admin.inc:166
+#: print_mail/print_mail.admin.inc:175
 #: print_mail/print_mail.inc:129
 msgid "!user has sent you a message from !site"
 msgstr "!user vous a envoyé un message à partir de !site"
 
-#: print_mail/print_mail.admin.inc:167
+#: print_mail/print_mail.admin.inc:176
 #, fuzzy
 msgid "e-mail subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site. The page title replaces !title."
 msgstr "Ligne sujet du courrier électronique. Le nom de l’émetteur apparaîtra au lieu de !user dans le sujet. Le nom du site Internet sera inséré au lieu de !site. The page title replaces !title."
 
-#: print_mail/print_mail.admin.inc:171
+#: print_mail/print_mail.admin.inc:180
 msgid "Message Preamble"
 msgstr "Préambule du message"
 
-#: print_mail/print_mail.admin.inc:172
+#: print_mail/print_mail.admin.inc:181
 #: print_mail/print_mail.inc:245
 msgid "Message from sender"
 msgstr "Message de l’émetteur"
 
-#: print_mail/print_mail.admin.inc:173
+#: print_mail/print_mail.admin.inc:182
 msgid "e-mail message preamble. The sender will be able to add their own message after this."
 msgstr "Préambule de message de courrier électronique. L’émetteur pourra ajouter leur propre message après ceci."
 
-#: print_mail/print_mail.admin.inc:177
+#: print_mail/print_mail.admin.inc:186
 msgid "Message Content"
 msgstr "Contenu du message"
 
-#: print_mail/print_mail.admin.inc:179
+#: print_mail/print_mail.admin.inc:188
 msgid "Set the default contents of the message."
 msgstr "Établie le contenu par défaut du message."
 
-#: print_mail/print_mail.admin.inc:183
+#: print_mail/print_mail.admin.inc:192
 msgid "Thank You Message"
 msgstr "Message de remerciement"
 
-#: print_mail/print_mail.admin.inc:184
-#: print_mail/print_mail.inc:276
+#: print_mail/print_mail.admin.inc:193
+#: print_mail/print_mail.inc:300
 msgid "Thank you for spreading the word about !site."
 msgstr "Nous vous remercions passer le mot à propos de !site."
 
-#: print_mail/print_mail.admin.inc:185
+#: print_mail/print_mail.admin.inc:194
 msgid "This message will be displayed after the user successfully submits the form."
 msgstr "Ce message sera affiché après que l'utilisateur aura soumis avec succès le formulaire."
 
@@ -680,37 +684,40 @@ msgstr "Vous devez entrer un sujet."
 msgid "You must enter a message."
 msgstr "Vous devez entrer un message."
 
-#: print_mail/print_mail.inc:275
+#: print_mail/print_mail.inc:282
+msgid "print_mail: From %from"
+msgstr ""
+
+#: print_mail/print_mail.inc:299
 msgid "us"
 msgstr "nous"
 
-#: print_mail/print_mail.inc:274
-#: print_mail/print_mail.module:0
+#: print_mail/print_mail.inc:298
 msgid "print_mail"
 msgstr "print_mail"
 
-#: print_mail/print_mail.inc:274
+#: print_mail/print_mail.inc:298
 msgid "%name [%from] sent %page to [%to]"
 msgstr "%name [$from] à envoyé %page à [%to]"
 
-#: print_mail/print_mail.module:88;98
+#: print_mail/print_mail.module:89;99
 msgid "Most emailed"
 msgstr "Les plus envoyés par courrier électronique"
 
-#: print_mail/print_mail.module:229
+#: print_mail/print_mail.module:227
 #: print_mail/print_mail.info:0
 msgid "Send by e-mail"
 msgstr "Envoyer par courrier électronique."
 
-#: print_mail/print_mail.module:316
+#: print_mail/print_mail.module:324
 msgid "Send this page by e-mail."
 msgstr "Envoyer cette page par courrier électronique."
 
-#: print_mail/print_mail.module:48
+#: print_mail/print_mail.module:49
 msgid "Send page by e-mail"
 msgstr "Envoyer la page par courrier électronique"
 
-#: print_mail/print_mail.module:56
+#: print_mail/print_mail.module:57
 msgid "e-mail"
 msgstr "courrier électronique"
 
@@ -806,46 +813,64 @@ msgstr "Taille de la fonte"
 msgid "(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles."
 msgstr "(TCPDF seulement) Fixe la taille de la police à utiliser pour le texte normal. C’est la valeur de base pour la mise à l’échelle appliquée à d'autres styles de texte."
 
-#: print_pdf/print_pdf.admin.inc:187
+#: print_pdf/print_pdf.admin.inc:186
+#, fuzzy
+msgid "wkhtmltopdf options"
+msgstr "Options wkhtmltopdf"
+
+#: print_pdf/print_pdf.admin.inc:188
+msgid "(wkhtmltopdf only) Set any additional options to be passed to the wkhtmltopdf executable."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:192
+#, fuzzy
+msgid "Xvfb options"
+msgstr "Options Xvfb"
+
+#: print_pdf/print_pdf.admin.inc:194
+msgid "(wkhtmltopdf only) Set any additional options to be passed to the Xvfb executable."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:200
 msgid "PDF File Name"
 msgstr "Nom du fichier PDF"
 
-#: print_pdf/print_pdf.admin.inc:189
+#: print_pdf/print_pdf.admin.inc:202
 msgid "If left empty the generated filename defaults to the node's path. Tokens may be used to build the filename (see following list). The .pdf extension will be appended automatically."
 msgstr "Si laissé vide, le nom de fichier généré utilise par défault le chemin du noeud. Des jetons (Tokens) peuvent être employés pour construire le nom du fichier (voir la liste suivante). L’extension .pdf sera ajouté automatiquement."
 
-#: print_pdf/print_pdf.admin.inc:193
+#: print_pdf/print_pdf.admin.inc:206
 msgid "Replacement Patterns"
 msgstr "Structure de remplacement"
 
-#: print_pdf/print_pdf.admin.inc:214
+#: print_pdf/print_pdf.admin.inc:227
 msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
 msgstr "Aucun outil de génération de PDF trouvé! Veuillez télécharger un outil compatible de génération de PDF fonctionnant sous PHP. Examinez le fichier INSTALL.txt de ce module pour plus de détails."
 
-#: (duplicate) print_pdf/print_pdf.admin.inc:226
-#: print_pdf/print_pdf.module:150
+#: (duplicate) print_pdf/print_pdf.admin.inc:239
+#: print_pdf/print_pdf.module:153
 msgid "No PDF tool selected"
 msgstr "Aucun outil PDF sélectionné"
 
-#: print_pdf/print_pdf.admin.inc:229
+#: print_pdf/print_pdf.admin.inc:242
 msgid "Font size must be at least 1."
 msgstr "La taille de la fonte doit être au minimum 1."
 
-#: (duplicate) print_pdf/print_pdf.admin.inc:276
-#: print_pdf/print_pdf.module:275;360;149
+#: (duplicate) print_pdf/print_pdf.admin.inc:290
+#: print_pdf/print_pdf.module:275;360;152
 #: print_pdf/print_pdf.info:0
 msgid "PDF version"
 msgstr "version PDF"
 
-#: print_pdf/print_pdf.admin.inc:277
+#: print_pdf/print_pdf.admin.inc:291
 msgid "Text used in the link to the PDF version."
 msgstr "Texte utilisé dans le lien à la version PDF."
 
-#: print_pdf/print_pdf.pages.inc:396
+#: print_pdf/print_pdf.pages.inc:515
 msgid "Page !n of !total"
 msgstr "Page !n de !total"
 
-#: print_pdf/print_pdf.module:111;121
+#: print_pdf/print_pdf.module:114;124
 msgid "Most PDFd"
 msgstr "Les plus générés en PDF"
 
@@ -853,26 +878,27 @@ msgstr "Les plus générés en PDF"
 msgid "Display a PDF version of this page."
 msgstr "Afficher la version PDF de cette page"
 
-#: (duplicate) print_pdf/print_pdf.module:151
+#: (duplicate) print_pdf/print_pdf.module:154
 msgid "Please configure it in the <a href=\"@url\">PDF settings page</a>."
 msgstr "SVP le configurer dans la <a href=\"@url\">page de configuration PDF</a>."
 
 # Nom du module
-#: print_pdf/print_pdf.module:72
+#: print_pdf/print_pdf.module:75
 msgid "Printer-friendly PDF"
 msgstr "PDF version imprimable"
 
-#: print_pdf/print_pdf.module:79
+#: print_pdf/print_pdf.module:82
 msgid "PDF"
 msgstr "PDF"
-
-#: print_pdf/print_pdf.module:0
-msgid "print_pdf"
-msgstr "print_pdf"
 
 #: print_pdf/print_pdf.info:0
 msgid "Adds the capability to export pages as PDF."
 msgstr "Ajoute la capacité d’exporter des pages en PDF."
+
+#~ msgid "print"
+#~ msgstr "imprimer"
+#~ msgid "print_pdf"
+#~ msgstr "print_pdf"
 
 # Nom du module
 #~ msgid "Printer-friendly pages"

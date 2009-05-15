@@ -1,5 +1,5 @@
 <?php
-// $Id: print_mail.inc,v 1.2.2.20 2009/04/22 22:11:37 jcnventura Exp $
+// $Id: print_mail.inc,v 1.2.2.22 2009/05/13 16:18:06 jcnventura Exp $
 
 /**
  * @file
@@ -260,8 +260,17 @@ function print_mail_form_submit($form, &$form_state) {
       include_once(_print_get_template(PRINT_MAIL_FORMAT, $print['type']));
       $params['body'] = ob_get_contents();
       ob_end_clean();
+      $params['body'] = drupal_final_markup($params['body']);
 
       $ok = FALSE;
+      if (function_exists('job_queue_add') && variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT)) {
+        $use_job_queue = TRUE;
+        $this_file = drupal_get_path('module', 'print_mail') .'/print_mail.inc';
+      }
+      else {
+        $use_job_queue = FALSE;
+      }
+
       $addresses = explode(', ', $form_state['values']['txt_to_addrs']);
       foreach ($addresses as $to) {
         // Call to hook_print_mail_before_send in order to know if the mail can be sent
@@ -269,8 +278,15 @@ function print_mail_form_submit($form, &$form_state) {
         $can_send = module_invoke_all('print_mail_before_send', $node, $to, $from, $params);
 
         if (!in_array(FALSE, $can_send)) {
-          $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
-          if ($ret['result']) {
+          if ($use_job_queue) {
+            // Use job queue to send mails during cron runs
+            job_queue_add('drupal_mail', t('print_mail: From %from', array('%from' => $from)), array('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE), $this_file, TRUE);
+          }
+          else {
+            // Send mail immediately using Drupal's mail handler
+            $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
+          }
+          if ($ret['result'] || $use_job_queue) {
             // Call to hook_print_mail_after_send in order to provide information to other modules.
             module_invoke_all('print_mail_after_send', $node, $to, $from, $params);
 
