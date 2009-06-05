@@ -34,7 +34,7 @@ features[] = primary_links
 features[] = secondary_links
 
 ; Information added by Acquia.com packaging script
-version = "6.x-1.1"
+version = "6.x-1.4"
 core = "6.x"
 project = "acquia_slate"
 acquia = "1"

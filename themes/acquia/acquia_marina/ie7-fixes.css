@@ -1,5 +1,5 @@
 /**
- * $Id: ie7-fixes.css,v 1.1.2.4 2009/02/13 11:01:26 jwolf Exp $
+ * $Id: ie7-fixes.css,v 1.1.2.6 2009/05/10 00:50:27 jwolf Exp $
  * Acquia Marina
  */
 
@@ -7,8 +7,8 @@
 /* IE7 FIXES */
 /*************/
 
-/* fix floating tabs */
-#header-bottom {
+/* fix tabs from floating */
+#primary-menu-wrapper {
   height: 1%;
 }
 
@@ -23,11 +23,11 @@ body.layout-main-last #sidebar-last ul li,
 }
 
 /* adjust pager spacing */
-#main-wrapper .item-list ul.pager li {
+#main .item-list ul.pager li {
   margin: 0 2px;
 }
 
-#main-wrapper .item-list .pager a.active {
+#main .item-list .pager a.active {
   padding: 1px 0 2px 3px;
 }
 
@@ -40,8 +40,8 @@ body.layout-main-last #sidebar-last ul li,
   padding: 2px 0 0;
 }
 
-.form-submit,
-.teaser-button {
+input.form-submit,
+input.teaser-button {
   border: 1px solid #225A82;
   margin: 0;
   padding: 3px 2px;

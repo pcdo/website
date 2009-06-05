@@ -1,4 +1,4 @@
-/* $Id: style.css,v 1.1.2.2 2009/04/19 07:35:18 jwolf Exp $ */
+/* $Id: style.css,v 1.1.2.4 2009/05/11 08:53:00 jwolf Exp $ */
 
 /******************************************/
 /*  TopNotchThemes CSS Stylesheet         */
@@ -2114,6 +2114,37 @@ div.view div.views-admin-links li {
 
 #views-ui-edit-view-form {
   margin: 20px 0;
+}
+
+
+/* make text legible in views admin */
+div.views-admin-links a,
+div.views-admin-links-hover a,
+div.view div.views-admin-links:hover a{
+  color: #fff;
+}
+
+.views-edit-view a,
+.views-entry a {
+  color: #1767B1;
+}
+
+#views-ajax-form,
+#views-ajax-pad .form-item,
+#views-ajax-pad .views-expose .description,
+#views-ajax-pad .views-override .description,
+.changed,
+.defaulted,
+.views-category,
+.views-category-content,
+.views-entry,
+.tab-section,
+.views-tab {
+  color: #000 !important;
+}
+
+#views-ajax-pad table.sticky-enabled tr td {
+  color: #fff;
 }
 
 

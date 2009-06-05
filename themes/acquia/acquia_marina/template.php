@@ -1,5 +1,5 @@
 <?php
-// $Id: template.php,v 1.1.2.10 2009/02/13 08:22:38 jwolf Exp $
+// $Id: template.php,v 1.1.2.14 2009/05/13 06:08:29 jwolf Exp $
 
 /**
  * Initialize theme settings
@@ -321,17 +321,19 @@ function phptemplate_preprocess_node(&$vars) {
   // Node Theme Settings
   
   // Date & author
-  $date = t('Posted ') . format_date($vars['node']->created, 'medium');                 // Format date as small, medium, or large
-  $author = theme('username', $vars['node']);
-  $author_only_separator = t('Posted by ');
-  $author_date_separator = t(' by ');
-  $submitted_by_content_type = (theme_get_setting('submitted_by_enable_content_type') == 1) ? $vars['node']->type : 'default';
-  $date_setting = (theme_get_setting('submitted_by_date_'. $submitted_by_content_type) == 1);
-  $author_setting = (theme_get_setting('submitted_by_author_'. $submitted_by_content_type) == 1);
-  $author_separator = ($date_setting) ? $author_date_separator : $author_only_separator;
-  $date_author = ($date_setting) ? $date : '';
-  $date_author .= ($author_setting) ? $author_separator . $author : '';
-  $vars['submitted'] = $date_author;
+  if (!module_exists('submitted_by')) {
+    $date = t('Posted ') . format_date($vars['node']->created, 'medium');                 // Format date as small, medium, or large
+    $author = theme('username', $vars['node']);
+    $author_only_separator = t('Posted by ');
+    $author_date_separator = t(' by ');
+    $submitted_by_content_type = (theme_get_setting('submitted_by_enable_content_type') == 1) ? $vars['node']->type : 'default';
+    $date_setting = (theme_get_setting('submitted_by_date_'. $submitted_by_content_type) == 1);
+    $author_setting = (theme_get_setting('submitted_by_author_'. $submitted_by_content_type) == 1);
+    $author_separator = ($date_setting) ? $author_date_separator : $author_only_separator;
+    $date_author = ($date_setting) ? $date : '';
+    $date_author .= ($author_setting) ? $author_separator . $author : '';
+    $vars['submitted'] = $date_author;
+  }
 
   // Taxonomy
   $taxonomy_content_type = (theme_get_setting('taxonomy_enable_content_type') == 1) ? $vars['node']->type : 'default';
@@ -340,26 +342,28 @@ function phptemplate_preprocess_node(&$vars) {
   if ((module_exists('taxonomy')) && ($taxonomy_display == 'all' || ($taxonomy_display == 'only' && $vars['page']))) {
     $vocabularies = taxonomy_get_vocabularies($vars['node']->type);
     $output = '';
-    $vocab_delimiter = '';
+    $term_delimiter = ', ';
     foreach ($vocabularies as $vocabulary) {
-      if (theme_get_setting('taxonomy_vocab_display_'. $taxonomy_content_type .'_'. $vocabulary->vid) == 1) {
+      if (theme_get_setting('taxonomy_vocab_hide_'. $taxonomy_content_type .'_'. $vocabulary->vid) != 1) {
         $terms = taxonomy_node_get_terms_by_vocabulary($vars['node'], $vocabulary->vid);
         if ($terms) {
-          $output .= ($taxonomy_format == 'vocab') ? '<li class="vocab vocab-'. $vocabulary->vid .'"><span class="vocab-name">'. $vocabulary->name .':</span> <ul class="vocab-list">' : '';
-          $links = array();
-          foreach ($terms as $term) {        
-            $links[] = '<li class="vocab-term">'. l($term->name, taxonomy_term_path($term), array('attributes' => array('rel' => 'tag', 'title' => strip_tags($term->description)))) .'</li>';        
+          $term_items = '';
+          foreach ($terms as $term) {                        // Build vocabulary term items
+            $term_link = l($term->name, taxonomy_term_path($term), array('attributes' => array('rel' => 'tag', 'title' => strip_tags($term->description))));
+            $term_items .= '<li class="vocab-term">'. $term_link . $term_delimiter .'</li>';
           }
-          if ($taxonomy_format == 'list') {
-            $output .= $vocab_delimiter;    // Add comma between vocabularies
-            $vocab_delimiter = ', ';        // Use a comma delimiter after first displayed vocabulary
+          if ($taxonomy_format == 'vocab') {                 // Add vocabulary labels if separate
+            $output .= '<li class="vocab vocab-'. $vocabulary->vid .'"><span class="vocab-name">'. $vocabulary->name .':</span> <ul class="vocab-list">';
+            $output .= substr_replace($term_items, '</li>', -(strlen($term_delimiter) + 5)) .'</ul></li>';
           }
-          $output .= implode(", ", $links);
-          $output .= ($taxonomy_format == 'vocab') ? '</ul></li>' : '';
+          else {
+            $output .= $term_items;
+          }
         }
       }
     }
     if ($output != '') {
+      $output = ($taxonomy_format == 'list') ? substr_replace($output, '</li>', -(strlen($term_delimiter) + 5)) : $output;
       $output = '<ul class="taxonomy">'. $output .'</ul>';
     }
     $vars['terms'] = $output;
@@ -375,10 +379,10 @@ function phptemplate_preprocess_node(&$vars) {
       'title' => _themesettings_link(
       theme_get_setting('readmore_prefix_'. $node_content_type),
       theme_get_setting('readmore_suffix_'. $node_content_type),
-      theme_get_setting('readmore_'. $node_content_type),
+      t(theme_get_setting('readmore_'. $node_content_type)),
       'node/'. $vars['node']->nid,
       array(
-        'attributes' => array('title' => theme_get_setting('readmore_title_'. $node_content_type)), 
+        'attributes' => array('title' => t(theme_get_setting('readmore_title_'. $node_content_type))), 
         'query' => NULL, 'fragment' => NULL, 'absolute' => FALSE, 'html' => TRUE
         )
       ),
@@ -393,10 +397,10 @@ function phptemplate_preprocess_node(&$vars) {
         'title' => _themesettings_link(
         theme_get_setting('comment_add_prefix_'. $node_content_type),
         theme_get_setting('comment_add_suffix_'. $node_content_type),
-        theme_get_setting('comment_add_'. $node_content_type),
+        t(theme_get_setting('comment_add_'. $node_content_type)),
         "comment/reply/".$vars['node']->nid,
         array(
-          'attributes' => array('title' => theme_get_setting('comment_add_title_'. $node_content_type)), 
+          'attributes' => array('title' => t(theme_get_setting('comment_add_title_'. $node_content_type))), 
           'query' => NULL, 'fragment' => 'comment-form', 'absolute' => FALSE, 'html' => TRUE
           )
         ),
@@ -409,10 +413,10 @@ function phptemplate_preprocess_node(&$vars) {
         'title' => _themesettings_link(
         theme_get_setting('comment_node_prefix_'. $node_content_type),
         theme_get_setting('comment_node_suffix_'. $node_content_type),
-        theme_get_setting('comment_node_'. $node_content_type),
+        t(theme_get_setting('comment_node_'. $node_content_type)),
         "comment/reply/".$vars['node']->nid,
         array(
-          'attributes' => array('title' => theme_get_setting('comment_node_title_'. $node_content_type)), 
+          'attributes' => array('title' => t(theme_get_setting('comment_node_title_'. $node_content_type))), 
           'query' => NULL, 'fragment' => 'comment-form', 'absolute' => FALSE, 'html' => TRUE
           )
         ),
@@ -429,12 +433,12 @@ function phptemplate_preprocess_node(&$vars) {
         theme_get_setting('comment_new_suffix_'. $node_content_type),
         format_plural(
           comment_num_new($vars['node']->nid),
-          theme_get_setting('comment_new_singular_'. $node_content_type),
-          theme_get_setting('comment_new_plural_'. $node_content_type)
+          t(theme_get_setting('comment_new_singular_'. $node_content_type)),
+          t(theme_get_setting('comment_new_plural_'. $node_content_type))
         ),
         "node/".$vars['node']->nid,
         array(
-          'attributes' => array('title' => theme_get_setting('comment_new_title_'. $node_content_type)), 
+          'attributes' => array('title' => t(theme_get_setting('comment_new_title_'. $node_content_type))), 
           'query' => NULL, 'fragment' => 'new', 'absolute' => FALSE, 'html' => TRUE
         )
       ),
@@ -450,12 +454,12 @@ function phptemplate_preprocess_node(&$vars) {
         theme_get_setting('comment_suffix_'. $node_content_type),
         format_plural(
           comment_num_all($vars['node']->nid),
-          theme_get_setting('comment_singular_'. $node_content_type),
-          theme_get_setting('comment_plural_'. $node_content_type)
+          t(theme_get_setting('comment_singular_'. $node_content_type)),
+          t(theme_get_setting('comment_plural_'. $node_content_type))
         ),
         "node/".$vars['node']->nid,
         array(
-          'attributes' => array('title' => theme_get_setting('comment_title_'. $node_content_type)), 
+          'attributes' => array('title' => t(theme_get_setting('comment_title_'. $node_content_type))), 
           'query' => NULL, 'fragment' => 'comments', 'absolute' => FALSE, 'html' => TRUE
         )
       ),

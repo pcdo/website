@@ -6,7 +6,7 @@
  *   Integration between Acquia Drupal and Acquia's hosted solr search service.
  */
 
-define('ACQUIA_SEARCH_VERSION', "6.x-1.4963");
+define('ACQUIA_SEARCH_VERSION', "6.x-1.4968");
 
 /**
  * Implementation of hook_enable().
@@ -38,7 +38,7 @@ function _acquia_search_set_variables() {
 function acquia_search_disable() {
   acquia_search_delete_variables();
   // Disable all the associated search modules.
-  module_disable(array('apachesolr', 'apachesolr_search', 'apachesolr_mlt', 'apachesolr_nodeaccess', 'apachesolr_image', 'apachesolr_og'));
+  module_disable(array('apachesolr', 'apachesolr_search', 'apachesolr_nodeaccess', 'apachesolr_image', 'apachesolr_og'));
 }
 
 /**
@@ -86,20 +86,17 @@ function acquia_search_form_alter(&$form, &$form_state, $form_id) {
   switch ($form_id) {
     case 'search_block_form':
     case 'search_theme_form':
-      foreach ($form['#submit'] as $key => $name) {
-        if ($name == 'search_box_form_submit') {
-          unset($form['#submit'][$key]);
-        }
-      }
-      $form['#submit'][] = 'acquia_search_search_box_form_submit';
-      break;
     case 'search_form':
+      if (!isset($form['#submit'])) {
+        $form['#submit'] = array();
+      }
       foreach ($form['#submit'] as $key => $name) {
-        if ($name == 'search_form_submit') {
+        if ($name == 'search_form_submit' || $name == 'search_box_form_submit') {
           unset($form['#submit'][$key]);
+          $form_submit = $name;
         }
       }
-      $form['#submit'][] = 'acquia_search_search_form_submit';
+      $form['#submit'][] = 'acquia_search_'. $form_submit;
       break;
     case 'apachesolr_settings':
       // Don't alter the form if there is no subscription.

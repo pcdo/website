@@ -1,5 +1,5 @@
 <?php
-// $Id: theme-settings.php,v 1.1.2.1 2009/04/19 05:47:55 jwolf Exp $
+// $Id: theme-settings.php,v 1.1.2.4 2009/05/13 12:15:12 jwolf Exp $
 
 /**
 * Implementation of THEMEHOOK_settings() function.
@@ -201,43 +201,45 @@ SCRIPT;
   );
   
   // Search Settings
-  $form['tnt_container']['general_settings']['search_container'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Search results'),
-    '#description' => t('What additional information should be displayed on your search results page?'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-  );
-  $form['tnt_container']['general_settings']['search_container']['search_results']['search_snippet'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display text snippet'),
-    '#default_value' => $settings['search_snippet'],
-  );
-  $form['tnt_container']['general_settings']['search_container']['search_results']['search_info_type'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display content type'),
-    '#default_value' => $settings['search_info_type'],
-  );
-  $form['tnt_container']['general_settings']['search_container']['search_results']['search_info_user'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display author name'),
-    '#default_value' => $settings['search_info_user'],
-  );
-  $form['tnt_container']['general_settings']['search_container']['search_results']['search_info_date'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display posted date'),
-    '#default_value' => $settings['search_info_date'],
-  );
-  $form['tnt_container']['general_settings']['search_container']['search_results']['search_info_comment'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display comment count'),
-    '#default_value' => $settings['search_info_comment'],
-  );
-  $form['tnt_container']['general_settings']['search_container']['search_results']['search_info_upload'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Display attachment count'),
-    '#default_value' => $settings['search_info_upload'],
-  );
+  if (module_exists('search')) {
+    $form['tnt_container']['general_settings']['search_container'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Search results'),
+      '#description' => t('What additional information should be displayed on your search results page?'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+    $form['tnt_container']['general_settings']['search_container']['search_results']['search_snippet'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Display text snippet'),
+      '#default_value' => $settings['search_snippet'],
+    );
+    $form['tnt_container']['general_settings']['search_container']['search_results']['search_info_type'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Display content type'),
+      '#default_value' => $settings['search_info_type'],
+    );
+    $form['tnt_container']['general_settings']['search_container']['search_results']['search_info_user'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Display author name'),
+      '#default_value' => $settings['search_info_user'],
+    );
+    $form['tnt_container']['general_settings']['search_container']['search_results']['search_info_date'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Display posted date'),
+      '#default_value' => $settings['search_info_date'],
+    );
+    $form['tnt_container']['general_settings']['search_container']['search_results']['search_info_comment'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Display comment count'),
+      '#default_value' => $settings['search_info_comment'],
+    );
+    $form['tnt_container']['general_settings']['search_container']['search_results']['search_info_upload'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Display attachment count'),
+      '#default_value' => $settings['search_info_upload'],
+    );
+  }
   
   // Node Settings
   $form['tnt_container']['node_type_specific'] = array(
@@ -257,37 +259,41 @@ SCRIPT;
     '#collapsed' => TRUE,
   );
   // Default & content-type specific settings
-  foreach ((array('default' => 'Default') + node_get_types('names')) as $type => $name) {
-    $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by'][$type] = array(
-      '#type' => 'fieldset',
-      '#title' => t('!name', array('!name' => t($name))),
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
-    );
-    $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by'][$type]["submitted_by_author_{$type}"] = array(
-      '#type'          => 'checkbox',
-      '#title'         => t('Display author\'s username'),
-      '#default_value' => $settings["submitted_by_author_{$type}"],
-    );
-    $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by'][$type]["submitted_by_date_{$type}"] = array(
-      '#type'          => 'checkbox',
-      '#title'         => t('Display date posted (you can customize this format on your Date and Time settings page)'),
-      '#default_value' => $settings["submitted_by_date_{$type}"],
-    );
-    // Options for default settings
-    if ($type == 'default') {
-      $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by']['default']['#title'] = t('Default');
-      $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by']['default']['#collapsed'] = $settings['submitted_by_enable_content_type'] ? TRUE : FALSE;
-      $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by']['submitted_by_enable_content_type'] = array(
-        '#type'          => 'checkbox',
-        '#title'         => t('Use custom settings for each content type instead of the default above'),
-        '#default_value' => $settings['submitted_by_enable_content_type'],
+  if (module_exists('submitted_by') == FALSE) {
+    foreach ((array('default' => 'Default') + node_get_types('names')) as $type => $name) {
+      $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by'][$type] = array(
+        '#type' => 'fieldset',
+        '#title' => t('!name', array('!name' => t($name))),
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
       );
+      $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by'][$type]["submitted_by_author_{$type}"] = array(
+        '#type'          => 'checkbox',
+        '#title'         => t('Display author\'s username'),
+        '#default_value' => $settings["submitted_by_author_{$type}"],
+      );
+      $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by'][$type]["submitted_by_date_{$type}"] = array(
+        '#type'          => 'checkbox',
+        '#title'         => t('Display date posted (you can customize this format on your Date and Time settings page)'),
+        '#default_value' => $settings["submitted_by_date_{$type}"],
+      );
+      // Options for default settings
+      if ($type == 'default') {
+        $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by']['default']['#title'] = t('Default');
+        $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by']['default']['#collapsed'] = $settings['submitted_by_enable_content_type'] ? TRUE : FALSE;
+        $form['tnt_container']['node_type_specific']['submitted_by_container']['submitted_by']['submitted_by_enable_content_type'] = array(
+          '#type'          => 'checkbox',
+          '#title'         => t('Use custom settings for each content type instead of the default above'),
+          '#default_value' => $settings['submitted_by_enable_content_type'],
+        );
+      }
+      // Collapse content-type specific settings if default settings are being used
+      else if ($settings['submitted_by_enable_content_type'] == 0) {
+        $form['submitted_by'][$type]['#collapsed'] = TRUE;
+      }
     }
-    // Collapse content-type specific settings if default settings are being used
-    else if ($settings['submitted_by_enable_content_type'] == 0) {
-      $form['submitted_by'][$type]['#collapsed'] = TRUE;
-    }
+  } else {
+      $form['tnt_container']['node_type_specific']['submitted_by_container']['#description'] = 'NOTICE: You currently have the "Submitted By" module installed and enabled, so the Author & Date theme settings have been disabled to prevent conflicts.  If you wish to re-enable the Author & Date theme settings, you must first disable the "Submitted By" module.';
   }
     
   // Taxonomy Settings
@@ -337,10 +343,10 @@ SCRIPT;
       }
       // Display taxonomy checkboxes
       foreach ($vocabs as $key => $vocab_name) {
-        $form['tnt_container']['node_type_specific']['display_taxonomy_container']['display_taxonomy'][$type]["taxonomy_vocab_display_{$type}_{$key}"] = array(
+        $form['tnt_container']['node_type_specific']['display_taxonomy_container']['display_taxonomy'][$type]["taxonomy_vocab_hide_{$type}_{$key}"] = array(
           '#type'          => 'checkbox',
-          '#title'         => t('Display vocabulary: '. $vocab_name),
-          '#default_value' => isset($settings["taxonomy_vocab_display_{$type}_{$key}"]) ? $settings["taxonomy_vocab_display_{$type}_{$key}"] : (($settings["taxonomy_display_{$type}"] == 'never') ? 0 : 1),
+          '#title'         => t('Hide vocabulary: '. $vocab_name),
+          '#default_value' => $settings["taxonomy_vocab_hide_{$type}_{$key}"], 
         );
       }
       // Options for default settings
@@ -372,7 +378,7 @@ SCRIPT;
   // Read more link settings
   $form['tnt_container']['node_type_specific']['link_settings']['readmore'] = array(
     '#type'        => 'fieldset',
-    '#title'       => t('“Read more”'),
+    '#title'       => t('"Read more"'),
     '#collapsible' => TRUE,
     '#collapsed'   => TRUE,
    );
@@ -428,7 +434,7 @@ SCRIPT;
   // Comments link settings
   $form['tnt_container']['node_type_specific']['link_settings']['comment'] = array(
     '#type'        => 'fieldset',
-    '#title'       => t('“Comment”'),
+    '#title'       => t('"Comment"'),
     '#collapsible' => TRUE,
     '#collapsed'   => TRUE,
   );
@@ -449,7 +455,7 @@ SCRIPT;
     );
     $form['tnt_container']['node_type_specific']['link_settings']['comment'][$type]['node']['add'] = array(
       '#type'        => 'fieldset',
-      '#title'       => t('“Add new comment” link'),
+      '#title'       => t('"Add new comment" link'),
       '#description' => t('The link when the full content is being displayed.'),
       '#collapsible' => TRUE,
       '#collapsed'   => TRUE,
@@ -493,7 +499,7 @@ SCRIPT;
     );
     $form['tnt_container']['node_type_specific']['link_settings']['comment'][$type]['teaser']['add'] = array(
       '#type'        => 'fieldset',
-      '#title'       => t('“Add new comment” link'),
+      '#title'       => t('"Add new comment" link'),
       '#description' => t('The link when there are no comments.'),
       '#collapsible' => TRUE,
       '#collapsed'   => TRUE,
@@ -530,7 +536,7 @@ SCRIPT;
     );
     $form['tnt_container']['node_type_specific']['link_settings']['comment'][$type]['teaser']['standard'] = array(
       '#type'        => 'fieldset',
-      '#title'       => t('“Comments” link'),
+      '#title'       => t('"Comments" link'),
       '#description' => t('The link when there are one or more comments.'),
       '#collapsible' => TRUE,
       '#collapsed'   => TRUE,
@@ -573,7 +579,7 @@ SCRIPT;
     );
     $form['tnt_container']['node_type_specific']['link_settings']['comment'][$type]['teaser']['new'] = array(
       '#type'        => 'fieldset',
-      '#title'       => t('“New comments” link'),
+      '#title'       => t('"New comments" link'),
       '#description' => t('The link when there are one or more new comments.'),
       '#collapsible' => TRUE,
       '#collapsed'   => TRUE,
