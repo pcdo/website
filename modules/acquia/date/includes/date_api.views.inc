@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api.views.inc,v 1.1.2.8 2009/03/26 08:47:11 karens Exp $
+//$Id: date_api.views.inc,v 1.1.2.10 2009/04/30 11:29:59 karens Exp $
 
 /**
  * @file
@@ -122,9 +122,8 @@ function date_api_views_plugins() {
 function date_api_views_data() {
   $data = array();
   
-  // TODO Try to get date filters and arguments working on non-nodes.
-  $tables = array('node', 'users', 'comments');
-  //$tables = array('node');
+  $tables = module_invoke_all('date_api_tables');
+  
   foreach ($tables as $base_table) {
     // The flexible date argument.
     $data[$base_table]['date_argument'] = array(
@@ -156,7 +155,8 @@ function date_api_views_data() {
  *  Identify all potential date/timestamp fields and cache the data.
  */
 function date_api_fields($base = 'node', $reset = TRUE) {
-  static $fields;
+  static $fields = array();
+  $empty = array('name' => array(), 'alias' => array());
   require_once('./'. drupal_get_path('module', 'date_api') .'/includes/date_api_fields.inc');
   if (empty($fields[$base]) || $reset) {
     $cid = 'date_api_fields_'. $base;
@@ -167,7 +167,8 @@ function date_api_fields($base = 'node', $reset = TRUE) {
       $fields[$base] = _date_api_fields($base);
     }
   }
-  return $fields[$base];
+  // Make sure that empty values will be arrays in he expected format.
+  return !empty($fields) && !empty($fields[$base]) ? $fields[$base] : $empty;
 }
 
 /**

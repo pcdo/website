@@ -1,5 +1,5 @@
 <?php
-// $Id: apachesolr_search.module,v 1.1.2.6.2.92 2009/05/14 23:10:19 pwolanin Exp $
+// $Id: apachesolr_search.module,v 1.1.2.6.2.98 2009/06/10 12:54:12 jacobsingh Exp $
 
 /**
  * @file
@@ -90,12 +90,13 @@ function apachesolr_search_search($op = 'search', $keys = NULL) {
     case 'search':
       $filters = isset($_GET['filters']) ? $_GET['filters'] : '';
       $solrsort = isset($_GET['solrsort']) ? $_GET['solrsort'] : '';
+      $page = isset($_GET['page']) ? $_GET['page'] : 0;
       try {
-        $results = apachesolr_search_execute($keys, $filters, $solrsort, 'search/' . arg(1));
+        $results = apachesolr_search_execute($keys, $filters, $solrsort, 'search/' . arg(1), $page);
         return $results;
       }
       catch (Exception $e) {
-        watchdog('Apache Solr', $e->getMessage(), NULL, WATCHDOG_ERROR);
+        watchdog('Apache Solr', nl2br(check_plain($e->getMessage())), NULL, WATCHDOG_ERROR);
         apachesolr_failure(t('Solr search'), $keys);
       }
       break;
@@ -107,7 +108,7 @@ function apachesolr_search_search($op = 'search', $keys = NULL) {
  *
  * @throws Exception
  */
-function apachesolr_search_execute($keys, $filters, $solrsort, $base_path = '') {
+function apachesolr_search_execute($keys, $filters, $solrsort, $base_path = '', $page = 0, $caller = 'apachesolr_search') {
   // Validate sort parameter
   // TODO: move this to the query class.
   if (strlen($solrsort) && preg_match('/^([a-z0-9_]+ (asc|desc)(,)?)+$/i', $solrsort)) {
@@ -128,7 +129,6 @@ function apachesolr_search_execute($keys, $filters, $solrsort, $base_path = '') 
   apachesolr_search_add_facet_params($params, $query);
   apachesolr_search_add_boost_params($params, $query, $solr);
 
-  $page = isset($_GET['page']) ? $_GET['page'] : 0;
   $params['start'] = $page * $params['rows'];
 
   // Cache the built query. Since all the built queries go through
@@ -136,7 +136,7 @@ function apachesolr_search_execute($keys, $filters, $solrsort, $base_path = '') 
   apachesolr_current_query($query);
 
   // This hook allows modules to modify the query and params objects.
-  apachesolr_modify_query($query, $params, 'apachesolr_search');
+  apachesolr_modify_query($query, $params, $caller);
   if (!$query) {
     return array();
   }
@@ -614,27 +614,63 @@ function apachesolr_search_get_type($facet) {
  */
 function apachesolr_search_form_search_form_alter(&$form, $form_state) {
 
-  if (($form['module']['#value'] == 'apachesolr_search') && variable_get('apachesolr_search_spellcheck', FALSE) && apachesolr_has_searched() && ($response = apachesolr_static_response_cache())) {
-    //Get spellchecker suggestions into an array.
-    $suggestions = get_object_vars($response->spellcheck->suggestions);
-
-    if ($suggestions) {
-      //Get the original query and replace words.
-      $query = apachesolr_current_query();
-
-      foreach($suggestions as $word => $value) {
-        $replacements[$word] = $value->suggestion[0];
-      }
-      $new_keywords = strtr($query->get_query_basic(), $replacements);
-
-      $form['basic']['suggestion'] = array(
-        '#prefix' => '<div class="spelling-suggestions">',
-        '#suffix' => '</div>',
-        '#type' => 'item',
-        '#title' => t('Did you mean'),
-        '#value' => l($new_keywords, $query->get_path($new_keywords)),
+  if ($form['module']['#value'] == 'apachesolr_search') {
+    $filters = isset($_REQUEST['filters']) ? trim($_REQUEST['filters']) : '';
+    $form['apachesolr_search']['#tree'] = TRUE;
+    if ($filters) {
+      $form['apachesolr_search']['retain-filters'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Retain current filters'),
+        '#default_value' => !empty($_GET['retain-filters']), 
       );
     }
+    $form['filters'] = array(
+      '#type' => 'hidden',
+      '#default_value' => $filters,
+    );
+
+    $form['#submit'][] = 'apachesolr_search_form_search_submit';
+    if (variable_get('apachesolr_search_spellcheck', FALSE) && apachesolr_has_searched() && ($response = apachesolr_static_response_cache())) {
+      //Get spellchecker suggestions into an array.
+      $suggestions = get_object_vars($response->spellcheck->suggestions);
+  
+      if ($suggestions) {
+        //Get the original query and replace words.
+        $query = apachesolr_current_query();
+  
+        foreach($suggestions as $word => $value) {
+          $replacements[$word] = $value->suggestion[0];
+        }
+        $new_keywords = strtr($query->get_query_basic(), $replacements);
+  
+        $form['basic']['suggestion'] = array(
+          '#prefix' => '<div class="spelling-suggestions">',
+          '#suffix' => '</div>',
+          '#type' => 'item',
+          '#title' => t('Did you mean'),
+          '#value' => l($new_keywords, $query->get_path($new_keywords)),
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Added form submit function to account for Apache mode_rewrite quirks.
+ *
+ * @see apachesolr_search_form_search_form_alter()
+ */
+function apachesolr_search_form_search_submit($form, &$form_state) {
+  $keys = $form_state['values']['processed_keys'];
+  $base = 'search/'. $form_state['values']['module'] . '/';
+  if (variable_get('clean_url', '0')) {
+    $keys = str_replace('+', '%2B', $keys);
+    $form_state['redirect'] = $base . $keys;
+  }
+  if (!empty($form_state['values']['apachesolr_search']['retain-filters'])) {
+    $query['retain-filters'] = '1';
+    $query['filters'] = $form_state['values']['filters'];
+    $form_state['redirect'] = array($base . $keys, $query);
   }
 }
 
@@ -675,7 +711,7 @@ function apachesolr_search_build_spellcheck() {
     $response = $solr->search('solr', 0, 0, $params);
   }
   catch (Exception $e) {
-    watchdog('Apache Solr', $e->getMessage(), NULL, WATCHDOG_ERROR);
+    watchdog('Apache Solr', nl2br(check_plain($e->getMessage())), NULL, WATCHDOG_ERROR);
   }
 }
 

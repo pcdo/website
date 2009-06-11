@@ -16,6 +16,7 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
       $url .= "?";
     }
     $url .= '&request_id=' . $id;
+    return $id;
   }
   /**
    * Central method for making a get operation against this Solr Server
@@ -23,7 +24,7 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
    * @see Drupal_Apache_Solr_Service::_sendRawGet()
    */
   protected function _sendRawGet($url, $timeout = FALSE) {
-    $this->add_request_id($url);
+    $id = $this->add_request_id($url);
     list($cookie, $nonce) = acquia_search_auth_cookie($url);
     $request_headers = array(
       'Cookie' => $cookie,
@@ -32,8 +33,14 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
     list ($data, $headers) = $this->_makeHttpRequest($url, 'GET', $request_headers, '', $timeout);
     $response = new Apache_Solr_Response($data, $headers, $this->_createDocuments, $this->_collapseSingleValueArrays);
     $hmac = acquia_search_extract_hmac($headers);
-    if ($response->getHttpStatus() != 200) {
-      throw new Exception('"' . $response->getHttpStatus() . '" Status: ' . $response->getHttpStatusMessage() . "\n<br />request ID: $id <br />" . $url, $response->getHttpStatus());
+    $code = (int) $response->getHttpStatus();
+    if ($code != 200) {
+      $message = $response->getHttpStatusMessage() . "\n request ID: $id \n";
+      if ($code >= 400 && $code != 403 && $code != 404) {
+        // Add details, like Solr's exception message.
+        $message .= $response->getRawResponse();
+      }
+      throw new Exception('"' . $code . '" Status: ' . $message);
     }
     elseif (!acquia_search_valid_response($hmac, $nonce, $data)) {
       throw new Exception('Authentication of search content failed url: '. $url);
@@ -47,7 +54,7 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
    * @see Drupal_Apache_Solr_Service::_sendRawGet()
    */
   protected function _sendRawPost($url, $rawPost, $timeout = FALSE, $contentType = 'text/xml; charset=UTF-8')  {
-    $this->add_request_id($url);
+    $id = $this->add_request_id($url);
     list($cookie, $nonce) = acquia_search_auth_cookie($url, $rawPost);
     $request_headers = array(
       'Content-Type' => $contentType,
@@ -56,8 +63,14 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
     );
     list ($data, $headers) = $this->_makeHttpRequest($url, 'POST', $request_headers, $rawPost, $timeout);
     $response = new Apache_Solr_Response($data, $headers, $this->_createDocuments, $this->_collapseSingleValueArrays);
-    if ($response->getHttpStatus() != 200) {
-      throw new Exception('"' . $response->getHttpStatus() . '" Status: ' . $response->getHttpStatusMessage() . "\n<br />request ID: $id <br />" . $url, $response->getHttpStatus());
+    $code = (int) $response->getHttpStatus();
+    if ($code != 200) {
+      $message = $response->getHttpStatusMessage() . "\n request ID: $id \n";
+      if ($code >= 400 && $code != 403 && $code != 404) {
+        // Add details, like Solr's exception message.
+        $message .= $response->getRawResponse();
+      }
+      throw new Exception('"' . $code . '" Status: ' . $message);
     }
     return $response;
   }

@@ -1,5 +1,5 @@
 <?php
-// $Id: mollom.test,v 1.1.2.13 2008/12/31 14:45:06 dries Exp $
+// $Id: mollom.test,v 1.1.2.16 2009/03/29 04:47:06 dries Exp $
 
 /**
  * @file
@@ -53,7 +53,7 @@ class MollomWebTestCase extends DrupalWebTestCase {
    *   An array of data to be passed to drupalPost().
    */
   function mollomSetAdminOptions($edit) {
-    $admin_user = $this->drupalCreateUser(array('administer site configuration'));
+    $admin_user = $this->drupalCreateUser(array('administer mollom'));
     $this->drupalLogin($admin_user);
     $this->drupalPost('admin/settings/mollom', $edit, t('Save configuration'));
     $this->drupalLogout($admin_user);
@@ -80,7 +80,7 @@ class MollomAccessTestCase extends MollomWebTestCase {
    */
   function testKeyPairs() {
     // Check that a success message is shown.
-    $admin_user = $this->drupalCreateUser(array('administer site configuration'));
+    $admin_user = $this->drupalCreateUser(array('administer mollom'));
     $this->drupalLogin($admin_user);
     $this->drupalGet('admin/settings/mollom');
     $this->assertText(t('@message: the Mollom services are operating correctly. We are now blocking spam.', array('@message' => t('We contacted the Mollom servers to verify your keys'))), t('The Mollom settings page reports that Mollom is working correctly.'));
@@ -90,7 +90,7 @@ class MollomAccessTestCase extends MollomWebTestCase {
     variable_set('mollom_private_key', 'invalid-private-key');
 
     // Check that an error message is shown.
-    $admin_user = $this->drupalCreateUser(array('administer site configuration'));
+    $admin_user = $this->drupalCreateUser(array('administer mollom'));
     $this->drupalLogin($admin_user);
     $this->drupalGet('admin/settings/mollom');
     $this->assertRaw(t('"messages error"'), t('The Mollom settings page reports that the Mollom keys are invalid.'));
@@ -98,25 +98,25 @@ class MollomAccessTestCase extends MollomWebTestCase {
 
   /**
    * Make sure that the Mollom settings page works for users with the
-   * 'administer site configuration' permission but not those without
+   * 'administer mollom' permission but not those without
    * it.
    */
   function testAccessRights() {
     // Check access for a user that only has access to the 'administer
     // site configuration' permission. This user should have access to
     // the Mollom settings page.
-    $admin_user = $this->drupalCreateUser(array('administer site configuration'));
+    $admin_user = $this->drupalCreateUser(array('administer mollom'));
     $this->drupalLogin($admin_user);
     $this->drupalGet('admin/settings/mollom');
-    $this->assertResponse(200, t("The Mollom settings page is accessible to users with the 'administer site configuration' permission."));
+    $this->assertResponse(200, t("The Mollom settings page is accessible to users with the 'administer mollom' permission."));
 
     // Check access for a user that has everything except the 'administer
     // site configuration' permission. This user should not have access
     // to the Mollom settings page.
-    $non_admin_user = $this->drupalCreateUser(array_diff(module_invoke_all('perm'), array('administer site configuration')));
+    $non_admin_user = $this->drupalCreateUser(array_diff(module_invoke_all('perm'), array('administer mollom')));
     $this->drupalLogin($non_admin_user);
     $this->drupalGet('admin/settings/mollom');
-    $this->assertResponse(403, t("The Mollom settings page is inaccessible to users without the 'administer site configuration' permission."));
+    $this->assertResponse(403, t("The Mollom settings page is inaccessible to users without the 'administer mollom' permission."));
   }
 }
 
@@ -357,12 +357,12 @@ class MollomCommentFormTestCase extends MollomWebTestCase {
     $this->assertText(t('The CAPTCHA was not completed correctly. Please complete this new CAPTCHA and try again.'), t('The comment cannot be submitted when the CAPTCHA is incorrect.'));
     $this->assertFieldByID('edit-mollom-captcha', '', t('The CAPTCHA is present on the comment form after an incorrect CAPTCHA is submitted.'));
     $this->assertFieldByID('edit-mollom-session-id', $mollom_session_id, t('The Mollom Session ID is present on the comment form after a possible spam comment is previewed.'));
-    
+
     // Try to submit a correct answer for the CAPTCHA, but without one of the required field.
     $this->drupalPost(NULL, array('comment' => '', 'mollom[captcha]' => 'correct'), t('Preview'));
     $this->assertText(t('Comment field is required.'), t('An empty comment field triggers a rebuild of the form.'));
     $this->assertNoFieldByID('edit-mollom-captcha', '', t('The CAPTCHA is absent on the comment form after a correct CAPTCHA is submitted.'));
-    
+
     // Finally, we should be able to submit a comment.
     $this->drupalPost(NULL, array('comment' => 'spam'), t('Save'));
     $this->assertRaw('<p>spam</p>', t('The comment is finally posted and appears on the screen after it is submitted.'));
@@ -371,7 +371,7 @@ class MollomCommentFormTestCase extends MollomWebTestCase {
   /**
    * Make sure that the comment submission form can be fully protected.
    */
-  function testTextAnalysisProtectedCommentForm() {  
+  function testTextAnalysisProtectedCommentForm() {
     // Enable Mollom text-classification for comments.
     $this->mollomSetAdminOptions(array('mollom_comment_form' => MOLLOM_MODE_ANALYSIS));
 
@@ -448,7 +448,7 @@ class MollomCommentFormTestCase extends MollomWebTestCase {
   function getFieldValue($field_id) {
     $value = '';
     if ($this->parse()) {
-      $fields = $this->elements->xpath($this->_constructFieldXpath('id', $field_id));
+      $fields = $this->elements->xpath($this->constructFieldXpath('id', $field_id));
       if (isset($fields[0])) {
         $value = $fields[0]->value;
       }
