@@ -26,6 +26,9 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
   protected function _sendRawGet($url, $timeout = FALSE) {
     $id = $this->add_request_id($url);
     list($cookie, $nonce) = acquia_search_auth_cookie($url);
+    if (empty($cookie)) {
+      throw new Exception('Invalid authentication string - subscription keys expired or missing.');
+    }
     $request_headers = array(
       'Cookie' => $cookie,
       'User-Agent' => 'acquia_search/'. ACQUIA_SEARCH_VERSION,
@@ -59,6 +62,9 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
     }
     $id = $this->add_request_id($url);
     list($cookie, $nonce) = acquia_search_auth_cookie($url, $rawPost);
+    if (empty($cookie)) {
+      throw new Exception('Invalid authentication string - subscription keys expired or missing.');
+    }
     $request_headers = array(
       'Content-Type' => $contentType,
       'Cookie' => $cookie,

@@ -1,5 +1,5 @@
 <?php
-// $Id: fivestar.module,v 1.13.2.67 2009/07/01 04:03:50 quicksketch Exp $
+// $Id: fivestar.module,v 1.13.2.69 2009/07/07 03:48:36 quicksketch Exp $
 
 /**
  * @file
@@ -697,7 +697,7 @@ function fivestar_vote($type, $cid, $tag, $value) {
     exit($output);
   }
 
-  _fivestar_cast_vote($type, $cid, $value, $tag, TRUE);
+  _fivestar_cast_vote($type, $cid, $value, $tag);
   votingapi_recalculate_results($type, $cid);
   $result = fivestar_get_votes($type, $cid, $tag);
 

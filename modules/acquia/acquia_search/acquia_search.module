@@ -6,7 +6,7 @@
  *   Integration between Acquia Drupal and Acquia's hosted solr search service.
  */
 
-define('ACQUIA_SEARCH_VERSION', "6.x-1.5044");
+define('ACQUIA_SEARCH_VERSION', "6.x-1.5053");
 
 /**
  * Implementation of hook_enable().
@@ -165,17 +165,24 @@ function acquia_search_auth_cookie(&$url, $string = '') {
  */
 function _acquia_search_derived_key() {
   static $derived_key;
-  if (empty($derived_key)) {
+  if (!isset($derived_key)) {
     $key = acquia_agent_settings('acquia_key');
     $subscription = acquia_agent_settings('acquia_subscription_data');
-    // We use the expiration date in key derivation since this is a shared
+    $identifier = acquia_agent_settings('acquia_identifier');
+    // We use a salt from acquia.com in key derivation since this is a shared
     // value that we could change on the AN side if needed to force any
     // or all clients to use a new derived key.  We also use a string
     // ('solr') specific to the service, since we want each service using a
     // derived key to have a separate one.
-    $salt = isset($subscription['derived_key_salt']) ? $subscription['derived_key_salt'] : '';
-    $derivation_string = acquia_agent_settings('acquia_identifier') . 'solr' . $salt;
-    $derived_key = _acquia_search_hmac($key, str_pad($derivation_string, 80, $derivation_string));
+    if (empty($subscription['active']) || empty($key) || empty($identifier)) {
+      // Expired or invalid subscription - don't continue.
+      $derived_key = '';
+    }
+    else {
+      $salt = isset($subscription['derived_key_salt']) ? $subscription['derived_key_salt'] : '';
+      $derivation_string = $identifier . 'solr' . $salt;
+      $derived_key = _acquia_search_hmac($key, str_pad($derivation_string, 80, $derivation_string));
+    }
   }
   return $derived_key;
 }
@@ -187,8 +194,14 @@ function acquia_search_authenticator($string, $nonce, $derived_key = NULL) {
   if (empty($derived_key)) {
     $derived_key = _acquia_search_derived_key();
   }
-  $time = time();
-  return 'acquia_solr_time='. $time .'; acquia_solr_nonce='. $nonce .'; acquia_solr_hmac='. _acquia_search_hmac($derived_key, $time . $nonce . $string) .';';
+  if (empty($derived_key)) {
+    // Expired or invalid subscription - don't continue.
+    return '';
+  }
+  else {
+    $time = time();
+    return 'acquia_solr_time='. $time .'; acquia_solr_nonce='. $nonce .'; acquia_solr_hmac='. _acquia_search_hmac($derived_key, $time . $nonce . $string) .';';
+  }
 }
 
 /**
