@@ -1,5 +1,5 @@
 <?php
-// $Id: votingapi_views_handler_relationship.inc,v 1.1.2.7 2009/07/08 15:55:34 eaton Exp $
+// $Id: votingapi_views_handler_relationship.inc,v 1.1.2.8 2009/08/15 17:58:06 eaton Exp $
 
 /**
  * @file
@@ -149,6 +149,10 @@ class votingapi_views_handler_relationship extends views_handler_relationship {
 
     if ($v['function'] == '**OTHER**') {
       $form_state['values']['options']['votingapi']['function'] = $v['function_other'];
+    }
+    
+    foreach (array('function_other', 'value_type_other', 'tag_other') as $key) {
+      unset($form_state['values']['options']['votingapi'][$key]);
     }
   }
 
