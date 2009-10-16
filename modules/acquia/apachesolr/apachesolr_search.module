@@ -1,5 +1,5 @@
 <?php
-// $Id: apachesolr_search.module,v 1.1.2.6.2.111 2009/07/02 21:58:34 pwolanin Exp $
+// $Id: apachesolr_search.module,v 1.1.2.6.2.115 2009/10/14 13:28:40 pwolanin Exp $
 
 /**
  * @file
@@ -207,7 +207,12 @@ function apachesolr_search_execute($keys, $filters, $solrsort, $base_path = '', 
   apachesolr_search_add_facet_params($params, $query);
   apachesolr_search_add_boost_params($params, $query, $solr);
 
-  $params['start'] = $page * $params['rows'];
+  // Allow modules to alter the query prior to statically caching it.
+  // This can e.g. be used to add available sorts.
+  foreach (module_implements('apachesolr_prepare_query') as $module) {
+    $function_name = $module . '_apachesolr_prepare_query';
+    $function_name($query, $params, $caller);
+  }
 
   // Cache the built query. Since all the built queries go through
   // this process, all the hook_invocations will happen later
@@ -215,6 +220,8 @@ function apachesolr_search_execute($keys, $filters, $solrsort, $base_path = '', 
 
   // This hook allows modules to modify the query and params objects.
   apachesolr_modify_query($query, $params, $caller);
+  $params['start'] = $page * $params['rows'];
+
   if (!$query) {
     return array();
   }

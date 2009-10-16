@@ -1,5 +1,5 @@
 <?php
-// $Id: print_pdf.pages.inc,v 1.3.2.55 2009/08/20 02:19:20 jcnventura Exp $
+// $Id: print_pdf.pages.inc,v 1.3.2.58 2009/10/13 21:52:30 jcnventura Exp $
 
 /**
  * @file
@@ -88,7 +88,7 @@ function print_pdf_controller() {
   elseif (basename($print_pdf_pdf_tool) == 'tcpdf.php') {
     _print_pdf_tcpdf($print, $html, $pdf_filename);
   }
-  elseif (basename($print_pdf_pdf_tool) == 'wkhtmltopdf') {
+  elseif (basename($print_pdf_pdf_tool, '.exe') == 'wkhtmltopdf') {
     _print_pdf_wkhtmltopdf($print, $html, $pdf_filename);
   }
   else {
@@ -121,6 +121,7 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
   require_once($print_pdf_pdf_tool);
+  spl_autoload_register('DOMPDF_autoload');
 
   // dompdf seems to have problems with something in system.css so let's not use it
   $html = preg_replace('!<link.*?modules/system/system.css.*?/>!', '', $html);
@@ -295,8 +296,13 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
     $xprocess = proc_open($xcmd, $xdescriptor, $xpipes, NULL, NULL);
   }
 
+  if (function_exists('token_replace') && !empty($print_pdf_wkhtmltopdf_options)) {
+    $print_pdf_wkhtmltopdf_options = token_replace($print_pdf_wkhtmltopdf_options, 'node', $print['node']);
+  }
+
   $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
-  $cmd = realpath($print_pdf_pdf_tool) ." --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation --dpi $dpi $print_pdf_wkhtmltopdf_options - -";
+  $pdf_output = (stristr(PHP_OS, 'Win')) ? tempnam(file_directory_temp(), 'pdf') : '-';
+  $cmd = realpath($print_pdf_pdf_tool) ." --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation --dpi $dpi $print_pdf_wkhtmltopdf_options - $pdf_output";
 
   $process = proc_open($cmd, $descriptor, $pipes, NULL, isset($xvfb_binary) ? array('DISPLAY' => ':'. $xdisplay) : NULL);
 
@@ -304,7 +310,14 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
     fwrite($pipes[0], $html);
     fclose($pipes[0]);
 
-    $pdf = stream_get_contents($pipes[1]);
+    if (stristr(PHP_OS, 'Win')) {
+      // It seems Windows can't use the pipe properly so get the contents from a file and then delete it.
+      $pdf = file_get_contents($pdf_outputg);
+      unlink($pdf_output);
+    }
+    else {
+      $pdf = stream_get_contents($pipes[1]);
+    }
     fclose($pipes[1]);
 
     stream_set_blocking($pipes[2], 0);

@@ -1,5 +1,5 @@
 <?php
-// $Id: print_pdf.module,v 1.1.2.43 2009/08/20 02:19:20 jcnventura Exp $
+// $Id: print_pdf.module,v 1.1.2.45 2009/10/13 00:04:25 jcnventura Exp $
 
 /**
  * @file
@@ -11,6 +11,8 @@
 define('PRINTPDF_PATH', 'printpdf');
 
 define('PRINT_PDF_FORMAT', 'pdf');
+
+define('PRINT_PDF_LIB_PATH', 'sites/all/libraries');
 
 define('PRINT_PDF_LINK_POS_DEFAULT', 'link');
 define('PRINT_PDF_SHOW_LINK_DEFAULT', 1);
@@ -89,7 +91,7 @@ function print_pdf_menu() {
     'file' => 'print_pdf.pages.inc',
   );
   $items[PRINTPDF_PATH .'/'. PRINTPDF_PATH] = array(
-    'page callback' => 'drupal_access_denied',
+    'access callback' => FALSE,
   );
   $items['admin/settings/print/pdf'] = array(
     'title' => 'PDF',
@@ -485,7 +487,7 @@ function print_pdf_link_allowed($args) {
     $print_pdf_node_link_visibility = variable_get('print_pdf_node_link_visibility', PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT);
     $print_pdf_node_link_pages = variable_get('print_pdf_node_link_pages', PRINT_PDF_NODE_LINK_PAGES_DEFAULT);
 
-    if (!_print_page_match($print_pdf_node_link_visibility, $print_pdf_node_link_pages)) {
+    if (!_print_page_match($print_pdf_node_link_visibility, "node/". $node->nid, $print_pdf_node_link_pages)) {
       // Page not in visibility list
       return FALSE;
     }
@@ -528,7 +530,7 @@ function print_pdf_link_allowed($args) {
     $print_pdf_sys_link_visibility = variable_get('print_pdf_sys_link_visibility', PRINT_PDF_SYS_LINK_VISIBILITY_DEFAULT);
     $print_pdf_sys_link_pages = variable_get('print_pdf_sys_link_pages', PRINT_PDF_SYS_LINK_PAGES_DEFAULT);
 
-    return _print_page_match($print_pdf_sys_link_visibility, $print_pdf_sys_link_pages);
+    return _print_page_match($print_pdf_sys_link_visibility, $_GET['q'], $print_pdf_sys_link_pages);
   }
   return FALSE;
 }

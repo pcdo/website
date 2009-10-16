@@ -1,5 +1,5 @@
 <?php
-// $Id: print.pages.inc,v 1.1.2.54 2009/08/20 02:19:19 jcnventura Exp $
+// $Id: print.pages.inc,v 1.1.2.56 2009/10/14 22:54:52 jcnventura Exp $
 
 /**
  * @file
@@ -162,7 +162,9 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
   $print_logo_options = variable_get('print_logo_options', PRINT_LOGO_OPTIONS_DEFAULT);
   $print_logo_url = variable_get('print_logo_url', PRINT_LOGO_URL_DEFAULT);
+  $print_html_new_window = variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT);
   $print_html_sendtoprinter = variable_get('print_html_sendtoprinter', PRINT_HTML_SENDTOPRINTER_DEFAULT);
+  $print_html_windowclose = variable_get('print_html_windowclose', PRINT_HTML_WINDOWCLOSE_DEFAULT);
   $print_sourceurl_enabled = variable_get('print_sourceurl_enabled', PRINT_SOURCEURL_ENABLED_DEFAULT);
   $print_sourceurl_forcenode = variable_get('print_sourceurl_forcenode', PRINT_SOURCEURL_FORCENODE_DEFAULT);
   $print_sourceurl_date = variable_get('print_sourceurl_date', PRINT_SOURCEURL_DATE_DEFAULT);
@@ -220,7 +222,8 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     }
   }
 
-  $print['sendtoprinter'] = $print_html_sendtoprinter ? ' onload="window.print();"' : '';
+  $window_close = ($print_html_new_window && $print_html_windowclose) ? 'window.close();' : '';
+  $print['sendtoprinter'] = $print_html_sendtoprinter ? " onload='window.print();$window_close'" : '';
 
   switch ($print_logo_options) {
     case 0: // none
@@ -324,7 +327,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     $pfp_links = '';
     if ($max) {
       for ($i = 0; $i < $max; $i++) {
-        $pfp_links .= '['. ($i + 1) .'] '. $urls[$i] ."<br />\n";
+        $pfp_links .= '['. ($i + 1) .'] '. check_plain($urls[$i]) ."<br />\n";
       }
       $links = filter_xss(variable_get('print_text_links', t('Links')));
       $print['pfp_links'] = "<p><strong>$links:</strong><br />$pfp_links</p>";

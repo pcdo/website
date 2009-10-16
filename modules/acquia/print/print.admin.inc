@@ -1,5 +1,5 @@
 <?php
-// $Id: print.admin.inc,v 1.1.2.28 2009/08/20 02:19:19 jcnventura Exp $
+// $Id: print.admin.inc,v 1.1.2.29 2009/10/03 15:18:23 jcnventura Exp $
 
 /**
  * @file
@@ -291,6 +291,13 @@ function print_html_settings() {
     '#title' => t('Send to printer'),
     '#default_value' => variable_get('print_html_sendtoprinter', PRINT_HTML_SENDTOPRINTER_DEFAULT),
     '#description' => t("Automatically calls the browser's print function when the printer-friendly version is displayed."),
+  );
+
+  $form['settings']['print_html_windowclose'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Close window after sending to printer'),
+    '#default_value' => variable_get('print_html_windowclose', PRINT_HTML_WINDOWCLOSE_DEFAULT),
+    '#description' => t("When the above options are enabled, this option will close the window after its contents are printed."),
   );
 
   $form['settings']['print_robots_settings'] = array(

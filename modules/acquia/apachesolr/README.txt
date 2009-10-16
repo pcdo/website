@@ -1,4 +1,4 @@
-/* $Id: README.txt,v 1.1.2.1.2.24 2009/06/30 21:00:51 pwolanin Exp $ */
+/* $Id: README.txt,v 1.1.2.1.2.30 2009/10/14 19:08:19 pwolanin Exp $ */
 
 This module integrates Drupal with the Apache Solr search platform. Solr search
 can be used as a replacement for core content search and boasts both extra
@@ -49,7 +49,7 @@ Instead of checking out, externals can be used too. Externals can be seen as
 (remote) symlinks in svn. This requires your own project in your own svn ]
 repository, off course. In the apachesolr module directory, issue the command:
 
-svn propedit svn:externals
+svn propedit svn:externals .
 
 Your editor will open. Add a line
 
@@ -128,6 +128,9 @@ behavior:
  - apachesolr_tags_to_index: the list of HTML tags that the module will index
    (see apachesolr_add_tags_to_document()).
 
+ - apachesolr_exclude_comments_types: an array of node types.  Any type listed
+   will have any attached comments excluded from the index.
+
  - apachesolr_ping_timeout: the timeout (in seconds) after which the module will
    consider the Apache Solr server unavailable.
 
@@ -142,6 +145,10 @@ behavior:
    with the Apache Solr server.
 
  - apachesolr_query_class: the default query class to use.
+
+ - apachesolr_cron_mass_limit: update or delete at most this many documents in
+   each Solr request, such as when making {apachesolr_search_node} consistent
+   with {node}.
 
 Troubleshooting
 --------------
@@ -174,7 +181,23 @@ hook_apachesolr_modify_query(&$query, &$params, $caller);
           // I only want to see articles by the admin!
           $query->add_filter("uid", 1);         
         }        
-    
+
+hook_apachesolr_prepare_query(&$query, &$params, $caller);
+
+  This is pretty much the same as hook_apachesolr_modify_query() but runs earlier
+  and before the query is statically cached. It can e.g. be used to add
+  available sorts to the query.
+
+  Example:
+
+        function my_module_apachesolr_prepare_query(&$query) {
+          // Add a sort on the node ID.
+          $query->set_available_sort('nid', array(
+            'title' => t('Node ID'),
+            'default' => 'asc',
+          ));
+        }
+
 hook_apachesolr_cck_fields_alter(&$mappings)
 
   Add or alter index mappings for CCK types.  The default mappings array handles just 
@@ -225,7 +248,6 @@ hook_apachesolr_search_result_alter(&$doc)
 hook_apachesolr_sort_links_alter(&$sort_links)
 
   Called by the sort link block code. Allows other modules to modify, add or remove sorts.
-
 
 Themers
 ----------------

@@ -1,5 +1,5 @@
 <?php
-// $Id: print_mail.inc,v 1.2.2.24 2009/08/20 02:19:19 jcnventura Exp $
+// $Id: print_mail.inc,v 1.2.2.26 2009/10/03 16:52:09 jcnventura Exp $
 
 /**
  * @file
@@ -118,11 +118,11 @@ function print_mail_form($form_state) {
   );
 
   if ($user->uid != 0) {
-    $user_name = $user->name;
+    $user_name = check_plain(strip_tags(theme('username', $user)));
     $form['fld_from_addr']['#default_value'] = $user->mail;
     $form['fld_from_addr']['#disabled'] = TRUE;
     $form['fld_from_addr']['#value'] = $user->mail;
-    $form['fld_from_name']['#default_value'] = $user->name;
+    $form['fld_from_name']['#default_value'] = $user_name;
   }
   else {
     $user_name = t('Someone');
@@ -179,7 +179,7 @@ function print_mail_form_validate($form, &$form_state) {
   }
 
   // All new-lines are replaced by commas
-  $to_addrs = preg_replace('![\r|\n|,]+!', ',', $form_state['values']['txt_to_addrs']);
+  $to_addrs = preg_replace('![\r|\n|,]+!', ',', trim($form_state['values']['txt_to_addrs']));
   // Create an array from the string
   $to_array = explode(',', $to_addrs);
   // Verify each element of the array

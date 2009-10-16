@@ -6,7 +6,7 @@
  *   Integration between Acquia Drupal and Acquia's hosted solr search service.
  */
 
-define('ACQUIA_SEARCH_VERSION', "6.x-1.5092");
+define('ACQUIA_SEARCH_VERSION', "6.x-1.5118");
 
 /**
  * Implementation of hook_enable().
@@ -81,7 +81,8 @@ function acquia_search_form_apachesolr_settings_alter(&$form, $form_state) {
       '#title' => t("Search is being provided by the Acquia Search network service"),
       '#value' => variable_get('apachesolr_host', 'localhost'),
     );
-    unset($form['apachesolr_port'], $form['apachesolr_path']);
+    $form['apachesolr_port']['#type'] = 'value';
+    $form['apachesolr_path']['#type'] = 'value';
     $form['apachesolr_failure']['#title'] = t("If your site cannot connect to the Acquia Search network service");
     $form['#submit'][] = 'acquia_search_settings_submit';
   }

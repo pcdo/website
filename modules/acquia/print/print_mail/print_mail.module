@@ -1,5 +1,5 @@
 <?php
-// $Id: print_mail.module,v 1.1.2.39 2009/08/20 02:19:19 jcnventura Exp $
+// $Id: print_mail.module,v 1.1.2.41 2009/10/14 22:54:52 jcnventura Exp $
 
 /**
  * @file
@@ -58,12 +58,13 @@ function print_mail_menu() {
     'title' => 'Send page by e-mail',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_form'),
+    'access callback' => '_print_mail_access',
     'access arguments' => array('access send to friend'),
     'type' => MENU_CALLBACK,
     'file' => 'print_mail.inc',
   );
   $items[PRINTMAIL_PATH .'/'. PRINTMAIL_PATH] = array(
-    'page callback' => 'drupal_access_denied',
+    'access callback' => FALSE,
   );
   $items['admin/settings/print/email'] = array(
     'title' => 'e-mail',
@@ -276,6 +277,32 @@ function print_mail_job_queue_functions() {
 }
 
 /**
+ * Access callback to check a combination of user_acess() and page access
+ *
+ * @param $permission
+ *   permission required to view the page
+ * @return
+ *   TRUE if the user has permission to view the page, FALSE otherwise
+ */
+function _print_mail_access($permission) {
+  $page_access = TRUE;
+  $parts = explode('/', $_GET['q']);
+  if (count($parts) > 1) {
+    unset($parts[0]);
+    $path = implode('/', $parts);
+    if (is_numeric($parts[1])) {
+      $path = 'node/'. $path;
+    }
+    // If the destination page is not accessible, don't show the form
+    if (!($router_item = menu_get_item($path)) || (!$router_item['access'])) {
+      $page_access = FALSE;
+    }
+  }
+
+  return (user_access($permission) && $page_access);
+}
+
+/**
  * Auxiliary function to assign the per-node settings to the node object fields
  *
  * @param $node
@@ -444,7 +471,7 @@ function print_mail_link_allowed($args) {
     $print_mail_node_link_visibility = variable_get('print_mail_node_link_visibility', PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT);
     $print_mail_node_link_pages = variable_get('print_mail_node_link_pages', PRINT_MAIL_NODE_LINK_PAGES_DEFAULT);
 
-    if (!_print_page_match($print_mail_node_link_visibility, $print_mail_node_link_pages)) {
+    if (!_print_page_match($print_mail_node_link_visibility, "node/". $node->nid, $print_mail_node_link_pages)) {
       // Page not in visibility list
       return FALSE;
     }
@@ -487,7 +514,7 @@ function print_mail_link_allowed($args) {
     $print_mail_sys_link_visibility = variable_get('print_mail_sys_link_visibility', PRINT_MAIL_SYS_LINK_VISIBILITY_DEFAULT);
     $print_mail_sys_link_pages = variable_get('print_mail_sys_link_pages', PRINT_MAIL_SYS_LINK_PAGES_DEFAULT);
 
-    return _print_page_match($print_mail_sys_link_visibility, $print_mail_sys_link_pages);
+    return _print_page_match($print_mail_sys_link_visibility, $_GET['q'], $print_mail_sys_link_pages);
   }
   return FALSE;
 }
