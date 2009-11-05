@@ -1,103 +1,106 @@
+# Danish translation of Drupal (boost.module)
+# Copyright 2007 Morten Wulff <wulff@ratatosk.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: link drupal module : french translation\n"
+"Project-Id-Version: Danish translation of Drupal (link.module) $Id: link.da.po,v 1.1.2.1 2009/10/07 23:05:31 hass Exp $\n"
 "POT-Creation-Date: 2007-12-08 13:14+0100\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Sylvain Moreau <sylvain.moreau@ows.fr>\n"
-"Language-Team: Sylvain Moreau <sylvain.moreau@ows.fr>\n"
+"PO-Revision-Date: 2007-12-09 13:54+0100\n"
+"Last-Translator: Morten Wulff <wulff@ratatosk.net>\n"
+"Language-Team: Danish <l10n@drupaldanmark.dk>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Language: Danish\n"
+"X-Poedit-Country: DENMARK\n"
 
 #: link.module:51
 msgid "Optional Title"
-msgstr "Titre Optionnel"
+msgstr "Valgfri titel"
 
 #: link.module:52
 msgid "Required Title"
-msgstr "Titre Obligatoire"
+msgstr "Påkrævet titel"
 
 #: link.module:53
 msgid "Static Title: "
-msgstr "Titre Statique : "
+msgstr "Statisk titel:"
 
 #: link.module:54
 msgid "No Title"
-msgstr "Aucun Titre"
+msgstr "Ingen titel"
 
 #: link.module:59;176
 msgid "Link Title"
-msgstr "Titre du Lien"
+msgstr "Link-titel"
 
 #: link.module:62
 msgid "If the link title is optional or required, a field will be displayed to the end user. If the link title is static, the link will always use the same title. If <a href=\"http://drupal.org/project/token\">token module</a> is installed, the static title value may use any other node field as its value."
-msgstr "Si le titre du lien est optionnel ou obligatoire, un champ sera affiché à l'utilisateur final. Si le titre du lien est statique, le lien utilisera toujours le même titre. Si <a href=\"http://drupal.org/project/token\">le module token</a> est installé, la valeur du titre statique peut utiliser n'importe quel autre champ du noeud en tant que valeur."
+msgstr "Hvis link-titlen er valgfri eller påkrævet vises et tekstfelt til brugeren. Hvis link-titlen er statisk vil linket altid have den samme titel. Hvis <a href=\"http://drupal.org/project/token\">token-modulet</a> er installeret kan den statiske titel bruge ethvert indholdselementfelt som dets værdi."
 
 #: link.module:77;268
-#, fuzzy
 msgid "Placeholder tokens"
-msgstr "Ebauches de jetons"
+msgstr "Pladsholder-symboler"
 
 #: link.module:78
-#, fuzzy
 msgid "The following placeholder tokens can be used in both paths and titles. When used in a path or title, they will be replaced with the appropriate values."
-msgstr "Les ébauches de jetons suivantes peuvent être utilisées à la fois dans les chemins et dans les titres. Lorsqu'elles sont utilisées dans un chemin ou un titre, elles seront remplacées par les valeurs appropriées."
+msgstr "Følgende pladsholder symboler kan bruges i både stier og titler. Når de bruges i stier og titler erstattes de med de relevante værdier."
 
 #: link.module:86
 msgid "Allow tokens"
-msgstr "Autoriser les jetons (tokens)"
+msgstr "Tillad symboler"
 
 #: link.module:88
 msgid "Checking will allow users to enter tokens in URLs and Titles on the node edit form. This does not affect the field settings on this page."
-msgstr "Le fait de cocher cette case permettra aux utilisateurs de saisir des jetons dans les URL et les Titres dans le formulaire d'édition du noeud. Ceci n'affecte pas les configurations de champ sur cette page."
+msgstr "Tillad brugerne at bruge symboler i URLer og titler på indholdsformularen. Valget påvirker ikke feltindstillingerne på denne side."
 
 #: link.module:97
 msgid "URL Display Cutoff"
-msgstr "Coupure de l'Affichage de l'URL"
+msgstr "Beskæring af URL"
 
 #: link.module:99
 msgid "If the user does not include a title for this link, the URL will be used as the title. When should the link title be trimmed and finished with an elipsis (&hellip;)? Leave blank for no limit."
-msgstr "Si l'utilisateur n'inclue pas de titre pour ce lien, l'URL sera utilisée en tant que titre. A quel endroit le lien devra-t-il être coupé et terminé par une ellipse (&hellip;) ? Laissez vide pour aucune limite."
+msgstr "Hvis brugeren ikke angiver en link-titel bruges URLen som titel. Hvornår skal titlen beskæres og afsluttes med en elipse ((&hellip;)? Undlad at udfylde dette felt hvis titlen ikke skal beskæres."
 
 #: link.module:105
 msgid "Default (no target attribute)"
-msgstr "Par Défaut (aucun attribut de cible)"
+msgstr "Standard (ingen mål-egenskab)"
 
 #: link.module:106
 msgid "Open link in window root"
-msgstr "Ouvrir le lien dans la fenêtre courante"
+msgstr "Åben link i rod-vindue"
 
 #: link.module:107
 msgid "Open link in new window"
-msgstr "Ouvrir le lien dans une nouvelle fenêtre"
+msgstr "Åben link i nyt vindue"
 
 #: link.module:108
 msgid "Allow the user to choose"
-msgstr "Autoriser l'utilisateur à choisir"
+msgstr "Lad brugeren vælge"
 
 #: link.module:115;180
 msgid "Link Target"
-msgstr "Cible du Lien"
+msgstr "Link-mål"
 
 #: link.module:121
 msgid "Rel Attribute"
-msgstr "Attribut Rel"
+msgstr "Rel-attribut"
 
 #: link.module:122
 msgid "When output, this link will have this rel attribute. The most common usage is <a href=\"http://en.wikipedia.org/wiki/Nofollow\">rel=&quot;nofollow&quot;</a> which prevents some search engines from spidering entered links."
-msgstr "Quand il sera affiché, ce lien aura cet attribut rel. L'usage le plus commun est <a href=\"http://fr.wikipedia.org/wiki/Nofollow\">rel=&quot;nofollow&quot;</a> qui empêche certains moteurs de recherche d'aspirer les liens suivis."
+msgstr "Når linket vises vil det have denne rel-attribut. Den meest alinidelig brug er <a href=\"http://en.wikipedia.org/wiki/Nofollow\">rel=&quot;nofollow&quot;</a>, som forhindrer visse søgemaskiner i at indeksere indtastede links."
 
 #: link.module:127
 msgid "Additional CSS Class"
-msgstr "Classe CSS additionnelle"
+msgstr "Ekstra CSS klasse"
 
 #: link.module:128
 msgid "When output, this link will have have this class attribute. Multiple classes should be seperated by spaces."
-msgstr "A l'affichage, ce lien possédera cet attribut de classe. Les classes multiples doivent être séparées par des espaces."
+msgstr "Når linket vises vil det have denne CSS klasse. Flere klasser adskilles med mellemrum."
 
 #: link.module:135
 msgid "A default title must be provided if the title is a static value"
-msgstr "Un titre pas défaut doit être fourni si le titre est une valeur statique"
+msgstr "Angiv en standard-titel hvis titlen er en statisk værdi."
 
 #: link.module:152;404
 msgid "URL"
@@ -105,69 +108,68 @@ msgstr "URL"
 
 #: link.module:157;416
 msgid "Title"
-msgstr "Titre"
+msgstr "Titel"
 
 #: link.module:162
 msgid "Protocol"
-msgstr "Protocole"
+msgstr "Protokol"
 
 #: link.module:172
 msgid "Link URL"
-msgstr "Url du Lien"
+msgstr "Link URL"
 
 #: link.module:269
-#, fuzzy
 msgid "The following placeholder tokens can be used in both titles and URLs. When used in a URL or title, they will be replaced with the appropriate values."
-msgstr "Les ébauches de jetons suivantes peuvent être utilisées à la fois dans les titres et dans les URL. Lorsqu'elles sont utilisées dans une URL ou un titre, elles seront remplacées par les valeurs appropriées."
+msgstr "Følgende pladsholder symboler kan bruges i både titler og URLer. Når de bruges i stier og titler erstattes de med de relevante værdier."
 
 #: link.module:317
 msgid "More Links"
-msgstr "Plus de Liens"
+msgstr "Flere links"
 
 #: link.module:343
 msgid "Not a valid URL."
-msgstr "Cette URL n'est pas valide."
+msgstr "Ikke en gyldig URL."
 
 #: link.module:347
 msgid "Titles are required for all links."
-msgstr "Les titres sont obligatoires pour tous les liens."
+msgstr "Titler er påkrævet for alle links."
 
 #: link.module:352
 msgid "You cannot enter a title without a link."
-msgstr "Vous ne pouvez pas saisir de titre sans un lien."
+msgstr "Du kan ikke indtaste en titel uden et link."
 
 #: link.module:424
 msgid "Open URL in a New Window"
-msgstr "Ouvril l'URL dans une Nouvelle Fenêtre"
+msgstr "Åben URL i et nyt vindue"
 
 #: link.module:532
 msgid "Default, as link with title"
-msgstr "Par défaut, comme lien avec titre"
+msgstr "Standard, som link med titel"
 
 #: link.module:536
 msgid "Plain, as the text URL"
-msgstr "Plat, comme l'URL texte"
+msgstr "Enkel, som tekst URL"
 
 #: link.module:540
 msgid "Short, as link with title \"Link\""
-msgstr "Court, comme lien avec le titre \"Lien\""
+msgstr "Kort, som link med titlen \"Link\""
 
 #: link.module:544
 msgid "Label, as link with label as title"
-msgstr "Etiquette, comme lien avec l'étiquette comme titre"
+msgstr "Etiket, som link med etiket som titel"
 
 #: link.module:602
 #: link.info:0
 msgid "Link"
-msgstr "Lien"
+msgstr "Link"
 
 #: link.module:0
 msgid "link"
-msgstr "lien"
+msgstr "link"
 
 #: link.info:0
 msgid "Defines simple link field types."
-msgstr "Définit les types de champs \"lien simple\"."
+msgstr "Definerer simple link-felttyper."
 
 #: link.info:0
 msgid "CCK"

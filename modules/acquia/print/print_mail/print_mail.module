@@ -1,5 +1,5 @@
 <?php
-// $Id: print_mail.module,v 1.1.2.41 2009/10/14 22:54:52 jcnventura Exp $
+// $Id: print_mail.module,v 1.1.2.42 2009/10/15 23:43:27 jcnventura Exp $
 
 /**
  * @file
@@ -292,6 +292,9 @@ function _print_mail_access($permission) {
     $path = implode('/', $parts);
     if (is_numeric($parts[1])) {
       $path = 'node/'. $path;
+    }
+    else {
+      $path = drupal_get_normal_path($path);
     }
     // If the destination page is not accessible, don't show the form
     if (!($router_item = menu_get_item($path)) || (!$router_item['access'])) {
