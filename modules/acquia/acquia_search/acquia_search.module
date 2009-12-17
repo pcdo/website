@@ -6,7 +6,7 @@
  *   Integration between Acquia Drupal and Acquia's hosted solr search service.
  */
 
-define('ACQUIA_SEARCH_VERSION', "6.x-1.5118");
+define('ACQUIA_SEARCH_VERSION', "6.x-1.5172");
 
 /**
  * Implementation of hook_enable().
@@ -38,8 +38,6 @@ function _acquia_search_set_variables() {
  */
 function acquia_search_disable() {
   acquia_search_delete_variables();
-  // Disable all the associated search modules.
-  module_disable(array('apachesolr', 'apachesolr_search', 'apachesolr_nodeaccess', 'apachesolr_image', 'apachesolr_og', 'apachesolr_og', 'apachesolr_attachments'));
 }
 
 /**
@@ -50,7 +48,6 @@ function acquia_search_delete_variables() {
   variable_del('apachesolr_port');
   variable_del('apachesolr_path');
   variable_del('apachesolr_service_class');
-  variable_del('apachesolr_query_class');
   variable_del('apachesolr_search_make_default');
 }
 

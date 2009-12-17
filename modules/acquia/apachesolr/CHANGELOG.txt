@@ -1,10 +1,32 @@
-// $Id: CHANGELOG.txt,v 1.1.2.121 2009/10/15 03:47:12 pwolanin Exp $
+// $Id: CHANGELOG.txt,v 1.1.2.140 2009/12/17 16:37:39 pwolanin Exp $
 
 Apache Solr Search Integration x.x-x.x, xxxx-xx-xx
 ------------------------------
 
 Apache Solr Search Integration 6.x-1.x, xxxx-xx-xx
 ------------------------------
+
+Apache Solr Search Integration 6.x-1.0-RC4, 2009-12-17
+------------------------------
+#528086 by pwolanin, better (but still problematic) handling of entities.
+#662232 by pwolanin, index zxx as the Language neutral code.
+#661952 by pwolanin, fix no results help text for dismax syntax.
+#348668 by pwolanin, add indexing of the 'node' entity string.
+#641954 by anarchivist, swentel, pwolanin, update schema.xml.
+#401234 by mkalkbrenner, janusman, and pwolanin, reflect hierarchical taxonomy vocabulary in facets.
+#650534 by Scott Reynolds, don't use c.last_comment_timestamp unless comment module enabled.
+#655006 by Scott Reynolds and pwolanin, prevent PHP notices around constants.
+#641452 by robertDouglass, prevent admin from trying to re-index when in read-only mode.
+#638572 by robertDouglass fix taxonomy facet sorting.
+#562458 by janusman, fix typo preventing menu_rebuild regarding taxonomy hijack.
+#628080 by pwolanin, update to use Solr PHP library r22 and check for it in hook_requirements.
+#630798 by joshk, robertDouglass make cache_apachesolr table to facilitate better memcache utilization.
+#621922 by robertDouglass make the "Show more" js more robust.
+#576040 by robertDouglass use Drush to download the SolrPhpClient: drush solr phpclient
+#570476 by robertDouglass add initial Drush support with commands drush solr delete index and drush solr reindex.
+#612024 by pwolanin, Add method to allow requests to additional Solr servelets.
+#611670 by pwolanin, Allow modules to abort the building of documents for indexing.
+#610656 by pwolanin, Don't request facets for non-enabled modules.
 
 Apache Solr Search Integration 6.x-1.0-RC3, 2009-10-15
 ------------------------------
