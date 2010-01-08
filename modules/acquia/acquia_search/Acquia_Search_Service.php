@@ -132,6 +132,7 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
     );
     list ($data, $headers) = $this->_makeHttpRequest($url, $method, $request_headers, $rawPost, $timeout);
     $response = new Apache_Solr_Response($data, $headers, $this->_createDocuments, $this->_collapseSingleValueArrays);
+    $hmac = acquia_search_extract_hmac($headers);
     $code = (int) $response->getHttpStatus();
     if ($code != 200) {
       $message = $response->getHttpStatusMessage();
@@ -140,6 +141,9 @@ class Acquia_Search_Service extends Drupal_Apache_Solr_Service {
         $message .= $response->getRawResponse();
       }
       throw new Exception('"' . $code . '" Status: ' . $message);
+    }
+    elseif (!acquia_search_valid_response($hmac, $nonce, $data)) {
+      throw new Exception('Authentication of search content failed url: '. $url);
     }
     return $response;
   }

@@ -1,5 +1,5 @@
 <?php
-// $Id: apachesolr.index.inc,v 1.1.2.18 2009/12/17 16:36:10 pwolanin Exp $
+// $Id: apachesolr.index.inc,v 1.1.2.22 2009/12/27 16:47:37 pwolanin Exp $
 
 /**
  * @file
@@ -86,8 +86,9 @@ function apachesolr_node_to_document($nid, $namespace) {
       $document->language = $node->language;
     }
     else {
-      // 'zxx' is the language-neutral code in Drupal 7.
-      $document->language = 'zxx';
+      // 'und' is the language-neutral code in Drupal 7.
+      // Note - this was changed from 'zxx'.
+      $document->language = 'und';
     }
     $document->body = apachesolr_clean_text($text);
     $document->type  = $node->type;
@@ -149,10 +150,10 @@ function apachesolr_node_to_document($nid, $namespace) {
     apachesolr_add_tags_to_document($document, $text);
     apachesolr_add_taxonomy_to_document($document, $node);
 
-    // Let modules add to the document - TODO convert to drupal_alter().
+    // Let modules add to the document.
     foreach (module_implements('apachesolr_update_index') as $module) {
       $function = $module .'_apachesolr_update_index';
-      $function($document, $node);
+      $function($document, $node, $namespace);
     }
   }
   return $document;

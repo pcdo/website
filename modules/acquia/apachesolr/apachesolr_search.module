@@ -1,5 +1,5 @@
 <?php
-// $Id: apachesolr_search.module,v 1.1.2.6.2.125 2009/12/17 16:37:39 pwolanin Exp $
+// $Id: apachesolr_search.module,v 1.1.2.6.2.131 2009/12/27 16:47:37 pwolanin Exp $
 
 /**
  * @file
@@ -225,7 +225,7 @@ function apachesolr_search_execute($keys, $filters, $solrsort, $base_path = '', 
 
   // Cache the built query. Since all the built queries go through
   // this process, all the hook_invocations will happen later
-  apachesolr_current_query($query);
+  $current_query = apachesolr_current_query($query);
 
   // This hook allows modules to modify the query and params objects.
   apachesolr_modify_query($query, $params, $caller);
@@ -249,7 +249,9 @@ function apachesolr_search_execute($keys, $filters, $solrsort, $base_path = '', 
   apachesolr_static_response_cache($response);
   apachesolr_has_searched(TRUE);
   // Add search terms and filters onto the breadcrumb.
-  drupal_set_breadcrumb(array_merge(menu_get_active_breadcrumb(), $query->get_breadcrumb()));
+  // We use $current_query to avoid exposing, for example, nodeaccess
+  // filters in the breadcrumb.
+  drupal_set_breadcrumb(array_merge(menu_get_active_breadcrumb(), $current_query->get_breadcrumb()));
   return apachesolr_process_response($response, $query, $params);
 }
 
@@ -404,7 +406,7 @@ function apachesolr_process_response($response, $query, $params) {
   // We default to getting snippets from the body.
   $hl_fl = is_null($params['hl.fl']) ? 'body' : $params['hl.fl'];
   $total = $response->response->numFound;
-  pager_query("SELECT %d", $params['rows'], 0, NULL, $total);
+  apachesolr_pager_init($total, $params['rows']);
   if ($total > 0) {
     foreach ($response->response->docs as $doc) {
       $extra = array();
@@ -430,7 +432,7 @@ function apachesolr_process_response($response, $query, $params) {
       // Copy code from comment_nodeapi().
       $extra[] = format_plural($doc->comment_count, '1 comment', '@count comments');
       $results[] = array(
-        'link' => url($doc->path),
+        'link' => url($doc->path, array('absolute' => TRUE)),
         'type' => apachesolr_search_get_type($doc->type),
         // template_preprocess_search_result() runs check_plain() on the title
         // again.  Decode to correct the display.
@@ -756,9 +758,9 @@ function apachesolr_search_language_name($lang) {
     if (function_exists('locale_language_list')) {
       $list = locale_language_list();
     }
-    $list['zxx'] = t('Language neutral');
-    // TODO - remove this line - only present for rc3 to rc4 update.
-    $list['[* TO *]'] = $list['zxx'];
+    $list['und'] = t('Language neutral');
+    // TODO - remove this line - only present for rc4 update.
+    $list['zxx'] = $list['und'];
   }
   return ($lang && isset($list[$lang])) ? $list[$lang] : $lang;
 }

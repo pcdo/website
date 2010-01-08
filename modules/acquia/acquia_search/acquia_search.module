@@ -6,7 +6,7 @@
  *   Integration between Acquia Drupal and Acquia's hosted solr search service.
  */
 
-define('ACQUIA_SEARCH_VERSION', "6.x-1.5172");
+define('ACQUIA_SEARCH_VERSION', "6.x-1.5180");
 
 /**
  * Implementation of hook_enable().
@@ -126,12 +126,14 @@ function acquia_search_search_box_form_submit($form, &$form_state) {
  * @param $string
  *  A string - the data to be authenticated, or empty to just use the path
  *  and query from the url to build the authenticator.
+ * @param $derived_key
+ *  Optional string to supply the derived key.
  *
  * @return
  *  An array containing the string to be added as the content of the
  *  Cookie header to the request and the nonce.
  */
-function acquia_search_auth_cookie(&$url, $string = '') {
+function acquia_search_auth_cookie(&$url, $string = '', $derived_key = NULL) {
   $uri = parse_url($url);
 
   // Add a scheme - should always be https if available.
@@ -150,10 +152,10 @@ function acquia_search_auth_cookie(&$url, $string = '') {
   $nonce = md5(acquia_agent_random_bytes(55));
 
   if ($string) {
-    $auth_header = acquia_search_authenticator($string, $nonce);
+    $auth_header = acquia_search_authenticator($string, $nonce, $derived_key);
   }
   else {
-    $auth_header = acquia_search_authenticator($path . $query, $nonce);
+    $auth_header = acquia_search_authenticator($path . $query, $nonce, $derived_key);
   }
   return array($auth_header, $nonce);
 }

@@ -1,5 +1,5 @@
 <?php
-// $Id: image_attach.module,v 1.66 2009/09/08 13:14:49 joachim Exp $
+// $Id: image_attach.module,v 1.69 2009/12/21 00:11:37 joachim Exp $
 
 /**
  * @file image_attach.module
@@ -194,6 +194,8 @@ function image_attach_form_alter(&$form, $form_state, $form_id) {
       $form['#attributes'] = array("enctype" => "multipart/form-data");
       // Add a custom submit handler so we can handle image creation on-the-fly
       $form['#validate'][] = 'image_attach_validate'; 
+      // Add a custom submit handler so we can clean up the selection box items.
+      $form['#submit'][] = 'image_attach_node_form_submit'; 
 
       // Display the image attach form only if user can attach images, AND
       // it is allowed to attach existing images or the user is allowed to create new images 
@@ -322,6 +324,15 @@ function image_attach_validate(&$form, &$form_state) {
 }
 
 /**
+ * Extra submit handler for node forms.
+ */
+function image_attach_node_form_submit(&$form, &$form_state) {
+  // Clear the 0 key in the iids array that arises from selecting the 'None' 
+  // option. We do this here so image_attach_nodeapi() gets clean data.
+  unset($form_state['values']['iids'][0]);
+}
+
+/**
  * Implementation of hook_nodeapi().
  */
 function image_attach_nodeapi(&$node, $op, $teaser, $page) {
@@ -339,8 +350,6 @@ function image_attach_nodeapi(&$node, $op, $teaser, $page) {
   switch ($op) {
     case 'insert':
     case 'update':
-      // Unsetting the "- None -" entry from the form select entries
-      unset($node->iids[0]);
       db_query("DELETE FROM {image_attach} WHERE nid = %d", $node->nid);
       if (!empty($node->iids)) {
         // Populate weight column with placeholder values.
@@ -382,7 +391,10 @@ function image_attach_nodeapi(&$node, $op, $teaser, $page) {
         }        
         $node->content['image_attach'] = array('#weight' => $weight);
         if ($teaser_or_body == 'teaser') {
-          $node->content['image_attach'][$node->iids[0]]['#value'] = theme("image_attach_{$teaser_or_body}", $node, $node->iids[0]);
+          // Reliably get the first element: this array is keyed by id rather 
+          // than from 0 when we are showing a node preview.
+          $first_iid = reset($node->iids);
+          $node->content['image_attach'][$first_iid]['#value'] = theme("image_attach_{$teaser_or_body}", $node, $first_iid);
         }
         else {
           $content = '';
@@ -542,7 +554,7 @@ function theme_image_attach_block_attached($nid, $image_nodes = array()) {
     foreach ($image_nodes as $image) {
       // Render each image from the node.
       $img = image_display($image, variable_get('image_attach_block_0_size', IMAGE_THUMBNAIL));
-      $content .= '<div class="attached-image">' .l($img, "node/$iid", array('html' => TRUE)). '</div>';
+      $content .= '<div class="attached-image">' .l($img, 'node/' . $image->nid, array('html' => TRUE)). '</div>';
     }
     return '<div class="all-attached-images">' .$content. '</div>';
   }

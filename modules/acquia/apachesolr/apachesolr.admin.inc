@@ -1,5 +1,5 @@
 <?php
-// $Id: apachesolr.admin.inc,v 1.1.2.41 2009/12/10 09:10:48 robertDouglass Exp $
+// $Id: apachesolr.admin.inc,v 1.1.2.46 2009/12/27 16:47:37 pwolanin Exp $
 
 /**
  * @file
@@ -11,11 +11,9 @@ function apachesolr_settings() {
 
   // Perform a check to ensure the server is there
   if (empty($_POST)) {
-    if (!defined('REQUIREMENT_OK')) {
-      define('REQUIREMENT_OK', 0);
-      define('REQUIREMENT_WARNING', 1);
-      define('REQUIREMENT_ERROR', 2);
-    }
+    // update_help() loads install.inc via include_once, so not much
+    // point in working around it.
+    include_once './includes/install.inc';
     module_load_include('install', 'apachesolr');
 
     foreach (apachesolr_requirements('runtime') as $requirement) {
@@ -45,7 +43,7 @@ function apachesolr_settings() {
     '#description' => t('Path that identifies the Solr request handler to be used.'),
   );
 
-  $numbers = drupal_map_assoc(array(10, 20, 50, 100, 200));
+  $numbers = drupal_map_assoc(array(1, 5, 10, 20, 50, 100, 200));
   $form['apachesolr_cron_limit'] = array(
     '#type' => 'select',
     '#title' => t('Number of items to index per cron run'),
@@ -134,13 +132,17 @@ function apachesolr_index_page() {
     $pending_docs = $delay_msg = $delete_msg = '';
     try {
       $stats_summary = $solr->getStatsSummary();
-      $delay_msg = '<p>' . t('<em>The server has a @autocommit_time delay before updates are processed.</em>', $stats_summary) . "</p>\n";
+      $solr_msg = '<p>' . t('Using schema.xml version: <strong>@schema_version</strong>', $stats_summary);
+      if ($stats_summary['@core_name']) {
+        $solr_msg .= '<br />' . t('Solr core name: <strong>@core_name</strong>', $stats_summary);
+      }
+      $delay_msg = '<br />' . t('<em>The server has a @autocommit_time delay before updates are processed.</em>', $stats_summary) . "</p>\n";
       $delete_msg = '<p>' . t('Number of pending deletions: @deletes_total', $stats_summary) . "</p>\n";
     }
     catch (Exception $e) {
       watchdog('Apache Solr', nl2br(check_plain($e->getMessage())), NULL, WATCHDOG_ERROR);
     }
-    $output .= $delay_msg;
+    $output .= $solr_msg . $delay_msg;
     $pending_msg = $stats_summary['@pending_docs'] ? t('(@pending_docs sent but not yet processed)', $stats_summary) : '';
     $output .= '<p>' . t('Number of documents in index: @num !pending', array('@num' => $data->index->numDocs, '!pending' => $pending_msg)) . "</p>\n";
     $output .= $delete_msg;
