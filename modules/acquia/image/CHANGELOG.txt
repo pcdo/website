@@ -1,4 +1,4 @@
-// $Id: CHANGELOG.txt,v 1.131 2009/12/21 13:54:59 joachim Exp $
+// $Id: CHANGELOG.txt,v 1.142 2010/01/16 11:41:40 joachim Exp $
 
 Image x.x-x.x, xxxx-xx-xx
 ------------------------
@@ -6,6 +6,21 @@ Image x.x-x.x, xxxx-xx-xx
 
 Image 6.x-1.x, xxxx-xx-xx
 -------------------------
+
+
+Image 6.x-1.0-BETA5, 2010-01-16
+-------------------------------
+#625666 by joachim: Added note about what happens when no image title is given.
+#581174 by jonathan1055, joachim | skyredwang: Added ability to limit the number
+  of attached images.
+#680672 by joachim: Fixed mention of 'upload' when user can't create images.
+#680644 by joachim: Cleaned up code in image attach's hook_form_alter().
+by joachim: Added tests for image attach.
+#580864 by joachim: Fixed new nodes not respecting the 'don't attach existing 
+  images' setting.
+#273426 by joachim: Added test for image thumbnails in teasers.
+#575374 by joachim: Fixed image import allowing selection of too big images. 
+#662252 by joachim: Changed description text in image attach form to be plural.
 
 
 Image 6.x-1.0-BETA4, 2009-12-21

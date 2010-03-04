@@ -1,5 +1,5 @@
 <?php
-// $Id: image_import.pages.inc,v 1.6 2009/12/03 23:52:08 joachim Exp $
+// $Id: image_import.pages.inc,v 1.7 2009/12/29 23:12:10 joachim Exp $
 
 /**
  * Verify a candidate file for import.
@@ -18,6 +18,13 @@ function image_import_validate_file($file) {
     $errors[] = t('Not a JPG, GIF or PNG file.');
     $file->height = $file->width = 0;
   }
+
+  // Check files are not too large to import.
+  $file->filesize = filesize($file->filename);
+  if ($file->filesize > variable_get('image_max_upload_size', 800) * 1024) {
+    $errors[] = t('File too big.');
+  }
+
   return $errors;
 }
 
