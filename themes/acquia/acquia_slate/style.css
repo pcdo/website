@@ -1,4 +1,4 @@
-/* $Id: style.css,v 1.1.2.4 2009/05/11 08:53:00 jwolf Exp $ */
+/* $Id*/
 
 /******************************************/
 /*  TopNotchThemes CSS Stylesheet         */
@@ -1529,9 +1529,29 @@ div.form-item div.description img {
   margin: 0;
 }
 
-html.js input.form-autocomplete {
-  background-position: 100% 5px;
+ html.js input.form-autocomplete {
+  background-position: 100% 3px;
+  background-image: url('images/throbber.gif');
   max-width: 96%;
+ }
+ 
+html.js input.throbbing {
+  background-position: 100% -17px;
+}
+
+#autocomplete {
+  background: #292929;
+}
+
+#autocomplete li {
+  background: #292929;
+  color: #F0F0F0;
+  border-color: #6D6D6D;
+}
+
+#autocomplete li.selected {
+  background: #3E3E3E;
+  color: #F0F0F0;
 }
 
 div.form-item {
@@ -1861,7 +1881,32 @@ div.admin-required {
 /* Maintenance
 -------------------------------------------------------------- */
 
-.in-maintenance  {
+.in-maintenance #header-middle #logo {
+  float: left;
+  margin-right: 10px;
+}
+
+.in-maintenance #header-middle #logo {
+  display: inline;
+  margin: 0 14px 10px 0;
+}
+
+.in-maintenance #header-middle  h1 {
+  color: #525252;
+  display: inline;
+  font-family: Myriad Pro, Myriad Web Pro Regular, Lucida Grande, Geneva, Trebuchet MS, sans-serif;
+  font-size: 2.1em;
+  font-weight: normal;
+  letter-spacing: 3px;
+  position: relative;
+  text-transform: uppercase;
+  top: 3px;
+  white-space: nowrap;
+}
+
+.in-maintenance #header-middle  h1 a {
+  color: #525252;
+  text-decoration: none;
 }
 
 
@@ -1884,6 +1929,25 @@ div.admin-required {
   border-bottom: 1px solid #CCC;
   text-align: center;
   padding: 0.5em;
+}
+
+
+/* Calendar
+-------------------------------------------------------------- */
+
+/* pop-up calendar styles */
+div#calpopup {
+  color: #444
+}
+
+div#calpopup a:link,
+div#calpopup a:visited {
+  color: #B38542;
+}
+
+div#calpopup a:hover,
+div#calpopup a:active {
+  color: #DFB77C;
 }
 
 
@@ -2011,25 +2075,31 @@ div.comment .picture {
 /* Panels
 -------------------------------------------------------------- */
 
-div.panels-display {
-  background: none;
-}
 
-.panels-modal-content {
-  color: #292929;
-}
-
-.panels-modal-content .modal-content a {
+#modal-content a {
   color: #2385C2;
 }
 
-.panels-modal-content fieldset,
-.panels-modal-content legend,
-.panels-modal-content textarea,
-.panels-modal-content select,
-.panels-modal-content input.text,
-.panels-modal-content input.form-text,
-.panels-modal-content input.title {
+#modal-content a {
+  color: #2385C2;
+}
+
+#modal-content textarea {
+  background: #fff;
+  color: #000;
+}
+
+#panels-panel-context-edit-content h2 {
+  margin: 10px 0;
+}
+
+#modal-content fieldset,
+#modal-content legend,
+#modal-content textarea,
+#modal-content select,
+#modal-content input.text,
+#modal-content input.form-text,
+#modal-content input.title {
   background: #fff;
   color: #292929;
 }
@@ -2039,6 +2109,9 @@ div.panels-display {
   color: #292929;
 }
 
+.ctools-owns-lock {
+  color: #000;
+}
 
 /* Polls
 -------------------------------------------------------------- */
@@ -2086,6 +2159,45 @@ div.poll div.bar div.foreground {
 /* Search results
 -------------------------------------------------------------- */
 
+
+/* Vertical Tabs
+-------------------------------------------------------------- */
+
+.vertical-tabs {
+  background-color: #3E3E3E;
+  border-color: #6D6D6D;
+}
+
+.vertical-tabs-list {
+  border-color: #6D6D6D;
+}
+
+.vertical-tabs-list li {
+  background-color: #1B1B1B;
+  border-color: #6D6D6D;
+}
+
+.vertical-tabs-list li.selected {
+  background-color: #3E3E3E;
+}
+
+.vertical-tabs-list li.selected strong {
+  color: #F0F0F0;
+}
+
+.vertical-tabs ul.vertical-tabs-list .summary {
+  color: #A3A3A3;
+}
+
+.vertical-tabs ul.vertical-tabs-list a:link,
+.vertical-tabs ul.vertical-tabs-list a:visited {
+  color: #555;
+}
+
+.vertical-tabs ul.vertical-tabs-list a:hover,
+.vertical-tabs ul.vertical-tabs-list a:active {
+  color: #212121;
+}
 
 /* Views
 -------------------------------------------------------------- */

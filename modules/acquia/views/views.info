@@ -5,8 +5,10 @@ package = Views
 core = 6.x
 
 ; Information added by Acquia.com packaging script
-version = "6.x-2.8"
 core = "6.x"
 project = "views"
+description = "[Create customized lists and queries from your database.] Version 6.x-2.8-acquiadev-1 (April 8, 2010) patched for SA-CONTRIB-2010-036 see: http://drupal.org/node/765892"
+datestamp = "1270750102"
+version = "6.x-2.8-acquiadev-1"
 acquia = "1"
 

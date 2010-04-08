@@ -1,5 +1,5 @@
 <?php 
-// $Id: page-front.tpl.php,v 1.1 2009/02/28 23:33:58 jwolf Exp $ 
+// $Id: page-front.tpl.php,v 1.1.4.1 2009/05/26 06:21:30 jwolf Exp $ 
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -10,11 +10,14 @@
     <?php print $head; ?>
     <?php print $styles; ?>
     <!--[if IE 7]>
-      <link rel="stylesheet" href="<?php print $base_path . $directory; ?>/ie7-fixes.css" type="text/css">
+      <?php print $ie7_styles; ?>
     <![endif]-->
     <!--[if lte IE 6]>
-      <link rel="stylesheet" href="<?php print $base_path . $directory; ?>/ie6-fixes.css" type="text/css">
+      <?php print $ie6_styles; ?>
     <![endif]-->
+    <?php if ($local_styles): ?>
+    <?php print $local_styles; ?>
+    <?php endif; ?>
     <?php print $scripts; ?>
   </head>
 
@@ -44,11 +47,11 @@
         <div id="header-first">
           <?php if ($logo): ?> 
           <div id="logo">
-            <a href="<?php print $base_path ?>" title="<?php print t('Home') ?>"><img src="<?php print $logo ?>" alt="<?php print t('Home') ?>" /></a>
+            <a href="<?php print check_url($front_page) ?>" title="<?php print t('Home') ?>"><img src="<?php print $logo ?>" alt="<?php print t('Home') ?>" /></a>
           </div>
           <?php endif; ?>
           <?php if ($site_name): ?>
-          <h1><a href="<?php print $base_path ?>" title="<?php print t('Home'); ?>"><?php print $site_name; ?></a></h1>
+          <h1><a href="<?php print check_url($front_page) ?>" title="<?php print t('Home'); ?>"><?php print $site_name; ?></a></h1>
           <?php endif; ?>
         </div><!-- /header-first -->
         <div id="header-middle">
@@ -66,7 +69,7 @@
         </div><!-- /search-box -->
       </div><!-- /header-wrapper -->
       <?php if ($preface_sidebar || $mission) : ?>
-      <div id="preface-wrapper" class="clearfix">
+      <div id="preface-wrapper" class="clearfix" <?php print $banner_image; ?>>
         <?php if ($preface_sidebar): ?>
           <div id="preface-sidebar">
             <?php print $preface_sidebar; ?>

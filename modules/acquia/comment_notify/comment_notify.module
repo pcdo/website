@@ -1,5 +1,5 @@
 <?php
-// $Id: comment_notify.module,v 1.73 2009/11/17 15:20:10 greggles Exp $
+// $Id: comment_notify.module,v 1.73.2.3 2010/03/10 22:29:40 greggles Exp $
 
 /**
  * @file
@@ -452,7 +452,7 @@ function _comment_notify_mailalert($comment) {
     if ($alert->notify == COMMENT_NOTIFY_COMMENT && strcmp($relevant_thread . '/', $alert->thread) != 0) {
       continue;
     }
-    if ($mail != $comment_mail && !in_array($mail, $sent_to) && $alert->uid != $comment->uid) {
+    if ($mail != $comment_mail && !in_array($mail, $sent_to) && ($alert->uid != $comment->uid || $alert->uid == 0)) {
       $message = array();
       if (!empty($alert->uid)) {
         $recipient_user = user_load(array('uid' => $alert->uid));
@@ -594,7 +594,7 @@ function comment_notify_settings() {
   }
 
   if (!empty($anonymous_problems)) {
-    drupal_set_message(t('Anonymous commenters have the permission to subscribe to comments but cannot leave their contact infromation on the following content types: !types.  You should either disable subscriptions on those types here, revoke the permission for anonymous users, or enable anonymous users to leave their contact information in the comment settings.', array('!types' => implode(', ', $anonymous_problems))), 'status', FALSE);
+    drupal_set_message(t('Anonymous commenters have the permission to subscribe to comments but cannot leave their contact information on the following content types: !types.  You should either disable subscriptions on those types here, revoke the permission for anonymous users, or enable anonymous users to leave their contact information in the comment settings.', array('!types' => implode(', ', $anonymous_problems))), 'status', FALSE);
   }
 
   $form['comment_notify_settings']['comment_notify_node_types'] = array(
@@ -650,24 +650,24 @@ function comment_notify_settings() {
     '#description' => t(
       'You can use the following variables to be replaced:
       <ul>
-      <li>!cid = the comment id for the comment
-      <li>!commname = the username who posted the comment
-      <li>!commtext = the text of the posted comment
-      <li>!commsubj = the subject of the posted comment
-      <li>!comment_url = the full url of the post and comment - note: if you have paging enabled, this does not work correct - set your max comments per page so that all fit on one page or reverse order them
-      <li>!nid = the node id the comment was posted on
-      <li>!node_title = the title of the node that was commented on
-      <li>!node_teaser = the teaser of the node that was commented on
-      <li>!node_body = the body of the node that was commented on
-      <li>!mission = site_mission text
-      <li>!name = username receiving the alert
-      <li>!site = your site
-      <li>!uri = base_url of site
-      <li>!uri_brief = base_url of site w/o http
-      <li>!date = the current time
-      <li>!login_uri  uri to login the user
-      <li>!edit_uri = uri to edit user profile
-      <li>!link1 the QUICKLINK to disable future follow-up notifications for the user
+      <li>!cid = the comment id for the comment</li>
+      <li>!commname = the username who posted the comment</li>
+      <li>!commtext = the text of the posted comment</li>
+      <li>!commsubj = the subject of the posted comment</li>
+      <li>!comment_url = the full url of the post and comment - note: if you have paging enabled, this does not work correct - set your max comments per page so that all fit on one page or reverse order them</li>
+      <li>!nid = the node id the comment was posted on</li>
+      <li>!node_title = the title of the node that was commented on</li>
+      <li>!node_teaser = the teaser of the node that was commented on</li>
+      <li>!node_body = the body of the node that was commented on</li>
+      <li>!mission = site_mission text</li>
+      <li>!name = username receiving the alert</li>
+      <li>!site = your site</li>
+      <li>!uri = base_url of site</li>
+      <li>!uri_brief = base_url of site w/o http</li>
+      <li>!date = the current time</li>
+      <li>!login_uri  uri to login the user</li>
+      <li>!edit_uri = uri to edit user profile</li>
+      <li>!link1 the QUICKLINK to disable future follow-up notifications for the user</li>
       </ul>'
     ),
     '#default_value' => variable_get('comment_notify_default_mailtext', t(DEFAULT_MAILTEXT)),
@@ -682,23 +682,23 @@ function comment_notify_settings() {
     '#description' => t(
       'You can use the following variables to be replaced:
       <ul>
-      <li>!cid = the comment id for the comment
-      <li>!commname = the username who posted the comment
-      <li>!commtext = the text of the posted comment
-      <li>!commsubj = the subject of the posted comment
-      <li>!comment_url = the full url of the post and comment - note: if you have paging enabled, this does not work correct - set your max comments per page so that all fit on one page or reverse order them
-      <li>!nid = the node id the comment was posted on
-      <li>!node_title = the title of the node that was commented on
-      <li>!node_teaser = the teaser of the node that was commented on
-      <li>!node_body = the body of the node that was commented on
-      <li>!mission = site_mission text
-      <li>!name = username receiving the alert
-      <li>!site = your site
-      <li>!uri = base_url of site
-      <li>!uri_brief = base_url of site w/o http
-      <li>!date = the current time
-      <li>!login_uri  uri to login the user
-      <li>!edit_uri = uri to edit user profile
+      <li>!cid = the comment id for the comment</li>
+      <li>!commname = the username who posted the comment</li>
+      <li>!commtext = the text of the posted comment</li>
+      <li>!commsubj = the subject of the posted comment</li>
+      <li>!comment_url = the full url of the post and comment - note: if you have paging enabled, this does not work correct - set your max comments per page so that all fit on one page or reverse order them</li>
+      <li>!nid = the node id the comment was posted on</li>
+      <li>!node_title = the title of the node that was commented on</li>
+      <li>!node_teaser = the teaser of the node that was commented on</li>
+      <li>!node_body = the body of the node that was commented on</li>
+      <li>!mission = site_mission text</li>
+      <li>!name = username receiving the alert</li>
+      <li>!site = your site</li>
+      <li>!uri = base_url of site</li>
+      <li>!uri_brief = base_url of site w/o http</li>
+      <li>!date = the current time</li>
+      <li>!login_uri  uri to login the user</li>
+      <li>!edit_uri = uri to edit user profile</li>
       </ul>'
     ),
     '#default_value' => variable_get('node_notify_default_mailtext', t(AUTHOR_MAILTEXT)),

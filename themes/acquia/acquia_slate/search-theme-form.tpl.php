@@ -1,5 +1,5 @@
 <?php
-// $Id: search-theme-form.tpl.php,v 1.1 2009/02/28 23:33:58 jwolf Exp $
+// $Id: search-theme-form.tpl.php,v 1.1.4.1 2010/04/06 22:19:43 sociotech Exp $
 
 /**
  * @file search-theme-form.tpl.php
@@ -36,7 +36,7 @@
 
 <div id="search" class="container-inline">
   <?php // <label for="edit-search_theme_form">Search</label> ?>
-  <input class="search-input form-text" type="text" maxlength="128" name="search_theme_form" id="edit-search_theme_form"  size="15" value="" title="Enter the terms you wish to search for" />
+  <input class="search-input form-text" type="text" maxlength="128" name="search_theme_form" id="edit-search_theme_form"  size="15" value="" title="<?php print t('Enter the terms you wish to search for.'); ?>" />
   <input class="search_submit" type="submit" name="op" value="Search"  />
   <?php print $search['hidden']; ?>
   <?php // <a class="advanced-search-link" href="/search" title="Advanced Search">Advanced Search</a> ?>

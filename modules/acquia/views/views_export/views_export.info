@@ -7,8 +7,9 @@ dependencies[] = views
 core = 6.x
 
 ; Information added by Acquia.com packaging script
-version = "6.x-2.8"
 core = "6.x"
 project = "views"
+datestamp = "1270750102"
+version = "6.x-2.8-acquiadev-1"
 acquia = "1"
 

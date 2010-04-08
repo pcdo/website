@@ -6,8 +6,10 @@ core = 6.x
 dependencies[] = views
 
 ; Information added by Acquia.com packaging script
-version = "6.x-2.8"
 core = "6.x"
 project = "views"
+description = "[Administrative interface to views. Without this module, you cannot create or edit your views.] Version 6.x-2.8-acquiadev-1 (April 8, 2010) patched for SA-CONTRIB-2010-036 see: http://drupal.org/node/765892"
+datestamp = "1270750102"
+version = "6.x-2.8-acquiadev-1"
 acquia = "1"
 
