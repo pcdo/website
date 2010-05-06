@@ -7,8 +7,8 @@ core = 6.x
 ; Information added by Acquia.com packaging script
 core = "6.x"
 project = "views"
-description = "[Create customized lists and queries from your database.] Version 6.x-2.8-acquiadev-1 (April 8, 2010) patched for SA-CONTRIB-2010-036 see: http://drupal.org/node/765892"
-datestamp = "1270750102"
-version = "6.x-2.8-acquiadev-1"
+description = "[Create customized lists and queries from your database.] Acquia version 6.x-2.10-acquiadev-1 (May 5, 2010) patched to prevent fatal error when proding a taxonomy term argument. See http://drupal.org/node/770006."
+version = "6.x-2.10-acquiadev-1"
+datestamp = "1273111456"
 acquia = "1"
 
