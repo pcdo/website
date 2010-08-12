@@ -32,7 +32,11 @@ dompdf support:
   4. Grant write access to the lib/fonts directory to your webserver user.
   5. If you're using dompdf-0.5.1, delete the dompdf.php file as it contains
   a security vulnerability
-  6. Check http://code.google.com/p/dompdf/ for further information.
+  6. If you're using dompdf-0.6 or later, you can try to enable the Unicode
+  support, but you'll need to add some Unicode fonts. See 
+  http://groups.google.com/group/dompdf/browse_thread/thread/9f7bc0162b04d5cf
+  for further info on this.
+  7. Check http://code.google.com/p/dompdf/ for further information.
 
 TCPDF support:
   TCPDF seems to be more actively developed than dompdf, but it's support
@@ -56,10 +60,7 @@ wkhtmltopdf support:
   2. Place the wkhtmltopdf executable into the print module lib directory
   (usually sites/all/modules/print/lib). You can also place a symbolic link
   to the executable.
-  3. You will need a running X Server or the virtual (headless) X
-  framebuffer server: Xvfb. Place the Xvfb binary or a symbolic link to it
-  in the print module lib directory (usually sites/all/modules/print/lib).
-  4. Check http://code.google.com/p/wkhtmltopdf/ for further information.
+  3. Check http://code.google.com/p/wkhtmltopdf/ for further information.
 
 UPDATE
 ------
@@ -87,4 +88,4 @@ Note that pattern matching in robots.txt is a Google extension (see
 http://www.google.com/support/webmasters/bin/answer.py?answer=40367 for more
 information).
 
-// $Id: INSTALL.txt,v 1.10.2.11 2009/06/15 22:04:24 jcnventura Exp $
+// $Id: INSTALL.txt,v 1.10.2.13 2010/07/12 15:09:45 jcnventura Exp $

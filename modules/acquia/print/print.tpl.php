@@ -1,5 +1,5 @@
 <?php
-// $Id: print.tpl.php,v 1.8.2.15 2009/07/09 12:00:52 jcnventura Exp $
+// $Id: print.tpl.php,v 1.8.2.16 2010/07/13 11:04:57 jcnventura Exp $
 
 /**
  * @file
@@ -14,12 +14,13 @@
     <?php print $print['head']; ?>
     <title><?php print $print['title']; ?></title>
     <?php print $print['scripts']; ?>
+    <?php print $print['sendtoprinter']; ?>
     <?php print $print['robots_meta']; ?>
     <?php print $print['base_href']; ?>
     <?php print $print['favicon']; ?>
     <?php print $print['css']; ?>
   </head>
-  <body<?php print $print['sendtoprinter']; ?>>
+  <body>
     <?php if (!empty($print['message'])) {
       print '<div class="print-message">'. $print['message'] .'</div><p />';
     } ?>
