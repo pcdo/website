@@ -1,5 +1,5 @@
 <?php
-// $Id: print_mail.module,v 1.1.2.52 2010/07/24 16:01:10 jcnventura Exp $
+// $Id: print_mail.module,v 1.1.2.54 2010/08/21 23:11:03 jcnventura Exp $
 
 /**
  * @file
@@ -218,9 +218,9 @@ function print_mail_nodeapi(&$node, $op = 'view', $teaser, $page) {
     case 'insert':
     case 'update':
       if (user_access('administer print') || user_access('node-specific print configuration')) {
-        if ($node->print_mail_display === NULL) $node->print_mail_display = variable_get('print_mail_display_' . $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
-        if ($node->print_mail_display_comment === NULL) $node->print_mail_display_comment = variable_get('print_mail_display_comment_' . $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
-        if ($node->print_mail_display_urllist === NULL) $node->print_mail_display_urllist = variable_get('print_mail_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
+        if ($node->print_mail_display === NULL) $node->print_mail_display = variable_get('print_mail_display_'. $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
+        if ($node->print_mail_display_comment === NULL) $node->print_mail_display_comment = variable_get('print_mail_display_comment_'. $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+        if ($node->print_mail_display_urllist === NULL) $node->print_mail_display_urllist = variable_get('print_mail_display_urllist_'. $node->type, PRINT_TYPE_URLLIST_DEFAULT);
 
         _print_mail_node_conf_modify($node->nid, $node->print_mail_display, $node->print_mail_display_comment, $node->print_mail_display_urllist);
       }
@@ -344,7 +344,7 @@ function _print_mail_set_node_fields(&$node) {
 function _print_mail_node_conf_modify($nid, $link, $comments, $url_list) {
     db_query("UPDATE {print_mail_node_conf} SET link = %d, comments = %d, url_list = %d WHERE nid = %d", $link, $comments, $url_list, $nid);
     if (!db_affected_rows()) {
-      db_query("INSERT INTO {print_mail_node_conf} (nid, link, comments, url_list) VALUES (%d, %d, %d, %d)", $nid, $link, $comments, $url_list);
+      @db_query("INSERT INTO {print_mail_node_conf} (nid, link, comments, url_list) VALUES (%d, %d, %d, %d)", $nid, $link, $comments, $url_list);
     }
 }
 

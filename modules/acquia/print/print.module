@@ -1,5 +1,5 @@
 <?php
-// $Id: print.module,v 1.25.2.94 2010/08/04 14:59:19 jcnventura Exp $
+// $Id: print.module,v 1.25.2.97 2010/08/21 23:11:03 jcnventura Exp $
 
 /**
  * @defgroup print Printer, e-mail and PDF versions
@@ -134,10 +134,15 @@ function print_preprocess_print_node(&$variables) {
  */
 function print_preprocess_print_page(&$variables) {
   $format = $variables['type'];
-  $type = $variables['node']->type;
-  $variables['show_blocks'] = FALSE;
-  $variables['show_messages'] = FALSE;
-  template_preprocess_page($variables);
+  if (isset($variables['node']->type)) {
+    $type = $variables['node']->type;
+    $variables['show_blocks'] = FALSE;
+    $variables['show_messages'] = FALSE;
+    template_preprocess_page($variables);
+  }
+  else {
+    $type = '';
+  }
   $variables['template_files'][] = "print";
   $variables['template_files'][] = "print.node-$type";
   $variables['template_files'][] = "print_$format";
@@ -399,9 +404,9 @@ function print_nodeapi(&$node, $op = 'view', $teaser, $page) {
     case 'insert':
     case 'update':
       if (user_access('administer print') || user_access('node-specific print configuration')) {
-        if ($node->print_display === NULL) $node->print_display = variable_get('print_display_' . $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
-        if ($node->print_display_comment === NULL) $node->print_display_comment = variable_get('print_display_comment_' . $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
-        if ($node->print_display_urllist === NULL) $node->print_display_urllist = variable_get('print_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
+        if ($node->print_display === NULL) $node->print_display = variable_get('print_display_'. $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
+        if ($node->print_display_comment === NULL) $node->print_display_comment = variable_get('print_display_comment_'. $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+        if ($node->print_display_urllist === NULL) $node->print_display_urllist = variable_get('print_display_urllist_'. $node->type, PRINT_TYPE_URLLIST_DEFAULT);
 
         _print_node_conf_modify($node->nid, $node->print_display, $node->print_display_comment, $node->print_display_urllist);
       }
@@ -550,7 +555,7 @@ function _print_get_title($path) {
 function _print_node_conf_modify($nid, $link, $comments, $url_list) {
     db_query("UPDATE {print_node_conf} SET link = %d, comments = %d, url_list = %d WHERE nid = %d", $link, $comments, $url_list, $nid);
     if (!db_affected_rows()) {
-      db_query("INSERT INTO {print_node_conf} (nid, link, comments, url_list) VALUES (%d, %d, %d, %d)", $nid, $link, $comments, $url_list);
+      @db_query("INSERT INTO {print_node_conf} (nid, link, comments, url_list) VALUES (%d, %d, %d, %d)", $nid, $link, $comments, $url_list);
     }
 }
 

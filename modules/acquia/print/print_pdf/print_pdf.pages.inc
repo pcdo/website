@@ -1,5 +1,5 @@
 <?php
-// $Id: print_pdf.pages.inc,v 1.3.2.75 2010/08/11 17:02:52 jcnventura Exp $
+// $Id: print_pdf.pages.inc,v 1.3.2.76 2010/08/14 00:04:58 jcnventura Exp $
 
 /**
  * @file
@@ -121,7 +121,7 @@ function _print_pdf_file_access_images($html) {
     $html = preg_replace($pattern, $replacement, $html);
   }
   $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?([^>]*?>)!is";
-  $replacement = '$1file://'. realpath($_SERVER["DOCUMENT_ROOT"] . base_path()) .'/$2';
+  $replacement = '$1file://'. dirname($_SERVER['SCRIPT_FILENAME']) .'/$2';
   $html = preg_replace($pattern, $replacement, $html);
 
   return $html;

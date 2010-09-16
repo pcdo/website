@@ -1,5 +1,5 @@
 <?php
-// $Id: print_pdf.module,v 1.1.2.58 2010/08/11 17:02:52 jcnventura Exp $
+// $Id: print_pdf.module,v 1.1.2.61 2010/08/21 23:11:03 jcnventura Exp $
 
 /**
  * @file
@@ -165,14 +165,22 @@ function print_pdf_requirements($phase) {
       $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
       if (empty($print_pdf_pdf_tool)) {
         $requirements['print_pdf_tool'] = array(
-          'title' => $t('PDF version'),
+          'title' => $t('PDF generation library'),
           'value' => $t('No PDF tool selected'),
           'description' => $t('Please configure it in the <a href="@url">PDF settings page</a>.', array('@url' => url('admin/settings/print/pdf'))),
           'severity' => REQUIREMENT_ERROR,
         );
       }
       else {
-        if (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
+        if (!is_file($print_pdf_pdf_tool) || !is_readable($print_pdf_pdf_tool)) {
+          $requirements['print_pdf_tool'] = array(
+            'title' => $t('PDF generation tool'),
+            'value' => $t('File not found'),
+            'description' => $t('The currently selected PDF generation library (%file) is no longer accessible.', array('%file' => $print_pdf_pdf_tool)),
+            'severity' => REQUIREMENT_ERROR,
+          );
+        }
+        elseif (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
           $directory = dirname($print_pdf_pdf_tool) .'/lib/fonts';
           if (!is_dir($directory) || !is_writable($directory)) {
             $requirements['print_pdf_tool'] = array(
@@ -184,14 +192,24 @@ function print_pdf_requirements($phase) {
           }
         }
         elseif (substr(basename($print_pdf_pdf_tool, '.exe'), 0, 11) == 'wkhtmltopdf') {
-          $version = _print_pdf_wkhtmltopdf_version();
-          if (version_compare($version, '0.9.6', '<')) {
+          if (function_exists('is_executable') && !is_executable($print_pdf_pdf_tool)) {
             $requirements['print_pdf_tool'] = array(
-              'title' => $t('wkhtmltopdf version'),
-              'value' => $t('Unsupported version'),
-              'description' => $t('The currently selected version of wkhtmltopdf (@version) is not supported. Please update to a <a href="@url">newer version</a>.', array('@version' => $version, '@url' => url('http://code.google.com/p/wkhtmltopdf/'))),
+              'title' => $t('wkhtmltopdf library'),
+              'value' => $t('Non-executable permissions'),
+              'description' => $t('You must modify the permissions of the wkhtmltopdf file (%file) to make it executable.', array('%file' => $print_pdf_pdf_tool)),
               'severity' => REQUIREMENT_ERROR,
             );
+          }
+          else {
+            $version = _print_pdf_wkhtmltopdf_version();
+            if (version_compare($version, '0.9.6', '<')) {
+              $requirements['print_pdf_tool'] = array(
+                'title' => $t('wkhtmltopdf library'),
+                'value' => $t('Unsupported version'),
+                'description' => $t('The currently selected version of wkhtmltopdf (@version) is not supported. Please update to a <a href="@url">newer version</a>.', array('@version' => $version, '@url' => url('http://code.google.com/p/wkhtmltopdf/'))),
+                'severity' => REQUIREMENT_ERROR,
+              );
+            }
           }
         }
       }
@@ -290,9 +308,9 @@ function print_pdf_nodeapi(&$node, $op = 'view', $teaser, $page) {
     case 'insert':
     case 'update':
       if (user_access('administer print') || user_access('node-specific print configuration')) {
-        if ($node->print_pdf_display === NULL) $node->print_pdf_display = variable_get('print_pdf_display_' . $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
-        if ($node->print_pdf_display_comment === NULL) $node->print_pdf_display_comment = variable_get('print_pdf_display_comment_' . $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
-        if ($node->print_pdf_display_urllist === NULL) $node->print_pdf_display_urllist = variable_get('print_pdf_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
+        if ($node->print_pdf_display === NULL) $node->print_pdf_display = variable_get('print_pdf_display_'. $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
+        if ($node->print_pdf_display_comment === NULL) $node->print_pdf_display_comment = variable_get('print_pdf_display_comment_'. $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+        if ($node->print_pdf_display_urllist === NULL) $node->print_pdf_display_urllist = variable_get('print_pdf_display_urllist_'. $node->type, PRINT_TYPE_URLLIST_DEFAULT);
 
         _print_pdf_node_conf_modify($node->nid, $node->print_pdf_display, $node->print_pdf_display_comment, $node->print_pdf_display_urllist);
       }
@@ -377,7 +395,7 @@ function _print_pdf_set_node_fields(&$node) {
 function _print_pdf_node_conf_modify($nid, $link, $comments, $url_list) {
     db_query("UPDATE {print_pdf_node_conf} SET link = %d, comments = %d, url_list = %d WHERE nid = %d", $link, $comments, $url_list, $nid);
     if (!db_affected_rows()) {
-      db_query("INSERT INTO {print_pdf_node_conf} (nid, link, comments, url_list) VALUES (%d, %d, %d, %d)", $nid, $link, $comments, $url_list);
+      @db_query("INSERT INTO {print_pdf_node_conf} (nid, link, comments, url_list) VALUES (%d, %d, %d, %d)", $nid, $link, $comments, $url_list);
     }
 }
 
@@ -553,8 +571,8 @@ function print_pdf_link_allowed($args) {
 function _print_pdf_wkhtmltopdf_version() {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
-   
-  $cmd = realpath($print_pdf_pdf_tool) ." --version";
+
+  $cmd = realpath($print_pdf_pdf_tool) .' --version';
   $process = proc_open($cmd, $descriptor, $pipes, NULL, NULL);
   if (is_resource($process)) {
     $out = preg_match('!.*?(\d+\.\d+\.\d+).*$!m', stream_get_contents($pipes[1]), $matches);

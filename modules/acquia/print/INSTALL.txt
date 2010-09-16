@@ -12,10 +12,14 @@ PDF TOOL
 --------
 
 The print_pdf module requires the use of an external PDF generation tool.
-The currently supported tools are dompdf and TCPDF. Please note that any
-errors/bugs in those tools need to be reported and fixed by their
-maintainers. DO NOT report bugs in those tools in the print module's issue
-queue at Drupal.org.
+The currently supported tools are dompdf, TCPDF and wkhtmltopdf.  Please
+note that any errors/bugs in those tools need to be reported and fixed by
+their maintainers.  DO NOT report bugs in those tools in the print module's
+issue queue at Drupal.org.
+
+supported paths:
+  * print module lib directory (usually sites/all/modules/print/lib)
+  * libraries directory (sites/all/libraries)
 
 dompdf support:
   The dompdf tool produces results that are more faithful to the HTML
@@ -24,8 +28,8 @@ dompdf support:
   from its incomplete implementation.
 
   1. Download dompdf from http://code.google.com/p/dompdf/downloads/list
-  2. Extract the contents of the downloaded package into the print module
-  lib directory (usually sites/all/modules/print/lib)
+  2. Extract the contents of the downloaded package into one of the
+  supported paths.
   3. Check if dompdf_config.inc.php fits your installation. In 99% of cases,
   no changes are necessary, so just try to use it and only edit anything if
   the PDF generation fails.
@@ -45,10 +49,9 @@ TCPDF support:
   requires TCPDF >= 4.0.000.
 
   1. Download TCPDF from http://sourceforge.net/projects/tcpdf/
-  2. Extract the contents of the downloaded package into the print module
-  lib directory (usually sites/all/modules/print/lib). There is no need to
-  modify the config/tcpdf_config.php file, as the module self-configures
-  TCPDF.
+  2. Extract the contents of the downloaded package into one of the
+  supported paths.  There is no need to modify the config/tcpdf_config.php
+  file, as the module self-configures TCPDF.
   3. Check http://tcpdf.sourceforge.net/ for further information.
 
 wkhtmltopdf support:
@@ -57,8 +60,8 @@ wkhtmltopdf support:
   http://code.google.com/p/wkhtmltopdf/downloads/list. You can choose to
   download the source and compile it or simply download the static binary,
   which doesn't require you to complile anything.
-  2. Place the wkhtmltopdf executable into the print module lib directory
-  (usually sites/all/modules/print/lib). You can also place a symbolic link
+  2. Place the wkhtmltopdf executable into one of the supported paths. 
+  (usually sites/all/modules/print/lib).  You can also place a symbolic link
   to the executable.
   3. Check http://code.google.com/p/wkhtmltopdf/ for further information.
 
@@ -88,4 +91,4 @@ Note that pattern matching in robots.txt is a Google extension (see
 http://www.google.com/support/webmasters/bin/answer.py?answer=40367 for more
 information).
 
-// $Id: INSTALL.txt,v 1.10.2.13 2010/07/12 15:09:45 jcnventura Exp $
+// $Id: INSTALL.txt,v 1.10.2.14 2010/08/11 23:53:13 jcnventura Exp $

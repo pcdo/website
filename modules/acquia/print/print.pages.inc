@@ -1,5 +1,5 @@
 <?php
-// $Id: print.pages.inc,v 1.1.2.66 2010/07/24 01:21:45 jcnventura Exp $
+// $Id: print.pages.inc,v 1.1.2.68 2010/08/21 23:11:03 jcnventura Exp $
 
 /**
  * @file
@@ -153,6 +153,9 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   global $base_url, $language, $_print_urls;
 
   $path = empty($node->nid) ? $node->path : "node/$node->nid";
+
+  // Needed because of the theme_get_setting() calls below
+  init_theme();
 
   // print module settings
   $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
@@ -454,6 +457,10 @@ function _print_friendly_urls($url = 0) {
  *   TRUE if URL list should be displayed, FALSE otherwise
  */
 function _print_url_list_enabled($node, $format = PRINT_HTML_FORMAT) {
+  if (!isset($node->type)) {
+    return TRUE;
+  }
+
   switch ($format) {
     case PRINT_HTML_FORMAT:
       $node_urllist = isset($node->print_display_urllist) ? $node->print_display_urllist : variable_get('print_display_urllist_'. $node->type, PRINT_TYPE_URLLIST_DEFAULT);

@@ -1,5 +1,5 @@
 <?php
-// $Id: print_mail.inc,v 1.2.2.31 2010/07/24 16:01:10 jcnventura Exp $
+// $Id: print_mail.inc,v 1.2.2.32 2010/08/12 08:43:50 jcnventura Exp $
 
 /**
  * @file
@@ -99,13 +99,13 @@ function print_mail_form($form_state) {
     '#title' => t('Send page as'),
     '#default_value' => variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT),
     '#options' => array(
-      'sendlink' => 'Link',
-      'sendpage' => 'Inline HTML',
+      'sendlink' => t('Link'),
+      'sendpage' => t('Inline HTML'),
     ),
   );
   if (class_exists('Mail_mime')) {
-    $form['fld_send_option']['#options']['inline-attachment'] = 'Inline HTML with Attachment';
-    $form['fld_send_option']['#options']['plain-attachment'] = 'Plain Text with Attachment';
+    $form['fld_send_option']['#options']['inline-attachment'] = t('Inline HTML with Attachment');
+    $form['fld_send_option']['#options']['plain-attachment'] = t('Plain Text with Attachment');
   }
   $form['txt_message'] = array(
     '#type' => 'textarea',

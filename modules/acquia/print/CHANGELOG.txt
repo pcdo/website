@@ -1,3 +1,28 @@
+August 22, 2010
+        Update CHANGELOG
+        Updated Polish translation by dargod
+        Update translations
+        Coder fixes
+August 20, 2010
+        Use theme_token_help to generate token list
+August 18, 2010
+        Fix #884936: Check if the select PDF tool is accessible and executable (wkhtmltopdf)
+        Fix #886766: Make unreadable custom CSS file a warning and not an error when submitting the settings form
+        Fix #885420: restore the call to init_theme()
+        Remove some PHP warnings in non-content pages
+        Fix #883952: Put base href at the top of the print template
+        Don't create configuration records if the content type settings are still the default value
+August 15, 2010
+        Fix #883086: blank CSS file field caused form validation failure in settings
+August 14, 2010
+        Fix #881650: hide insert warnings during node updates
+        Fix #881074 by ceme: use SCRIPT_FILENAME instead of DOCUMENT_ROOT when replacing image paths for local access
+        Fix #881870 by Shiny: recent update routines were not PostgreSQL compatible
+August 13, 2010
+        Updated Hungarian translation.
+August 12, 2010
+        Fix #880954: Enable translation of 'send page as' options
+        Fix #880400: document alternative sites/all/libraries path in INSTALL.txt
 August 11, 2010
         SA-CONTRIB-2010-TBD: disable local file access with wkhtmltopdf
         Update CHANGELOG
