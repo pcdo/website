@@ -6,7 +6,7 @@ package = Testing
 hidden = TRUE
 
 ; Information added by Acquia.com packaging script
-version = "6.x-1.13"
+version = "6.x-1.14"
 core = "6.x"
 project = "mollom"
 acquia = "1"
