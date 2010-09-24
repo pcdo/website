@@ -4,7 +4,7 @@ description = Enables Lightbox2 for Drupal
 core = 6.x
 
 ; Information added by Acquia.com packaging script
-version = "6.x-1.9"
+version = "6.x-1.11"
 core = "6.x"
 project = "lightbox2"
 acquia = "1"
