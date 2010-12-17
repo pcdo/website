@@ -1,5 +1,5 @@
 <?php
-// $Id: webform_export.inc,v 1.1.4.7 2010/02/12 08:18:11 quicksketch Exp $
+// $Id: webform.export.inc,v 1.4.2.2 2010/04/03 04:06:28 quicksketch Exp $
 
 /**
  * @file
@@ -110,7 +110,7 @@ class webform_exporter_delimited extends webform_exporter {
 
     // Include at BOM at the beginning of the file for Little Endian.
     // This makes tab-separated imports work correctly in MS Excel.
-    if (function_exists('mb_convert_encoding') && $this->delimiter == '\t') {
+    if (function_exists('mb_convert_encoding') && $this->delimiter == "\t") {
       $output = chr(255) . chr(254);
     }
     @fwrite($file_handle, $output);
@@ -119,9 +119,12 @@ class webform_exporter_delimited extends webform_exporter {
   function add_row(&$file_handle, $data) {
     foreach ($data as $key => $value) {
       // Escape inner quotes and wrap all contents in new quotes.
-      $data[$key] = '"'. str_replace('"', '""', $value) .'"';
+      $data[$key] = '"' . str_replace('"', '""', $data[$key]) . '"';
+
+      // Remove <script> tags, which mysteriously cause Excel not to import.
+      $data[$key] = preg_replace('!<(/?script.*?)>!', '[$1]', $data[$key]);
     }
-    $row = implode($this->delimiter, $data) ."\n";
+    $row = implode($this->delimiter, $data) . "\n";
 
     if (function_exists('mb_convert_encoding')) {
       $row = mb_convert_encoding($row, 'UTF-16LE', 'UTF-8');

@@ -7,9 +7,8 @@ core = 6.x
 recommends[] = path_redirect
 
 ; Information added by Acquia.com packaging script
-version = "6.x-1.x-dev"
+version = "6.x-1.5"
 core = "6.x"
 project = "pathauto"
-datestamp = "1281625860"
 acquia = "1"
 

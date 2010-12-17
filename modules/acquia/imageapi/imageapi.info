@@ -6,7 +6,7 @@ core = 6.x
 php = 5.1
 
 ; Information added by Acquia.com packaging script
-version = "6.x-1.8"
+version = "6.x-1.9"
 core = "6.x"
 project = "imageapi"
 acquia = "1"

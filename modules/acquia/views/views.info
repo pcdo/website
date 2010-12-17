@@ -5,7 +5,7 @@ package = Views
 core = 6.x
 
 ; Information added by Acquia.com packaging script
-version = "6.x-2.11"
+version = "6.x-2.12"
 core = "6.x"
 project = "views"
 acquia = "1"
