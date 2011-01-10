@@ -6,7 +6,7 @@ package = Webform
 php = 5.0
 
 ; Information added by Acquia.com packaging script
-version = "6.x-3.4"
+version = "6.x-3.5"
 core = "6.x"
 project = "webform"
 acquia = "1"
