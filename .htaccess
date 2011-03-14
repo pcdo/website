@@ -96,6 +96,22 @@ DirectoryIndex index.php
   # RewriteCond %{HTTP_HOST} ^www\.example\.com$ [NC]
   # RewriteRule ^(.*)$ http://example.com/$1 [L,R=301]
 
+
+  RewriteCond %{REQUEST_URI} ^/docs/ [NC]
+  RewriteRule ^(.*)$ http://www.princetondems.org/files/$1 [L,R=301]
+
+  RewriteCond %{REQUEST_URI} ^/a/ [NC]
+  RewriteRule ^(.*)$ http://www.princetondems.org/files/$1 [L,R=301]
+
+  RewriteCond %{HTTP_HOST} ^princetondems\.org$ [NC]
+  RewriteRule ^(.*)$ http://www.princetondems.org/$1 [L,R=301]
+
+  RewriteCond %{HTTP_HOST} !princetondems\.org$ [NC]
+  RewriteCond %{HTTP_HOST} !127\.0\.0\.1$ [NC]
+  RewriteCond %{HTTP_HOST} !localhost$ [NC]
+  RewriteRule ^(.*)$ http://www.princetondems.org/$1 [L,R=301]
+
+
   # Modify the RewriteBase if you are using Drupal in a subdirectory or in a
   # VirtualDocumentRoot and the rewrite rules are not working properly.
   # For example if your site is at http://example.com/drupal uncomment and
