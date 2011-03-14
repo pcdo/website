@@ -1,0 +1,325 @@
+/*theme borrowed from the box_grey theme  jenny crumiller jenny@crumiller.com*/
+
+
+body {  color: #000066;  background: #FFFFFF;  font-family: Trebuchet MS,  Lucida, Arial, Helvetica,  sans-serif;  font-size: 88%;  padding: 0;  margin: 0;}
+h1 { font-size: 1.5em; }
+h2 { font-size: 1.3em; }
+h2 a:link, h2 a:visited { color: #330066;}
+h2 a:hover { color: #6699ff;}
+h3 { font-size: 1.2em; font-weight: bold; }
+h4 { font-size: 1.2em; font-weight: bold; color: #0066CC;}
+h5 {	font-size: 1em;	font-weight: bold;	color: #CC0000;}/*bold red*/
+h6 { font-size: .9em; font-weight: normal; margin:0px;}
+h1, h2, h3, h4, h5, h6 {  font-family: Trebuchet MS, Lucida, Arial, Helvetica,  sans-serif;}
+p {  padding: 0 0 0.5em 0;  margin: 0; /* text-indent: 1.6em; */ font-size: 1em;  line-height: 1.5em;}
+h2.content-title {font: bold 1.2em Trebuchet MS, Lucida, Arial, Helvetica, sans-serif; color: #333366; letter-spacing: .05em;}
+.main-content .box h2 {  padding: 0.5em;  margin: 0;  font-size: 1.2em;  text-align: left;}
+
+/*default for ordered lists is roman numerals*/
+#content-both ol li {list-style: upper-roman /*url(none);*/ font-size: inherit;}
+/*add in this class "numbers" for ordered lists if you don't want roman numerals in numbered lists*/
+#content-both ol.numbers li {list-style: decimal /*url(none); */font-size: inherit;}
+#content-both ol.letters li {list-style: lower-alpha /*url(none) */; font-size: inherit;}
+#content-both ol.nobullet li {list-style: /*url(none)*/ none; font-size: inherit;}
+/*these fixed problems with list font size in main section*/
+
+#content-both ul li {	/*font-size: 1.1em;*/	list-style: url(images/bullet-jlc.png);}
+#content-both ul li ul li{	font-size: inherit; list-style: url(images/bulletsm-jlc.png);}
+pre {  background: #fafafa;  border: 1px solid #aaa;  padding: 0.75em 1.5em;  font-size: 12px;}
+a, a:link { color: #5151BF; text-decoration: none;}
+a:visited { color: #5151BF; text-decoration: none; }
+a:hover, a:focus { color: #6699ff; }
+a:active { color: #bcbcf2; }
+/*blue background with donkey logo*/
+#topbanner	{	padding-top: 0px;	margin: 0px; 	background: #DFE4F4 url(images/dembackground.jpg) no-repeat left top; }
+/*login block*/
+
+/*flag background in the header on the right
+#banner_right {background: url(images/bannerflagright.gif) no-repeat left top; z-index: 1;}*/
+td#logo {	padding: 0px;}
+#topbanner img {	margin-left: 80px;	margin-bottom: 0px;	margin-top: 1px;	padding: 3px;	}
+#logo img:hover{	border: 3px solid #ffffff;	padding: 0px;}
+/*logo is name, pcdo is image*/
+#sitename {	margin: 0px 0px 3px 90px;	padding: 0px;	font: 1.2em Georgia, "Times New Roman", Times, serif;	 letter-spacing: .13em;}
+#sitename a{	color: #333366;	font-weight: bold;}
+#sitename a:hover{	color: #3366CC;	background: #ffffff;}
+#top_stripe {	background: url(images/stripes_shadow_blue.gif) repeat-x left top;	padding-top: 14px;}
+
+/*collapsible login block*/
+#header {	width: 165px;	position: absolute;	top: 0px;	right: 0px; padding: 0;}
+#block-zmod-0 .content {	text-align: right;	padding-right: 15px;	margin-right: 15px;	margin-top: 5px; font-variant: small-caps; font-weight: bold; }
+#user-login-form {background-color:#FFFFFF;		padding-left: 8px;	border: 3px solid #DFE3F4; margin-top: -5px; height: 135px;}
+#user-login-form .item-list li{	font-size: .8em; list-style: none; margin: 0; padding: 0; line-height: 1.2em; }
+#user-login-form .item-list ul{	display: block;	float: right;	width: 95px;	text-align: left;	padding: 0px;	margin: 0;	}
+#user-login-form .form-item{	margin-top: 0px;	margin-bottom: 0px;	padding-top: 0px;	padding-bottom: 0px; font-size: 12px; text-align: left;}
+#user-login-form #edit-submit  {	margin: 5px 5px 0 0;	padding: 0;	width: 50px;	float: left;background-color:#FFFFFF;}
+
+
+#content {  width: 100%; }
+td.main-content {	vertical-align: top;	padding: 1em 1.4em 0em 1.4em;	margin: 0px; text-align: left; } 
+td.sidebar {	vertical-align: top; text-align: left;}
+
+/*left sidebar -- width is smaller when no block is showing*/
+#sidebar-left  {width: 120px; padding-top: 0px;  }
+#sidebar-left .block{ 	width: 180px; border-right: 4px double #333366;	padding-bottom:10px; font-size: 1em; margin: 0px; margin-right: 15px; text-align: left;}
+
+/*main menu on left */
+#sidebar-left #block-menu-353 h2 {	display: block;	font: bold 1.1em Verdana, Arial, Helvetica, sans-serif;	color: #333366;	background: #FFFFFF url(images/stripes_blue.gif) repeat-x bottom;	letter-spacing: .1em;	text-align: center;	padding: 4px 0px 14px;	margin: 0px 0px 10px;}
+#sidebar-left #block-menu-353 {	border-top: 4px double #333366;	background: #FFFFFF;	margin-top: 5px;}
+
+/*member-only menu*/
+#sidebar-left #block-menu-368 h2 {	display: block; font: bold 1em Verdana, Arial, Helvetica, sans-serif; color: #333366;	padding: 2px 0px;	text-align: center;	background: #FFFFFF;	letter-spacing: 0.2em;	margin-bottom: 10px; margin-top: 0px;	border-bottom: 4px double #333366;}
+#sidebar-left #block-menu-368 {border-top: 4px double #333366;}
+
+/*private webmaster links*/
+sidebar-left #block-menu-59 a {color: #996699; font-size: 1em; line-height: 1em; margin-right: 5px;}
+#sidebar-left #block-menu-59 a {color: #996699; font-size: 1em; line-height: 1em;}
+#sidebar-left #block-menu-59 {border-top: 4px double #336666; margin-bottom: 0px;}
+
+/* email list block  when margin issue is resolved padding bottom can be taken off */
+#sidebar-left #block-block-17 h2, #quickcontactblock_form h2 {    font: bold 1em , Lucida, Arial, Helvetica, sans-serif;	color: #333366;	/*display: block;*/	padding: 0px;
+	margin: 0px;}
+#sidebar-left #block-block-17 { 	margin: 0px;	padding: 10px;}
+
+/*right sidebar*/
+td#sidebar-right {	width: 150px;	padding-top: 45px;	padding-right: 15px; text-align: left; }
+#sidebar-right .block {	padding: 0px 5px 5px; border: 1px solid #333366;	margin-bottom: 15px; font-size: 1em; background: #FFFFFF; margin-top: 35px;	}
+#sidebar-right .block h2  {	color: 	#333366;	letter-spacing: .04em; padding: 0px;	text-align: center;	margin: 1px 0px 3px;	font-size: 1.1em;	font-weight: bold; }
+#sidebar-right .content {margin: 0px; } 
+#sidebar-right ul.menu a {	padding:2px 0px 1px;	margin: 0px;	font-size: 1em;}
+#sidebar-right ul.menu li.expanded ul.menu li a{padding: 1px 0px 3px 8px;}
+#sidebar-right .content .item-list li {	margin: 0px;	list-style: none;}
+#sidebar-right .item-list ul li a{ padding: 3px 0px 1px;	}
+#sidebar-right a:hover, #sidebar-right ul.menu li.leaf a:hover {background: none;}
+#sidebar-right .block-event .item-list {padding: 0px;}
+#sidebar-right #block-block-7 {	background: #FFFFFF;	border: 2px solid #AB2727;}
+#sidebar-right a { line-height: 1em; margin: 0px 0px 3px;}
+#sidebar-right #block-block-7 h2 {	text-transform: uppercase;	border-bottom: 1px dashed #b34b49;	font: bold 1.1em ; letter-spacing: .05em;}
+#sidebar-right .block-user h2 {	color: #AB2727;	text-align: left;}
+
+
+#search-block-form  .container-inline .form-item, #search-block-form  .container-inline .form-submit, #quickcontactblock_form .form-submit {margin-top: 8px;	margin-bottom: 0px;
+	font-size: 1em;		}
+#search-block-form {	padding-top:20px; padding-left: 10px; }
+
+/*bottom border block*/
+#block-block-18 {border-bottom: 4px double #333366; padding: 0; margin: 0; }
+
+/*calendar link block*/
+#sidebar-right #block-block-10 {border: 0px solid #FFFFFF; padding: 0; margin: 0; }
+
+
+#sidebar-right .block-user {
+	border: 2px solid  #e9ffff;
+	background: #f9ffff;
+}
+
+/* right and left menus and lists  inline is needed to take away big spaces in lists in IE*/
+ul.menu li { display: inline; }
+ul.menu li a {display:block; }
+ul.menu li a:hover {background-color:#eeeeff; }
+ul.menu li.expanded ul.menu li.leaf, ul.menu li.expanded ul.menu li.collapsed, ul.menu li.expanded, li.expanded ul.menu, ul.menu li.leaf {	margin: 0px;	padding: 0px;	}
+ul.menu li.expanded a, ul.menu li.leaf a {	line-height: 1em;	margin: 0px;	padding: 3px 0px 1px 8px;	font-weight: bold; }
+ul.menu li.expanded ul.menu li a{	list-style: none;	padding: 1px 0px 3px 18px;	margin: 0em;	font-weight: normal;}
+ul.menu li.expanded ul.menu a:hover {background-color:#eeeeff;}
+li.expanded a{	list-style: none;  }
+li.collapsed a{	list-style: none;  }
+
+/*sub-menu items that show when expanded*/
+ul.menu li.expanded ul.menu ul li a{	padding-left: 30px;	font-size: .8em;		}
+
+
+#primary {	margin-bottom: 5px;	display: inline;}
+#primary a {	color: #333366;	font-weight: bold;	padding-right: 2em;	padding-left: 2em;	}
+#primary a:hover { color: #3366CC; }
+#primary a.active, #primary a.active:hover {	color: #bcbcf2;	}
+.block ul {	margin: 0;	padding: .25em 0em 0em;}
+
+
+form {  padding: 0;  margin: 0;}
+blockquote {  /*border: 1px 0px #ddd solid;*/  margin: 0.5em 1em;  padding: 0.3em;  }
+code {  font-size: 1em;  font-family: Profont, 'lucida console', 'Courier New', Monaco, monospace;}
+img { border: 0; }
+.links a.read-more {  font-style: italic; /* font-size: 1.1em;*/}
+.sidebar .block .xml-icon {  text-align: center;}
+.breadcrumb {  padding: 0.5em 1em;  /*font-size: 1em; */ font-weight: bold;  margin: 0;  height: 1em;}
+.main-content .node { border-bottom:2px solid #EEEEFF; padding-bottom: 8px; }
+.main-content .node .content, .comment .content, .book .body {  line-height: 1.5em;}
+.main-content .node, .book {  margin: 0em 1em 2em 0em;}
+.main-content .content-title {  margin: 0 0 .8em;}
+.main-content .node .info {	padding: 0 0 .9em;	margin: 0;	font-size: 0.9em;	color: #2F669D;}
+.main-content .node .links, .main-content .node .terms {  padding: 0;  margin: 0;  /*font-size: 1em;*/  font-weight: normal;}
+.main-content .node .terms {  color: #999;  font-weight: normal;  text-align: right; }
+.main-content .node .info, .main-content .node .links, #mission {  font-family: Trebuchet MS, Lucida, Arial, Helvetica, sans-serif; }
+#mission {  color: #000;  background: #fafafa;  border: solid 1px #000066;  padding: 5px 10px;  margin: 0 0 1.6em 0;  font-size: 1.1em;  text-indent: 0;  width: auto;}
+.main-content .box {  border: 1px solid #eeeeff;  margin-bottom: 0.5em;}  
+
+.comment-new .new {  color: #CC3300;  text-align: right;  font-size: 1em;  display: block;  padding-bottom: 0.5em;  width: 100%;}
+#footer {   background: #eeeeff;  border-top: 2px solid #eeeeff;  margin-top: 40px;  padding: 1em 1em 1em 1em;  text-align: center;}
+#footer .content a {	font-weight: bold;	font-size: .8em;}
+#footer p {  text-indent: 0;  margin-bottom: 1em;  color: #2F669D; text-align: center;}
+.xml-icon {  text-align: center;}
+fieldset { border: 1px solid #ccccff;  }
+
+/*submit for search form and other forms*/
+.form-submit, .form-submit a {	background: #f5f5f5;	margin: 0px;	padding: 0px;	color: #000099;}
+.form-submit:hover, .form-submit a:hover { background: #ccccff;}
+.form-radio, .form-checkbox {  background: transparent;  border: 0;}
+input.form-text, input.form-password {	border: 1px solid #336699;	margin: 0;	padding: 2px 5px;	font-size: 1em;}
+input, textarea {	background: transparent;	border: 1px solid #336699;	font-size: 1em;	padding: 1px;}
+input:focus, textarea:focus {  border: 1px solid #03f;}
+.button .form-submit {	border: 1px solid #CCCCFF;	margin: 0px;	padding: 0px;	font-size: 1em;	color: #000099;}
+h3.form-title {  text-align: left;}
+form .form-item .title  {  border: 0;  border-bottom: #ddd solid 1px;  color: #777;  margin-bottom: 0.5em;  padding: 0.3em 0;  text-align: left;}
+
+select {  background: #fafafa;  color: #000;  margin: 1px 5px;}
+.container-inline {  margin: 0 0 1.6em 0;}
+.container-inline div {  display: inline;}
+#pager {  text-align: center;}
+#pager div {  padding: 0.5em;}
+.main-content li {  padding-bottom: 0.25em;}
+#message {  background: #fff;  border: 2px solid #6e2;  padding: 2em;  margin: 1em 2em;}
+div.picture {   border: 0;  float: left;  margin: 0 1em 0.3em 0;}
+br.clear {  clear: both;}
+.breadcrumb, .main-content .content-title, .links a.read-more { color: #000066; }
+.links a.read-more:hover { color: #03f; }
+.box { border: 1px solid #eeeeff; }
+.box h2 { color: #999; }
+.marker, .error { color: #f00; }
+.ok { color: #080; }
+.path a, .path a:visited { color: #777; }
+.tabs li .active, .tabs li .active:hover  {  color: #ccc;  background: #fff;}
+#content table {width: 95%;	padding:  0;	margin:  1px;	border: 1px solid #CCCCFF;}
+#content  .node table{	border: 1px solid #FFFFFF;}
+#content-both  .messages ul li {	list-style:  none;}
+#content-both  .status {
+	background: #FFFF00;
+	font-weight: bold;
+	border: 1px solid #CC3300;
+	font-size: 1.2em;
+	padding: 4px;
+}
+
+/*misc/drupal.css overrides*/
+li.expanded {  list-style-type: none;   padding: 0;  margin: 0;}
+li.collapsed {  list-style-type: none;   padding: 0;  margin: 0;}
+/*li.leaf {	list-style-type: none;		margin: 0;}*/
+li a.active {	color: #bcbcf2;}
+table.watchdog-event th {  border-bottom: 1px solid #ccccff;}
+table.watchdog-event td {	border-bottom: 1px solid #eeeeff;	padding-right: 2px;	padding-left: 2px;}
+table.watchdog-event  {  border: 1px solid #ccccff;}
+tr.watchdog-user {  background: #fbfbff;}
+tr.watchdog-user .active {  background: #eed;}
+tr.watchdog-content {  background: #fbfbff;}
+tr.watchdog-content .active {  background: #cce;}
+tr.watchdog-page-not-found, tr.watchdog-access-denied {  background: #dfd;}
+tr.watchdog-page-not-found .active, tr.watchdog-access-denied .active {  background: #fbfbff;}
+tr.watchdog-error {  background: #fcfafa;}
+tr.watchdog-error .active {  background: #fcd6f5;}
+tr.even, tr.odd {  background-color: #fbfbfb;  border-bottom: 1px solid #ccccff;}
+td.menu-disabled {  background: #dfe4f4;}
+.marker, .form-required {  display: none;}
+.book-navigation .menu {  border-top: 1px solid #eeeeff;  padding: 1em 0 0 3em; }
+.book-navigation .menu .leaf a{ list-style: disc; font-weight: normal;}
+.book-navigation .menu .leaf a:hover{	background: #ffffff;	color: #CCCCFF;}
+.book-navigation .page-links {  border-top: 1px solid #eeeeff;  border-bottom: 1px solid #ffffff;  text-align: center;  padding: 0.5em; }
+
+.book_add_child, .book_printer, .comment_add {font-size: .94em;}
+td.active {  background-color: #fafafa;}
+hr {  height: 1px;  border: 1px solid #eeeeff;}
+tbody {  border-top: none;}
+.indented {  margin-left: 15px;}
+
+/*forum styling*/
+.forum-topic-navigation {  display: none;}
+#forum td{border: 1px solid #CCCCFF;}
+.even .forum .name a, .odd .forum .name a {	font-weight: bold; 	color: #003399;	margin: 0px; }
+.even .forum .name a:hover, .odd .forum .name a:hover {	color: #6699FF;}
+.even .forum .name, .odd .forum .name{	margin: 0px;	background: #fbfbfb;	padding: 0px;}
+#forum th {	border-top: 4px solid #eeeeFF;	border-bottom: 4px solid #eeeeFF;	border-right: 1px solid #ccccFF;	border-left: 1px solid #ccccFF;	font-size: 1.1em;
+	padding: 2px;	font-weight: normal;}
+.topics, .post, .last-reply, #forum th{	padding: 0px 3px 0px 8px;}
+#forum .even, #forum .odd {	/*padding: 0px;*/	margin: 0px;	background: #FFFFFF;}
+#comments {margin-left: 50px;}
+#forum td {padding-left: 8px;}
+/*calendar - need to clean up with module css file*/
+.event-calendar {	width: 97%;	}
+.event-calendar .odd, .event-calendar .even {	background: #ffffff;	vertical-align: top;}
+.event-calendar .title { font-style: normal; font-weight: normal;}
+.event-calendar .title a { font-style: normal; font-weight: normal;}
+.event-calendar .start {	font-size: .85em;	color: #333399;	font-weight:bold;}
+.event-nodeapi .event-start, .event-nodeapi .event-start label {margin-bottom: 10px; color: #2F669D;}
+.event-timeleft {font-size: .8em;}
+
+.profile {margin: 0px; padding: 0px; } 
+.node-form .form-submit, #edit-preview .form-submit{	margin-top: 15px;}
+/*overrides system css to enlarge too-small fonts*/
+.form-item .description {  font-size: 1em;}
+.more-help-link {  font-size: 0.85em;}
+.tips {  font-size: 1em;}
+
+.links {	font-size: .9em;}
+.links a {	color: #8FA5BE;	}
+
+
+#comments .comment {
+	background: #fff url(images/gradient-inner.png) repeat-x 0 0;
+	margin-bottom: 15px;
+	padding-top: 5px;
+	padding-left: 10px;
+	 margin-left: -50px;
+}
+.submitted {
+	color: #8FA5BE;
+	font-size: .88em;
+	
+}
+
+.comment_add  {
+	color: #FF00FF;
+	
+	}
+.node-form .collapsible legend {
+	display:none
+}
+.node-form .collapsible, .container-inline-date {
+	border: 2px solid #FFFFFF;
+}
+.report {
+	
+	margin-top: 20px;
+}
+.report .field {
+	padding-bottom: 10px;
+
+	font-weight: normal;
+}
+.minutestitle {
+	font-size: 1.1em;
+	margin-bottom: 10px;
+}
+.report .field .field-label-inline-first, .report .field-label{
+	font-weight: normal; 
+
+font-style: oblique;
+}
+
+.bylaws li {
+	font-size: 0.85em;
+	font-weight: normal;
+	
+	list-style-type: none;
+}
+
+/*makes main post title centered*/
+.sticky h2 {
+	font-size: 1.4em;
+	text-align: center;
+}
+
+.content ul.leaf li {
+	list-style: none;
+}
+
+/*obama block*/
+#sidebar-right #block-block-23 {border: 2px solid #FFFFFF;}

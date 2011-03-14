@@ -1,0 +1,9 @@
+; $Id$
+name = Stripetheme
+description = based on box grey with red white and blue stripes
+core = 6.x
+engine = phptemplate
+
+stylesheets[all][] = style.css
+stylesheets[all][] = event.css
+stylesheets[print][] = print.css

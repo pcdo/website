@@ -1,0 +1,10 @@
+; $Id: bluedem.info 8 2008-09-23 00:25:17Z pwolanin $
+name = Bluedem
+description = Table-based multi-column theme based on Bluemarine by Dries.
+version = 1.0
+core = 6.x
+engine = phptemplate
+stylesheets[all][] = style.css
+stylesheets[print][] = print-dem.css
+
+

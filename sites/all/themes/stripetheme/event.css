@@ -1,0 +1,274 @@
+/*  event calendar table styles  */
+.event-calendar table {
+  border: 1px solid #ccccff;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 98%; /* Setting at 100% causes problem in Internet Explorer. */
+  margin-bottom: 1em;
+}
+.event-calendar tr {
+  padding: 0;
+  margin: 0;
+  background: white;
+}
+.event-calendar caption {font-size: 1.4em; padding-bottom: 5px;}
+.event-calendar .next {
+	font-size: 2em;
+	text-align: right;
+}
+.event-calendar .prev {
+	font-size: 2em;
+	text-align:left;
+}
+
+
+/*jlc change* heading with day name*/
+.event-calendar th {
+	color: #336666;
+	background: #EEEEFF;
+	font-size: 1.2em;
+	text-align: center;
+	padding: 1px 0.33em;
+	border-top: 1px solid #CCCCFF;
+	border-right: 1px solid #CCCCFF;
+	border-bottom: 1px solid #CCCCFF;
+	border-left: 1px solid #CCCCFF;
+	font-weight: bold;
+	
+}
+/*.event-calendar th {
+  color: #000099;
+  background: #EEEEFF;
+  text-align: center;
+  padding: 1px 0.33em;
+  border: 1px solid #ccccff;
+}*/
+.event-calendar td {
+  width: 14%; /* 14% is about 1/7 of total table width */
+  border: 1px solid #ccccff;
+  color: #333366;
+  text-align: right;
+  vertical-align: top;
+  margin: 0;
+  padding: 0;
+}
+.event-calendar th.heading {
+	border-width: 1px 0px;
+	
+}
+/*jlc start*/
+.event-calendar th.prev {
+  text-align: left;
+  border-width: 1px 0px 1px 1px;
+   
+}
+.event-calendar th.next {
+  text-align: right;
+  border-width: 1px 1px 1px 0px;
+ 
+}
+.event-calendar th a {
+  font-weight: bold;
+  color: #333366;
+   
+}
+.event-calendar td a {
+  color: #333366;
+  font-weight: bold;
+  text-decoration: none;
+}
+.event-calendar td a:hover {
+	text-decoration: underline;
+	color: #336699;
+}
+.event-calendar td.sat, .event-calendar td.sun {
+  background: #ffffff;
+}
+.event-calendar td.selected {
+  background: #FFFFFF;
+}
+.event-calendar td.today {
+  background: #FFEEEE;
+}
+/*jlc stop*/
+.event-calendar td.year, .event-calendar td.month {
+  text-align: center;
+  border-width: 1px 0px;
+}
+
+/*  days of the week header cells jlcstart*/
+.event-calendar td.days {
+  color: #cce;
+  background: #eeeeff;
+  text-align: center;
+  border: 1px solid #ccccff;
+  border-width: 0 1px 1px 0;
+}
+
+/*  floating day number div  */
+.event-calendar div.day {
+  float: right;
+  text-align: center;
+  border: 1px solid #f3f3f3;
+  border-width: 0 0 1px 1px;
+  padding: 0.125em 0.25em 0 0.25em;
+  margin: 0;
+  background: #f3f3f3;
+}
+/*jlc stop*/
+/*  event node times for the body and for listings made following two identical */
+.event-nodeapi div {
+  color: #000066;
+  padding: 0.5em 1em 0 0;
+}
+.event-nodeapi div label { color: #000066; }
+
+/*  individual node container jlc start */
+.event-calendar div.event {
+  font-style: italic;
+  background-color: #fff;
+  border: none;
+  text-align: left;
+  margin: 0.25em 0 0.5em 0.25em;
+}
+/*jlc stop*/
+.event-calendar div.title {
+  padding-left: 3px;
+}
+/*jlc start*/
+.event-calendar div.title a {
+  color: #333366;
+}
+
+.event-calendar div.title a:hover {
+  color: #336699;
+}
+/*jlc stop*/
+.event-calendar .content {
+  margin: 5px;
+  padding: 3px;
+  border-left: solid 2px #ddd;
+  padding-left: 5px;
+}
+.event-calendar div.type {
+  margin-left: 5px;
+  font-size: 0.8em;
+}
+.event-calendar div.type a {
+  color: #00c;
+}
+.event-calendar div.type a:hover {
+  color: #336699;
+}
+.event-calendar div.links {
+  padding-left: 3px;
+}
+.event-calendar div.links a {
+  color: #00c;
+}
+.event-calendar div.links a:hover {
+ color: #336699;
+}
+.event-calendar .start {
+  font-style: normal;
+  color: #555;
+  margin: 2px 0 2px 0;
+  padding-left: 3px;
+}
+.event-calendar .ongoing {
+  font-style: normal;
+  color: #555;
+  margin: 2px 0 2px 0;
+  padding-left: 9px;
+  font-size: 0.8em;
+}
+.event-calendar div.info {
+  visibility: hidden;
+  height: 0px;
+  overflow:hidden;
+  padding-left: 3px;
+}
+
+/*  individual node view styles  */
+.event-calendar div.monthview .title {
+  font-size: 0.8em;
+}
+.event-calendar div.dayview {
+  width: auto;
+}
+.event-calendar div.tableview {
+  width: auto;
+}
+.event-calendar div.tableview .links {
+}
+.event-calendar .event-empty {
+  min-height: 6em;
+}
+/* hack to make Internet Explorer for Windows display calendar height correctly \*/
+* html .event-calendar .event-empty {
+  height: 6em;
+}
+/* end of hack */
+.container-inline .day input {
+  width: auto;
+  display: inline;
+}
+
+/*  jlc multi-day event top stripes no show -- this should be fixed  */
+.event-calendar .event .stripe {
+  display: none;
+}
+.event-calendar .event .stripe-1 {
+  display: none;
+}
+.event-calendar .event .stripe-2 {
+  display: none;
+}
+.event-calendar .event .stripe-3 {
+ display: none;
+}
+.event-calendar .event .stripe-4 {
+  display: none;
+}
+.event-calendar .event .stripe-5 {
+  display: none;
+}
+.event-calendar .event .stripe-6 {
+  display: none;
+}
+.event-calendar .event .stripe-7 {
+  display: none;
+}
+.event-calendar .event .stripe-8 {
+  display: none;
+}
+.event-calendar .event .stripe-9 {
+  display: none;
+}
+.event-calendar .event .stripe-10 {
+ display: none;
+}
+
+#block-event-1 .item-list ul li a { 
+  margin-top: 8px; 
+}
+
+span.event-timeleft {
+  padding-bottom: 3px;
+  text-align: right;
+  width: auto;
+  display: block;
+}
+span.event-nodetype {
+  padding: 0px 0px 0px 5px;
+  display: block;
+  width: auto;
+  text-align: right;
+  float: right;
+}
+.ical-link {
+  text-align: right;
+}
+.event div.form-item {
+  white-space: normal;
+}
