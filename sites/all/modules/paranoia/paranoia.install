@@ -1,0 +1,13 @@
+<?php
+// $Id: paranoia.install,v 1.1 2009/01/13 21:07:43 killes Exp $
+
+/**
+ * Implementation of hook_enable().
+ */
+function paranoia_enable() {
+  // Disable the php module if it is enabled.
+  if (module_exists('php')) {
+    module_disable(array('php'));
+    drupal_set_message(t('Paranoia module disabled the PHP module.'));
+  }
+}

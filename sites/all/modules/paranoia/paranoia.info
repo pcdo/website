@@ -1,0 +1,12 @@
+; $Id: paranoia.info,v 1.3 2009/01/13 21:07:43 killes Exp $
+name = Paranoia
+description = Protects the site from insecure configurations.
+core = 6.x
+
+
+; Information added by drupal.org packaging script on 2011-02-16
+version = "6.x-1.0"
+core = "6.x"
+project = "paranoia"
+datestamp = "1297885372"
+

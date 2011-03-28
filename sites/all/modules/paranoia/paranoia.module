@@ -1,0 +1,114 @@
+<?php
+// $Id: paranoia.module,v 1.7.2.2 2010/06/08 14:23:07 killes Exp $
+/**
+ * @file
+ * - Disables PHP block visibility permission and gives status error if a role has this permission.
+ * - Disables the PHP module.
+ * - Hides the PHP and paranoia modules from the modules page.
+ * - Prevents user/1 editing which could give access to abitrary contrib module php execution.
+ */
+
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function paranoia_form_alter(&$form, $form_state, $form_id) {
+  switch ($form_id) {
+    case 'user_admin_perm': // Disable PHP input
+      $hide_permissions = module_invoke_all('paranoia_revoke');
+      foreach ($hide_permissions as $hidden) {
+        unset($form['permission'][$hidden]);
+        foreach (element_children($form['checkboxes']) as $rid) {
+          unset($form['checkboxes'][$rid]['#options'][$hidden]);
+        }
+      }
+      break;
+
+    case 'system_modules':   // Hide Paranoia and PHP modules from module admin form
+      $hidden_modules = module_invoke_all('paranoia_hide');
+      foreach($hidden_modules as $module){
+        _paranoia_hide_module($form, $module);
+      }
+      break;
+
+    case 'user_profile_form': // Prevent modifying user/1
+      if ($form['#uid'] === '1') {
+        global $user;
+        // Allow user/1 to edit own details.
+        if ($user->uid != 1) {
+          drupal_set_message('You must login as this user (user/1) to modify the email address and password for this account.');
+          $form['account']['mail']['#access'] = FALSE;
+          $form['account']['pass']['#access'] = FALSE;
+        }
+      }
+      break;
+
+  }
+}
+
+/**
+ * Remove a module from the module administration form.
+ */
+function _paranoia_hide_module(&$form, $module){
+  unset(
+    $form['validation_modules']['#value'][$module],
+    $form['name'][$module],
+    $form['version'][$module],
+    $form['description'][$module],
+    $form['throttle'][$module],
+    $form['throttle']['#options'][$module],
+    $form['status']['#options'][$module]
+  );
+}
+
+/**
+ * Implementation of hook_requirements().
+ */
+function paranoia_requirements($phase) {
+  $requirements = array();
+  if ($phase == 'runtime') {
+    // Ensure that no roles have permission to use PHP for block visibility.
+    module_load_include('inc', 'user', 'user.admin');
+    $form = user_admin_perm($form_state);
+    $hide_permissions = module_invoke_all('paranoia_revoke');
+    foreach (element_children($form['checkboxes']) as $rid) {
+      if (count(array_intersect($hide_permissions, $form['checkboxes'][$rid]['#default_value']))) {
+        $requirements['paranoia'] = array(
+          'title' => t('Paranoia'),
+          'description' => t('At least one user role has permission to input PHP. Resubmit your <a href="@admin/user/permissions">user permissions</a> to close this security hole.', array('@admin/user/permissions' => url('admin/user/permissions'))),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+    }
+    // Ensure the PHP module is not enabled.
+    if (module_exists('php')) {
+      $requirements['paranoia_php'] = array(
+        'title' => t('Paranoia'),
+        'description' => t('The PHP module is enabled.  This module should be disabled (but paranoia module prevents it from showing in the module admin form).  It may have been enabled in the database, circumventing the effectiveness of paranoia module.'),
+        'severity' => REQUIREMENT_ERROR,
+        );
+    }
+  }
+  return $requirements;
+}
+
+/**
+ * Implementation of hook_paranoia_hide().
+ */
+function paranoia_paranoia_hide() {
+  return array('php', 'paranoia');
+}
+
+/**
+ * Implementation of hook_paranoia_revoke().
+ */
+function paranoia_paranoia_revoke() {
+  return array(
+    // block module
+    'use PHP for block visibility',
+    // content module (in CCK)
+    'Use PHP input for field settings (dangerous - grant with care)',
+    // webform module
+    'use PHP for additional processing',
+  );
+}

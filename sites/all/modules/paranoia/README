@@ -1,0 +1,22 @@
+Paranoia module is for all the good sysadmins out there who think
+that allowing random CMS admins to execute PHP of their choice is not
+a safe idea.
+
+What it will do is the following:
+
+- Disable granting of the "use PHP for block visibility" permission.
+  Save the permissions form once to remove all previous grants.
+  (An error appears in the site status report if a role still has this permission.)
+- Disable the PHP module.
+- Remove the PHP and paranoia modules from the module admin page.
+  Provide a hook to let you remove other modules from the module admin page.
+
+NOTE:
+The only way to disable paranoia module is by changing its status in the database system table.  By design it does not show up in the module administration page after it is enabled.
+
+
+Author
+
+Gerhard Killesreiter
+
+$Id: README,v 1.4 2009/01/13 21:07:43 killes Exp $
